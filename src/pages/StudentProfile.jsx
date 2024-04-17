@@ -1,7 +1,6 @@
-import Perfiles from "../componentes/PerfilEstudiante";
+import Perfiles from "../components/PerfilEstudiante";
+import Navbar from "../components/Navbar";
 import { data } from "../data/ProfileStudentData";
-
-
 const {postulaciones, perfilVisitado, descargaCV} = data[0];
 
 
@@ -13,6 +12,7 @@ const StudentProfile = () => {
     <>
     {/* HEADER */}
     <header>
+      <Navbar />
     </header>
 
     {/* MAIN */}
