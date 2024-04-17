@@ -19,7 +19,9 @@ export default {
         "Azul-Crepúsculo": "#424769",
         "Azul-Neblina": "#7077A1",
         "Naranja Cálido":"#F6B17A",
-        "WhatsApp": "#4FCE5D"
+        "WhatsApp": "#4FCE5D",
+        "Navbar": "#D9D9D9"
+
       }
     }
   },

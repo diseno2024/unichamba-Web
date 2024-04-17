@@ -1,5 +1,5 @@
 import React from "react";
-import NavGeneral from "../componentes/NavGeneral";
+import NavGeneral from "../components/NavGeneral";
 
 const CreateStudentAccount = () => {
   return (
