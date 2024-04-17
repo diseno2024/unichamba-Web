@@ -7,6 +7,7 @@ import CreateOffer from '../pages/CreateOffer'
 import OfferExploreStudent from '../pages/OfferExploreStudent'
 import StudentProfile from '../pages/StudentProfile'
 import StudentsPublications from '../pages/StudentsPublications'
+import Login from '../auth/pages/Login'
 
 const RouterApp = () => {
 return (
@@ -21,6 +22,8 @@ return (
         <Route path='/offerExploreStd' element={<OfferExploreStudent/>} />
         <Route path='/studentProfile' element={<StudentProfile/>} />
         <Route path='/studentsPublications' element={<StudentsPublications/>} />
+        <Route path='/login' element={<Login/>}/>
+
     </Routes>
     
     </>
