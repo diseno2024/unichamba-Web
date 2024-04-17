@@ -1,10 +1,10 @@
 export const data = [
     {
-        nombre: 'Fernando Sandoval',
+        nombre: 'User Account',
         ciudad: 'Santa Ana',
         municipio: 'Santa Ana',
         contacto: 12345678,
-        email: 'FernandoSandoval123@gmail.com',
+        email: 'UserAccount123@gmail.com',
         educacion: 'Universidad de El Salvador',
         postulaciones: 2,
         perfilVisitado: 10, //Numero de veces que han visitado el perfil del estudiante

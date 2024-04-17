@@ -1,8 +1,12 @@
+import Perfiles from "../componentes/PerfilEstudiante";
 import { data } from "../data/ProfileStudentData";
 
-// Este es la paginación de Elias  
 
-const {nombre, ciudad, municipio, contacto, email, educacion} = data[0]
+const {postulaciones, perfilVisitado, descargaCV} = data[0];
+
+
+
+// Este es la paginación de Elias  
 
 const StudentProfile = () => {
   return (
@@ -14,35 +18,48 @@ const StudentProfile = () => {
     {/* MAIN */}
     <main className=' grid grid-cols-[1fr_2fr] gap-x-4'>
       {/* PERFIL */}
-      <div className=' bg-Azul-oscuro/40 w-96 ml-10 mt-5 rounded-lg'>
-        {/* CONTENIDO */}
-        <div className=' flex justify-center py-5 '>
-          <box-icon name='user-circle' size="110px" color="#2D3250"></box-icon>
+      <Perfiles>
+      </Perfiles>
+
+      {/* ACTIVIDADES, ESTADISTICAS Y APTITUDES */}
+      <div className=" bg-Gris-claro/50 mt-5 rounded-xl mr-3">
+        {/* EMPLEOS FAVORITOS */}
+        <h1 className=" ml-5 mt-5 text-2xl font-bold pb-3">Empleos favoritos</h1>
+        <div className=" bg-Azul-oscuro/40 w-[850px] mx-5 rounded-xl h-[300px] items-center flex justify-center flex-col">
+          <div className=" opacity-20">
+            <box-icon name='heart'></box-icon>
+          </div>
+          <div className="">
+            <p>Guarda empleos para postularte mas tarde</p>
+          </div>
         </div>
 
-        <div>
-          <h3 className=" flex justify-center text-2xl text-Azul-Medianoche font-bold">{nombre}</h3>
-          <span className=" flex justify-center font-light">{ciudad},{municipio}</span>
-          <a href="#" className=" flex justify-center bg-Azul-Medianoche text-white font-normal p-2 w-40 my-5 mx-auto rounded-xl shadow-xl">Descargar CV</a>
+        {/* MI ACTIVIDAD Y APTITUDES*/}
+        <div className="grid grid-cols-2 mt-12">
+          {/* MI ACTIVIDAD */}
+          <div>
+            <h2 className=" ml-5 text-2xl font-bold">Mi actividad</h2>
+            <div className=" bg-Azul-oscuro/40 rounded-xl mx-5 p-5 h-[150px]">
+            {/* <span className=' ml-5 font-bold border-2 border-black'>{postulaciones}</span><span className=' mx-auto'>Postulaciones esta semana</span>
+              <h1 className=' '><span className=' ml-5 font-bold'>{perfilVisitado}</span> <span className=' mx-auto'>Visualizacion de tu perfil</span></h1>
+              <h1 className=' '><span className=' ml-5 font-bold'>{descargaCV}</span> <span className=' mx-auto'>Descargas de tu CV</span></h1> */}
 
-          {/* INFORMACION DEL CONTACTO */}
-          <p className=" pl-10 pb-4">Informacion de contacto</p>
-          <ul className=' pl-10'>
-            <li><strong><box-icon name='phone' size="20px"></box-icon> Telefono</strong></li>
-            <span className=' font-extralight ml-5 '>{contacto} (Movil)</span>
-            <li><strong><box-icon name='envelope' size="20px"></box-icon>Email</strong></li>
-            <span className=' font-extralight ml-5'>{email}</span>
-            <li><strong><box-icon name='book-open' size="20px"></box-icon> Educacion</strong></li>
-            <span className=' font-extralight ml-5'>{educacion}</span>
-          </ul>
+              <ul className="flex items-center flex-col justify-center gap-2">
+                <li className=" w-full flex justify-start"><span className=" ml-8 font-bold">{postulaciones}</span><span className=" mx-auto">Postulaciones esta semana</span></li>
+                <li className=" w-full flex justify-start"><span className=" ml-8 font-bold">{perfilVisitado}</span><span className=" mx-auto">Visualizaciones del perfil</span></li>
+                <li className=" w-full flex justify-start"><span className=" ml-8 font-bold">{descargaCV}</span><span className=" mx-auto">Descargas de tu CV</span></li>
+              </ul>
+            </div>
+          </div>
 
-          {/* BTN WHATSAPP */}
-          <a href="#" className=" flex justify-center mt-32 p-3 w-80 mx-auto mb-5 bg-WhatsApp rounded-xl shadow-xl"><span className=" text-white font-bold mr-2">Contacta conmigo</span><box-icon name='whatsapp' type='logo' color='white' ></box-icon></a>
+          {/* APTITUDES */}
+          <div>
+            <h2 className=" ml-5 text-2xl font-bold">Aptitudes</h2>
+            <div className=" bg-Azul-oscuro/40 rounded-xl mx-5 p-5 h-[150px] overflow-x-hidden">
+              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda corrupti magni vitae, numquam vel recusandae doloribus dolor sed distinctio cupiditate reiciendis, quo quas laudantium voluptate velit, mollitia officiis hic! Minima!</p>
+            </div>
+          </div>
         </div>
-      </div>
-
-      <div>
-        2
       </div>
     </main>
     </>
