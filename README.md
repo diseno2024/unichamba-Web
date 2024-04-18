@@ -1,7 +1,8 @@
 # unichamba-Web
 > Esta es una app de bolsa universitaria, desarrollada por estudiantes de ING en sistemas informáticos de la Universidad Nacional de El Salvador
 
-###Informacion general
+### Informacion general
+
 App Hecha con :
 - React. js (v18.2.0)
 - TailWind.css (v3.4.3)
@@ -9,6 +10,7 @@ App Hecha con :
 
 ### Prerrequisitos para poder desplegar:
 - Haber instalado node.js (v20.12.2 o posteriores)
+
 ### Desplegando la aplicacion:
 - Se debe instalar las independencias necesarias  dentro del directorio del proyecto por medio del comando:
 
