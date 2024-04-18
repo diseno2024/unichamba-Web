@@ -1,13 +1,9 @@
 import React from 'react'
-import Navbar from '../components/Navbar'
 
 const OfferExploreStudent = () => {
 return (
     <>
-        
-        <header>
-            <Navbar />
-        </header>
+        <h1 className='font-3xl'>Anibal</h1>
     </>
 )
 }

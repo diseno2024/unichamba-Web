@@ -20,7 +20,8 @@ export default {
         "Azul-Neblina": "#7077A1",
         "Naranja Cálido":"#F6B17A",
         "WhatsApp": "#4FCE5D",
-        "Navbar": "#D9D9D9"
+        "Navbar": "#D9D9D9",
+        "Filters" : "#EBEBEB"
 
       }
     }

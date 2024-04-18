@@ -4,7 +4,7 @@ import Inicio from '../pages/Inicio'
 import CreateStudentAccount from '../pages/CreateStudentAccount'
 import DetailsOffer from '../pages/DetailsOffer'
 import CreateOffer from '../pages/CreateOffer'
-import OfferExploreStudent from '../pages/OfferExploreStudent'
+import OfferExploreStudent from '../pages/StudentsPublications'
 import StudentProfile from '../pages/StudentProfile'
 import StudentsPublications from '../pages/StudentsPublications'
 import Login from '../auth/pages/Login'
@@ -19,9 +19,9 @@ return (
         <Route path='/createAccountStd' element={<CreateStudentAccount/>} />
         <Route path='/detailsOffer' element={<DetailsOffer/>} />
         <Route path='/createOffer' element={<CreateOffer/>} />
-        <Route path='/offerExploreStd' element={<OfferExploreStudent/>} />
-        <Route path='/studentProfile' element={<StudentProfile/>} />
         <Route path='/studentsPublications' element={<StudentsPublications/>} />
+        <Route path='/studentProfile' element={<StudentProfile/>} />
+        <Route path='/offerExploreStd' element={<OfferExploreStudent/>} />
         <Route path='/login' element={<Login/>}/>
 
     </Routes>
