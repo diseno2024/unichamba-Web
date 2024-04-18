@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 
-
 const Login = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -12,11 +11,11 @@ const Login = () => {
     return (
         <div className='w-screen h-screen'> 
             <header className="flex items-start justify-between p-[15px] border-b-[3px] border-gray-500 bg-Gris-claro">
-                <a href="./" className='max-w-[30px]'>
+                <a href="./" className='max-w-[30px] my-auto'>
                     <img src="./public/arrow-left-solid.svg" className='w-full' />
                 </a>
 
-                <a href="./" className="max-w-[140px]">
+                <a href="./" className="max-w-[140px] my-auto">
                     <img src="./public/LOGO.svg" className='w-full' />
                 </a>
             </header>
