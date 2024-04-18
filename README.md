@@ -1,6 +1,5 @@
 # unichamba-Web
-> Este es un Proyecto de una app de bolsa Universitaria para los jovenes que estudian en la Universidad de El Salvador, Facultad Multidisciplinaria de Occidente.
-App Hecha con React. js, TailWind.css y empaquetado con Vite
+> Esta es una app de bolsa universitaria, desarrollada por estudiantes de ING en sistemas informáticos de la Universidad Nacional de El Salvador
 
 ###Informacion general
 App Hecha con :
@@ -9,21 +8,18 @@ App Hecha con :
 - Empaquetado con Vite (v5.2.0)
 
 ### Prerrequisitos para poder desplegar:
-- Haber instalado node.js (version mas reciente)
-- Luego de haber instalado node.js instalar yarn de forma global:
-
-```
-$npm install -g yarn
-```
+- Haber instalado node.js (v20.12.2 o posteriores)
 ### Desplegando la aplicacion:
 - Se debe instalar las independencias necesarias  dentro del directorio del proyecto por medio del comando:
 
 ```
-$yarn
+$npm install
 ```
+
 - Para echar a andar la app se usa el comando:
+
 ```
-$yarn dev
+$npm run dev
 ```
 
 La app correra en el localhost en el puerto 5173:
