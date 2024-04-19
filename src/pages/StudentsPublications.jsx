@@ -5,8 +5,9 @@ import AreaTrabajo from '../components/AreaTrabajo'
 import Municipio from '../components/Municipio'
 import students from '../data/students'
 import TarjetaPublicacion from '../components/TarjetaPublicacion'
+import { NavLink } from 'react-router-dom'
 
-const OfferExploreStudent = () => {
+const studentsPublications = () => {
 return (
     <>
         <header>
@@ -39,7 +40,9 @@ return (
 
             <section className='w-[90%] mx-auto'>
                 {students.map( (student) => (
+                        <NavLink to="/studentProfile">
                         <TarjetaPublicacion listStudent={student} key={student.id}/>
+                        </NavLink>
                 ))}
 
             </section>
@@ -48,4 +51,4 @@ return (
 )
 }
 
-export default OfferExploreStudent
+export default studentsPublications

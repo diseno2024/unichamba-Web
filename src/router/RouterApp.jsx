@@ -4,9 +4,9 @@ import Inicio from '../pages/Inicio'
 import CreateStudentAccount from '../pages/CreateStudentAccount'
 import DetailsOffer from '../pages/DetailsOffer'
 import CreateOffer from '../pages/CreateOffer'
-import OfferExploreStudent from '../pages/StudentsPublications'
+import StudentsPublications from '../pages/StudentsPublications';
 import StudentProfile from '../pages/StudentProfile'
-import StudentsPublications from '../pages/StudentsPublications'
+import OfferExploreStudent from '../pages/OfferExploreStudent'
 import Login from '../auth/pages/Login'
 
 const RouterApp = () => {
@@ -19,9 +19,9 @@ return (
         <Route path='/createAccountStd' element={<CreateStudentAccount/>} />
         <Route path='/detailsOffer' element={<DetailsOffer/>} />
         <Route path='/createOffer' element={<CreateOffer/>} />
-        <Route path='/studentsPublications' element={<StudentsPublications/>} />
-        <Route path='/studentProfile' element={<StudentProfile/>} />
-        <Route path='/offerExploreStd' element={<OfferExploreStudent/>} />
+        <Route path='studentsPublications' element={<StudentsPublications/>}/>{/** Perfiles de estudiante, vista empleador */}
+        <Route path='/studentProfile' element={<StudentProfile/>}/>
+        <Route path='/OfferExploreStudent' element={<OfferExploreStudent/>}/> {/** Ofertas del empleo */}
         <Route path='/login' element={<Login/>}/>
 
     </Routes>
