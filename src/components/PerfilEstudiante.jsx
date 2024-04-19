@@ -1,6 +1,6 @@
 import { data } from "../data/ProfileStudentData";
 
-const {nombre, ciudad, municipio, contacto, email, educacion} = data[0]
+const {nombre, ciudad, municipio, contacto, email} = data[0]
 
 const Perfiles = () => {
     return(
@@ -14,7 +14,7 @@ const Perfiles = () => {
         <div>
           <h3 className=" flex justify-center text-2xl text-Azul-Medianoche font-bold">{nombre}</h3>
           <span className=" flex justify-center font-light">{ciudad},{municipio}</span>
-          <div className=" flex justify-center py-2">
+          <div className=" flex justify-center py-2 space-x-2">
           <box-icon type='solid' name='capsule' color='#161A30'></box-icon>
           <box-icon name='baby-carriage' type='solid' color='#161A30'></box-icon>
           <box-icon name='library' color='#161A30'></box-icon>
@@ -31,7 +31,7 @@ const Perfiles = () => {
           </ul>
 
           {/* BTN WHATSAPP */}
-          <a href="#" className=" flex justify-center mt-32 p-3 w-80 mx-auto mb-5 bg-WhatsApp rounded-xl shadow-xl"><span className=" text-white font-bold mr-2">Contacta conmigo</span><box-icon type='logo' name='whatsapp' color='white'></box-icon></a>
+          <a href="#" className=" flex justify-center mt-44 p-3 w-80 mx-auto mb-5 bg-WhatsApp rounded-xl shadow-xl"><span className=" text-white font-bold mr-2">Contacta conmigo</span><box-icon type='logo' name='whatsapp' color='white'></box-icon></a>
         </div>
       </div>
         </>
