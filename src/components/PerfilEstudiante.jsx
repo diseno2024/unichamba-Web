@@ -14,17 +14,20 @@ const Perfiles = () => {
         <div>
           <h3 className=" flex justify-center text-2xl text-Azul-Medianoche font-bold">{nombre}</h3>
           <span className=" flex justify-center font-light">{ciudad},{municipio}</span>
-          <a href="#" className=" flex justify-center bg-Azul-Medianoche text-white font-normal p-2 w-40 my-5 mx-auto rounded-xl shadow-xl">Descargar CV</a>
-
+          <div className=" flex justify-center py-2">
+          <box-icon type='solid' name='capsule' color='#161A30'></box-icon>
+          <box-icon name='baby-carriage' type='solid' color='#161A30'></box-icon>
+          <box-icon name='library' color='#161A30'></box-icon>
+          <box-icon name='dog' type='solid' color='#161A30'></box-icon>
+          <box-icon name='brush' color='#161A30'></box-icon>
+          </div>
           {/* INFORMACION DEL CONTACTO */}
           <p className=" pl-10 py-4">Informacion de contacto</p>
-          <ul className=' pl-10 mt-3'>
-            <li><box-icon name='phone' size="20px"></box-icon><span className=" ml-2 font-normal">Telefono</span></li>
+          <ul className=' pl-10'>
+            <li><box-icon name='phone' size="20px"></box-icon><span className=" ml-2 font-normal">Telefono fijo</span></li>
             <span className=' font-extralight pl-5 ml-2'>{contacto} (Movil)</span>
             <li><box-icon name='envelope' size="20px"></box-icon><span className=" ml-2 font-normal">Email</span></li>
             <span className=' font-extralight pl-5 ml-2'>{email}</span>
-            <li><box-icon name='book-open' size="20px"></box-icon><span className=" ml-2 font-normal">Educacion</span></li>
-            <span className=' font-extralight pl-5 ml-2'>{educacion}</span>
           </ul>
 
           {/* BTN WHATSAPP */}
