@@ -3,6 +3,7 @@ import NavGeneral from '../components/NavGeneral'
 
 
 
+
 const CreateOffer = () => {
    const initialStateValues={
     nombrePuesto:"",
@@ -14,33 +15,34 @@ const CreateOffer = () => {
     setValues({...values, [name]:value})
    
   }
+  
+  const handleSubmit = (e) => {
+    e.preventDefault(); // Envío del formulario
+    window.location.href = '/inicio'; // Redirigir a la página de inicio
+}
 
-  const handleSubmit=(e)=>{
-    e.preventDefault();
-console.log(values)
-    addOrEditLink(values);
-  }
-
- 
+  const onSubmit = () => {
+    window.location.href = '/inicio'
+}
 
   return (
         <>
         {/*Menu Navegador*/}
-<header>
+        <header className="fixed top-0 left-0 w-full z-50 bg-white shadow-md">
           <NavGeneral/>
 </header>
         
         {/*Contenedor principal div con padding para darle espacio alrededor de la tarjeta*/}
         {/*Color pastel*/}
-        <div class="bg-Tarjet px-8 pt-4 h-auto w-auto">
-        <div class="flex flex-col lg:flex-row rounded-xl border border-gray-500 shadow-lg h-auto">
+        <div className="bg-Tarjet px-8 pt-4 h-auto w-auto mt-24">
+        <div className="flex flex-col lg:flex-row rounded-xl border border-gray-500 shadow-lg h-auto">
      
-        <div class="w-full lg:w-1/3 h-auto w-auto">
-            <section class="h-full"> 
+        <div className="w-full lg:w-1/3 h-auto w-auto">
+            <section className="h-full"> 
                 <img
                     src="./imagenOferta.png"
                     alt="./public/ofertaimagen.png"
-                    class="w-full h-full object-cover rounded-xl"
+                    className="w-full h-full object-cover rounded-xl"
                 />
             </section>
         </div>
@@ -82,16 +84,18 @@ console.log(values)
                           </div>
                           <div className="w-full lg:w-2/4 ">
                         
-                            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-black" for="file_input">Escoje una imagen para la oferta</label>
-                            <input class="
-    text-sm border border-gray-300 
-    rounded-lg bg-white text-Azul-Crepúsculo 
-    dark:border-gray-600
-    dark:placeholder-gray-400 p-1.5 w-96 mt-0 
-    hover:bg-Azul-Crepúsculo hover:text-white hover:border-navy
-    " 
-    id="file_input" 
-    type="file"/>
+                            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-black" 
+                            for="file_input">Escoje una imagen para la oferta</label>
+                            <input className="
+                              text-sm border border-gray-300 
+                              rounded-lg bg-white text-Azul-Crepúsculo 
+                              dark:border-gray-600
+                              dark:placeholder-gray-400 p-1.5 w-96 mt-0 
+                              hover:bg-Azul-Crepúsculo hover:text-white hover:border-navy
+                              " 
+                              id="file_input" 
+                              type="file"
+                              required/>
 
 
                           </div>
@@ -107,7 +111,9 @@ console.log(values)
 
                                       {/*fila 5 caja Descripcion*/}
                                       <div className="flex flex-col lg:flex-row p-1 " >
-                                      <textarea id="descripcion" rows="12" className="lg:h-auto w-full h-auto border-2 border-zinc-950 bg-gray-200 w-[94%] p-2.5 text-sm text-gray-900 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:placeholder-gray-400 dark:text-black " placeholder="Descripción del Empleo" required></textarea>
+                                      <textarea id="descripcion" rows="12" className="lg:h-auto w-full h-auto border-2 border-zinc-950 bg-gray-200 w-[94%] p-2.5 text-sm text-gray-900 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:placeholder-gray-400 dark:text-black "
+                                       placeholder="Escriba una breve descripcion sobre el empleo"
+                                        required></textarea>
                                       </div>
                   
   
@@ -115,7 +121,8 @@ console.log(values)
                     {/*fila 6 boton*/}
                     <div className="flex flex-col lg:flex-row  lg:justify-end pr-14" >
                             <div className="lg:w-4/4 ">
-                            <button type="submit" className="text-white border-2 w-64 bg-Azul-Crepúsculo border border-black hover:bg-blue-800 hover:text-white font-medium rounded-lg text-sm  py-2.5 ">Crear Oferta</button>
+                            <button type="submit"
+                             className="text-white border-2 w-64 bg-Azul-Crepúsculo border border-black hover:bg-blue-800 hover:text-white font-medium rounded-lg text-sm  py-2.5 ">Crear Oferta</button>
                             </div>
                           </div>
                 
