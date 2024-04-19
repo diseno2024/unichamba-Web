@@ -1,4 +1,6 @@
 import React from 'react'
+import { NavLink } from 'react-router-dom'
+
 const Navbar = () => {
 return (
     <>
@@ -16,7 +18,7 @@ return (
             </div>
             {/* info del user  */}
             <div className='flex w-[200px] items-center justify-between'>
-                <h2 className='text-xl font-normal'>User Account</h2>
+                <NavLink to="/studentProfile"><h2 className='text-xl font-normal'>User Account</h2></NavLink>
                 <div className='w-[50px] h-[50px] rounded-full border-[1px] border-Azul-Fuerte flex items-center justify-center'>
                     <box-icon name='user' color="#161A30"></box-icon>
                 </div>
