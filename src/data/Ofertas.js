@@ -7,7 +7,7 @@ const Ofertas= [
         "oferta": "Electricista",
         "localidad": "Santa Ana - Candelaria la Frontera",
         "carrera": "Ingeniería Electrica",
-        "descripcion": "Contrata talento digital en El Salvador más rápido obteniendo acceso inmediato a los mayores candidatos pasivos, ya preseleccionados.",
+        "descripcion": "Oportunidad de aprendizaje para jovones, que les sirva de conocimiento y le permita generar ingresos",
         
     },
     {
@@ -52,7 +52,7 @@ const Ofertas= [
     },
     {
         "id": 7,
-        "oferta": "Cuidar un Enfermo",
+        "oferta": "Cuidar Enfermos",
         "localidad": "Santa Ana - Chalchuapa",
         "carrera": "Medicina",
         "descripcion": "Oportunidad de aprendizaje para jovones, que les sirva de conocimiento y le permita generar ingresos",

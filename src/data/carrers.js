@@ -5,133 +5,112 @@ const listCarrers = [
     },
     {
         "id":2,
-        "nombre": "Licenciatura en Ciencias Jurídicas" 
+        "nombre": "Licenciatura en Anestesiología y Medicina Perioperatoria" 
     },
     {
         "id":3,
-        "nombre": "Licenciatura en Ciencias Jurídicas" 
+        "nombre": "Licenciatura en Psicología" 
     },
     {
         "id":4,
-        "nombre": "Licenciatura en Ciencias Jurídicas" 
+        "nombre": " Licenciatura en Letras" 
     },
     {
         "id":5,
-        "nombre": "Licenciatura en Ciencias Jurídicas" 
+        "nombre": "Profesorado en Educación Básica para Primero y Segundo ciclo" 
     },
     {
         "id":6,
-        "nombre": "Licenciatura en Ciencias Jurídicas" 
+        "nombre": "Licenciatura en Ciencias de la Educación, Especialidad Lenguaje y Literatura" 
     },
     {
         "id":7,
-        "nombre": "Licenciatura en Ciencias Jurídicas" 
+        "nombre": "Licenciatura en Idioma Inglés: Opción Enseñanza" 
     },
     {
         "id":8,
-        "nombre": "Licenciatura en Ciencias Jurídicas" 
+        "nombre": "  Profesorado en Idioma Inglés para tercer ciclo de educación basica y media" 
     },
     {
         "id":9,
-        "nombre": "Licenciatura en Ciencias Jurídicas" 
+        "nombre": "Ingeniería Civil" 
     },
     {
         "id":10,
-        "nombre": "Licenciatura en Ciencias Jurídicas" 
+        "nombre": "Ingeniería Industrial" 
     },
     {
         "id":11,
-        "nombre": "Licenciatura en Ciencias Jurídicas" 
+        "nombre": "Ingeniería Mecánica" 
     },
     {
         "id":12,
-        "nombre": "Licenciatura en Ciencias Jurídicas" 
+        "nombre": "Ingeniería Eléctrica" 
     },
     {
         "id":13,
-        "nombre": "Licenciatura en Ciencias Jurídicas" 
+        "nombre": "Ingeniería Química (4 ciclos)" 
     },
     {
         "id":14,
-        "nombre": "Licenciatura en Ciencias Jurídicas" 
+        "nombre": "Ingeniería de Sistemas Informáticos" 
     },
     {
         "id":15,
-        "nombre": "Licenciatura en Ciencias Jurídicas" 
+        "nombre": "Ingeniería en Desarrollo de Software (en linea)" 
     },
     {
         "id":16,
-        "nombre": "Licenciatura en Ciencias Jurídicas" 
+        "nombre": "Licenciatura en Administración de Empresas" 
     },
     {
         "id":17,
-        "nombre": "Licenciatura en Ciencias Jurídicas" 
+        "nombre": "Licenciatura en Mercadeo Internacional" 
     },
     {
         "id":18,
-        "nombre": "Licenciatura en Ciencias Jurídicas" 
+        "nombre": "Licenciatura en Contaduría Pública" 
     },
     {
         "id":19,
-        "nombre": "Licenciatura en Ciencias Jurídicas" 
+        "nombre": " Licenciatura en Estadística" 
     },
     {
         "id":20,
-        "nombre": "Licenciatura en Ciencias Jurídicas" 
+        "nombre": "Profesorado en Matemática para Tercer Ciclo de Educación Básica y Educación Media" 
     },
     {
         "id":21,
-        "nombre": "Licenciatura en Ciencias Jurídicas" 
+        "nombre": "Licenciatura en Ciencias de la Educación, Especialidad Matemática" 
     },
     {
         "id":22,
-        "nombre": "Licenciatura en Ciencias Jurídicas" 
+        "nombre": " Licenciatura en Física" 
     },
     {
         "id":23,
-        "nombre": "Licenciatura en Ciencias Jurídicas" 
+        "nombre": " Licenciatura en Geofísica" 
     },
     {
         "id":24,
-        "nombre": "Licenciatura en Ciencias Jurídicas" 
+        "nombre": "Profesorado en Física para Tercer Ciclo de Educación Básica y Educación Media" 
     },
     {
         "id":25,
-        "nombre": "Licenciatura en Ciencias Jurídicas" 
+        "nombre": " Técnico en Turismo Ecológico y Cultural" 
     },
     {
         "id":26,
-        "nombre": "Licenciatura en Ciencias Jurídicas" 
+        "nombre": "Licenciatura en Biología" 
     },
     {
         "id":27,
-        "nombre": "Licenciatura en Ciencias Jurídicas" 
+        "nombre": "Técnico en Veterinaria y Zootecnia" 
     },
     {
         "id":28,
-        "nombre": "Licenciatura en Ciencias Jurídicas" 
-    },
-    {
-        "id":29,
-        "nombre": "Licenciatura en Ciencias Jurídicas" 
-    },
-    {
-        "id":30,
-        "nombre": "Licenciatura en Ciencias Jurídicas" 
-    },
-    {
-        "id":31,
-        "nombre": "Licenciatura en Ciencias Jurídicas" 
-    },
-    {
-        "id":32,
-        "nombre": "Licenciatura en Ciencias Jurídicas" 
-    },
-    {
-        "id":33,
-        "nombre": "Licenciatura en Ciencias Jurídicas" 
+        "nombre": " Profesorado en Biología para Tercer Ciclo de Educación Básica y Educación Media" 
     }
-
 ]
 
 export default listCarrers
