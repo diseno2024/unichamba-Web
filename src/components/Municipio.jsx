@@ -12,7 +12,7 @@ return (
         {isOpen && <div className="absolute bg-white text-Naranje border-[1px] flex flex-col items-start rounded-[5px] p-2 font-semibold w-[200px] h-[300px] overflow-scroll overflow-x-hidden top-12">
                     {municipios.map(({municipio, id}) => (
                         <div className="cursor-pointer w-full rounded-lg text-Azul-oscuro py-1 px-1" key={id} >
-                            <h3>{municipio}</h3>
+                            <h3 className='hover:bg-Azul-oscuro/20 rounded-lg px-2'>{municipio}</h3>
                         </div>
                     ))}
                 </div>}

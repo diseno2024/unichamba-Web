@@ -23,7 +23,10 @@ export default {
         "Navbar": "#D9D9D9",
         "Filters" : "#EBEBEB"
 
-      }
+      },
+      backgroundImage: {
+        "imagen-fondo": "url('/Fondo-inicio.png')",
+      },
     }
   },
   plugins: [],

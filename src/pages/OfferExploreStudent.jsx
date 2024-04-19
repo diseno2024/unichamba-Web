@@ -14,7 +14,8 @@ const OfferExploreStudent = () => {
                 <Navbar />
             </header>
             <main className='bg-Blanco-cremoso h-auto mt-[6px] pt-28 space-y-8 '>
-                <section className='w-[95%] h-[100px] bg-Filters border-[1px] border-Azul-oscuro/50 mx-auto rounded-[10px] flex items-center px-5 justify-between'>
+
+                <section className=' w-[95%] h-[100px] bg-Filters border-[1px] border-Azul-oscuro/50 mx-auto rounded-[10px] flex items-center px-5 justify-between'>
 
                     <div className='w-[700px] flex justify-between'>
                         <div className='relative'>

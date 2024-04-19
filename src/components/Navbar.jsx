@@ -4,16 +4,16 @@ import { NavLink } from 'react-router-dom'
 const Navbar = () => {
 return (
     <>
-        <nav className='h-[90px] flex items-center justify-between px-10 bg-Navbar shadow-md shadow-Gris-claro fixed top-0 w-full'>
-            <div>
-                <img src="/LOGO.svg" alt="" />
-            </div>
+        <nav className='h-[90px] flex items-center justify-between px-10 bg-Navbar shadow-md shadow-Gris-claro fixed top-0 w-full z-50'>
+            <NavLink to='/inicio'>
+                <img src="/LOGO-AZUL.svg" alt="LOGO UNICHAMBA AZUL" />
+            </NavLink>
             {/* search */}
             <div className='border-[1px] border-Azul-Fuerte h-[50px] rounded-[15px] w-[750px] flex items-center justify-between px-5'>
-                <input type="search" placeholder='Cargo o Puesto' className='bg-inherit placeholder:text-Azul-Fuerte placeholder:font-normal w-[400px]'/>
+                <input type="search" placeholder='Cargo o Puesto' className='focus:outline-none font-normal bg-inherit placeholder:text-Azul-Fuerte placeholder:font-normal w-[400px]'/>
                 <box-icon name='x' color="#161A30"></box-icon>
                 <span className='h-[90%] border-[1px] border-Azul-Fuerte/50 ml-2'></span>
-                <input type="search" placeholder='Municipio' className='bg-inherit placeholder:text-Azul-Fuerte placeholder:font-normal h-full w-[400px] pl-[15px]'/>
+                <input type="search" placeholder='Municipio' className='focus:outline-none font-normal bg-inherit placeholder:text-Azul-Fuerte placeholder:font-normal h-full w-[400px] pl-[15px]'/>
                 <box-icon name='x' color="#161A30"></box-icon>
             </div>
             {/* info del user  */}

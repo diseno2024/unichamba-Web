@@ -4,56 +4,62 @@ const students = [
         "estudiante": "Valeria Esmeralda Escobar Lopez",
         "localidad": "Santa Ana - Santa Ana",
         "carrera": "Licenciatura en Administracion de Empresa",
-        "descripcion": "Actualmente crusando 4º año , una persona lider, analitica y muy comunicativa"
+        "descripcion": "Actualmente cursando 4º año , una persona lider, analitica y muy comunicativa",
+        "FechaPublicacion":"Hace 1 dia",
         
     },
     {
         "id": 2,
-        "estudiante": "Valeria Esmeralda Escobar Lopez",
-        "localidad": "Santa Ana - Santa Ana",
-        "carrera": "Licenciatura en Administracion de Empresa",
-        "descripcion": "Actualmente crusando 4º año , una persona lider, analitica y muy comunicativa"
+        "estudiante": "Ana Gabriela López Mejía",
+        "localidad": "Santa Ana - Metapan",
+        "carrera": "Licenciatura en Contabilidad",
+        "descripcion": "Actualmente cursando 4º año , una persona lider, analitica y muy comunicativa",
+        "FechaPublicacion": "Hace 2 dias",
         
     },
     {
         "id": 3,
-        "estudiante": "Valeria Esmeralda Escobar Lopez",
-        "localidad": "Santa Ana - Santa Ana",
-        "carrera": "Licenciatura en Administracion de Empresa",
-        "descripcion": "Actualmente crusando 4º año , una persona lider, analitica y muy comunicativa"
+        "estudiante": "Juan Antonio Godinez Flores",
+        "localidad": "Santa Ana - Candelaria la Frontera",
+        "carrera": "Medicina",
+        "descripcion": "Actualmente cursando 4º año , una persona lider, analitica y muy comunicativa",
+        "FechaPublicacion": "Hace 2 dias",
         
     },
     {
         "id": 4,
-        "estudiante": "Valeria Esmeralda Escobar Lopez",
-        "localidad": "Santa Ana - Santa Ana",
-        "carrera": "Licenciatura en Administracion de Empresa",
-        "descripcion": "Actualmente crusando 4º año , una persona lider, analitica y muy comunicativa"
+        "estudiante": "Miguel Angel Zepeda Trujillo",
+        "localidad": "Santa Ana - Santa Rosa",
+        "carrera": "Ingenieria Civil",
+        "descripcion": "Actualmente cursando 4º año , una persona lider, analitica y muy comunicativa",
+        "FechaPublicacion": "Hace 3 dias",
         
     },
     {
         "id": 5,
-        "estudiante": "Valeria Esmeralda Escobar Lopez",
+        "estudiante": "Bryan Alexander Fuentes Bachez",
         "localidad": "Santa Ana - Santa Ana",
-        "carrera": "Licenciatura en Administracion de Empresa",
-        "descripcion": "Actualmente crusando 4º año , una persona lider, analitica y muy comunicativa"
+        "carrera": "Ingeniería Electrica",
+        "descripcion": "Actualmente cursando 4º año , una persona lider, analitica y muy comunicativa",
+        "FechaPublicacion": "Hace 3 dias",
         
     },
     {
         "id": 6,
-        "estudiante": "Valeria Esmeralda Escobar Lopez",
-        "localidad": "Santa Ana - Santa Ana",
-        "carrera": "Licenciatura en Administracion de Empresa",
-        "descripcion": "Actualmente crusando 4º año , una persona lider, analitica y muy comunicativa"
+        "estudiante": "Noemi Fuentes Sanchez",
+        "localidad": "Santa Ana - Metapan",
+        "carrera": "Licenciatura en Idiomas",
+        "descripcion": "Actualmente cursando 4º año , una persona lider, analitica y muy comunicativa",
+        "FechaPublicacion": "Hace 4 dias",
         
     },
     {
         "id": 7,
-        "estudiante": "Valeria Esmeralda Escobar Lopez",
-        "localidad": "Santa Ana - Santa Ana",
-        "carrera": "Licenciatura en Administracion de Empresa",
-        "descripcion": "Actualmente crusando 4º año , una persona lider, analitica y muy comunicativa"
-        
+        "estudiante": "Jacquelinne Breatriz Alvares Ramos",
+        "localidad": "Santa Ana - Coatepeque",
+        "carrera": "Licenciatura en Mercadeo",
+        "descripcion": "Actualmente cursando 4º año , una persona lider, analitica y muy comunicativa",
+        "FechaPublicacion": "Hace 1 Semana",
     },
 
 
