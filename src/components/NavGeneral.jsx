@@ -4,19 +4,26 @@ import { NavLink } from 'react-router-dom'
 const NavGeneral = () => {
   return (
     <>
-      <nav className="border-b-2 border-black/20 h-[85px] mx-auto flex items-center justify-between px-8 shadow-md">
-        
-        <NavLink to="/" className="h-[50px] w-[250px] px-5 border-[1px] border-Lapislazuli rounded-lg placeholder:text-blue-600 focus:outline-none mr-3 flex  text-blue-900">
-        <button>
-          <box-icon name="arrow-back" color="#31304D"></box-icon>
-        </button>
+    <nav className="border-b-2 border-black/20 h-[85px] mx-auto flex items-center justify-between px-8 shadow-md bg-Gris-claro">
+        <NavLink
+          to="/"
+          className="h-[50px] w-[80px] px-5 border-[1px] border-Gris-claro rounded-lg placeholder:text-blue-600 focus:outline-none mr-3 flex  text-blue-900"
+        >
+          <button>
+            <box-icon name="arrow-back" color="#31304D" size="35px"></box-icon>
+          </button>
         </NavLink>
 
-       
         <div className="flex justify-center items-center gap-8">
-        <img src="./public/LOGO.png" alt="" className="mx-auto "/>
+          <NavLink
+            to="/"
+            className="h-[50px] w-[250px] px-5 border-[1px] border-Gris-claro rounded-lg placeholder:text-blue-600 focus:outline-none mr-1 flex  text-blue-900"
+          >
+            <img src="./public/LOGO.png" alt="" className="mx-auto " />
+          </NavLink>
         </div>
       </nav>
+
     </>
   );
 };
