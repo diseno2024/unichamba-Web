@@ -3,6 +3,8 @@ import Navbar from '../components/Navbar'
 import CarreraFiltro from '../components/CarreraFiltro'
 import AreaTrabajo from '../components/AreaTrabajo'
 import Municipio from '../components/Municipio'
+import students from '../data/students'
+import TarjetaPublicacion from '../components/TarjetaPublicacion'
 
 const OfferExploreStudent = () => {
 return (
@@ -10,10 +12,9 @@ return (
         <header>
             <Navbar />
         </header>
-        <main className='bg-Blanco-cremoso h-screen mt-[6px] pt-3'>
-            <section className='w-[95%] h-[100px] bg-Filters border-[1px] border-Azul-oscuro/50 mx-auto rounded-[10px] flex items-center px-5 justify-between'>
+        <main className='bg-Blanco-cremoso h-auto mt-[6px] pt-28 space-y-8'>
+            {/* <section className='w-[95%] h-[100px] bg-Filters border-[1px] border-Azul-oscuro/50 mx-auto rounded-[10px] flex items-center px-5 justify-between'>
 
-            {/* contenedor de filtros */}
             <div className='w-[700px] flex justify-between'>
                 <div className='relative'>
                     <CarreraFiltro />
@@ -26,9 +27,6 @@ return (
                 </div>
             </div>
 
-
-            {/* contenedor de bts relevantes */}
-
             <div className='w-auto flex gap-5 items-center '>
                 <p className='font-normal'>Ordenar por</p>
                 <div>
@@ -37,9 +35,12 @@ return (
                 </div>
             </div>
 
-            </section>
+            </section> */}
 
-            <section>
+            <section className='w-[90%] mx-auto'>
+                {students.map( (student) => (
+                        <TarjetaPublicacion listStudent={student} key={student.id}/>
+                ))}
 
             </section>
         </main>
