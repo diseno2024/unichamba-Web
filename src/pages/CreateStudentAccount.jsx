@@ -1,7 +1,14 @@
 import React from "react";
 import NavGeneral from "../components/NavGeneral";
 
+
+
 const CreateStudentAccount = () => {
+
+  const onSubmit = () => {
+    window.location.href = '/inicio'
+}
+
   return (
     <>
       <header className="bg-Blanco-cremoso">
@@ -296,7 +303,7 @@ const CreateStudentAccount = () => {
                   </h6>
                 </div>
                 <br />
-                <button className="bg-Azul-Crepúsculo text-white px-4 py-4 rounded-lg w-80 mr-11">
+                <button className="bg-Azul-Crepúsculo text-white px-4 py-4 rounded-lg w-80 mr-11" onClick={onSubmit}>
                   Crear cuenta estudiante
                 </button>
               </div>

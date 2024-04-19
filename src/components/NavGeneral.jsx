@@ -6,7 +6,7 @@ const NavGeneral = () => {
     <>
     <nav className="border-b-2 border-black/20 h-[85px] mx-auto flex items-center justify-between px-8 shadow-md bg-Gris-claro">
         <NavLink
-          to="/"
+          to="/login"
           className="h-[50px] w-[80px] px-5 border-[1px] border-Gris-claro rounded-lg placeholder:text-blue-600 focus:outline-none mr-3 flex  text-blue-900"
         >
           <button>
