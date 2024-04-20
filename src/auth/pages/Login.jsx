@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import NavGeneral from "../../components/NavGeneral";
+import { NavLink } from 'react-router-dom';
 
 const Login = () => {
     const [email, setEmail] = useState('')
@@ -9,70 +10,50 @@ const Login = () => {
         window.location.href = '/inicio'
     }
 
-    return (
-        <div className='w-screen h-screen bg-Blanco-cremoso text-xl'>
-            <header className="bg-Blanco-cremoso">
-                <NavGeneral></NavGeneral>
-               
-            </header>
-            <div className='flex flex-wrap justify-between items-center mx-[74px] mt-[20px] my-auto'>
-                <h1 className='font-roboto font-semibold text-[26px]'>Iniciar sesión para Publicar una oferta</h1>
-                <button className='max-w-[275px] mt-[80px]'>
-                    <img src="./public/iniciar-sesion.svg" className='w-full'/>
-                </button>
-            </div>
-            <div className='flex flex-wrap items-center justify-center p-[20px] pt-[40px] '>
-                <div className='ml-[55px] m-auto space-y-4'>              
-                    <div className='relative'>
-                        <label htmlFor='email' className='font-roboto font-normal '>User</label><br />
-                        <div className='flex flex-wrap justify-center'>
-                            <div className=' h-[32px]  mx-1'>
-                               <box-icon name='user' size='27px'></box-icon>
-                            </div>
-                            <input
-                                id="emailInput"
-                                type="email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                className='rounded-[5px] border-[1px] bg-Blanco-cremoso border-black p-[10px_15px] h-[32px] pl-[40px] w-[400px]'
-                            />
-                        </div>
-                    </div>
-                    <div className='relative my-[10px] '>
-                        <label htmlFor='password' className='font-roboto font-normal'>Contraseña</label><br />
+return (
+    <>
+        <header>
+            <NavGeneral/>
+        </header>
+        
+        <main className='h-[658px] bg-Blanco-cremoso'>
+            <section className='flex justify-between px-8 pt-10'>
+                <h1 className='text-2xl font-bold'>Inicia sesion para poder publicar una oferta laboral</h1>
+                <div><img src="/iniciar-sesion.svg" alt="" /></div>
+            </section>
+            <section className=' w-[90%] mx-auto mt-20'>
 
-                        <div className='flex flex-wrap justify-center '>
-                            <div className=' h-[33px] mx-1'>
-                            <box-icon type='solid' name='lock' size='27px' className=''></box-icon>
-                            </div>
-                            <input
-                                id="passwordInput"
-                                type="password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                className='rounded-[5px] border-[1px] bg-Blanco-cremoso border-black p-[10px_15px] h-[32px] pl-[40px] w-[400px]'
-                            />
+                <div>
+                    <h1 className='text-xl font-normal py-3'>Email</h1>
+                    <div className='flex gap-5 border-[1px] border-Azul-oscuro rounded-[5px] w-[450px] h-12'>
 
+                        <div className='px-3 h-12 border-[1px] border-Azul-oscuro rounded-[5px] flex items-center'>
+                        <box-icon name='user'></box-icon>
                         </div>
+                        <input type="text" className='bg-Blanco-cremoso focus:outline-none font-normal'/>
                     </div>
-                    <div 
-                    id="alerta" 
-                    className='hidden border-[1px] border-black font-medium font-roboto text-red-600 '
-                    >
-                        El email o la contraseña son incorrectos. Por favor, inténtelo de nuevo.
-                    </div>
-                    <a href="./" className='font-roboto font-normal h-[40px] '><br />Olvide mi contraseña</a><br />
-                    <button 
-                    onClick={onSubmit} 
-                    className='bg-Azul-oscuro border-[1px] border-black rounded-lg h-[35px] w-[400px]  text-white font-roboto font-semibold mt-[20px]'
-                    >
-                        Ingresar
-                    </button>
                 </div>
+
+                <div>
+                    <h1 className='text-xl font-normal py-3'>Password</h1>
+                    <div className='flex gap-5 border-[1px] border-Azul-oscuro rounded-[5px] w-[450px] h-12'>
+
+                        <div className='px-3 h-12 border-[1px] border-Azul-oscuro rounded-[5px] flex items-center'>
+                        <box-icon name='lock-alt'></box-icon>
+                        </div>
+                        <input type="text" className='bg-Blanco-cremoso focus:outline-none font-normal'/>
+                    </div>
+                </div>
+
+                <NavLink to='/createOffer'>
+                    <button className='h-[55px] w-[450px] bg-Azul-Crepúsculo mt-5 font-normal text-white rounded-[5px]'>Ingresar</button>
+                </NavLink>
                 
-            </div>
-        </div>
-    )
+            </section>
+        </main>
+    
+    </>
+)
 }
 
 export default Login

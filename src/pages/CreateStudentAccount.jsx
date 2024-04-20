@@ -1,8 +1,5 @@
 import React from "react";
 import NavGeneral from "../components/NavGeneral";
-import CarreraFiltro from '../components/CarreraFiltro'
-import AreaTrabajo from '../components/AreaTrabajo'
-
 
 const CreateStudentAccount = () => {
 
@@ -66,20 +63,156 @@ const CreateStudentAccount = () => {
                 <br></br>
                 <label htmlFor="carreraInput" className=" font-normal">Carrera</label>
                 <br />
-                <br />
-
-                <div className='relative'>
-                  <CarreraFiltro />
-                </div>
+                <select className="rounded-lg border border-black p-3 w-80 mt-4 text-lg bg-Blanco-cremoso">
+                  <option value="">Seleccione una carrera</option>
+                  <optgroup label="Ingenieria y Arquitectura">
+                    <option value="doctorado-en-medicina">
+                      Doctorado en Medicina
+                    </option>
+                    <option value="tecnico-en-enfermeria">
+                      Técnico en Enfermería
+                    </option>
+                    <option value="licenciatura-en-anestesiologia-y-medicina-perioperatoria">
+                      Licenciatura en Anestesiología y Medicina Perioperatoria
+                    </option>
+                  </optgroup>
+                  <optgroup label="Departamento de ciencias, filosofia y letras">
+                    <option value="licenciatura-en-psicologia">
+                      Licenciatura en Psicología
+                    </option>
+                    <option value="licenciatura-en-letras">
+                      Licenciatura en Letras
+                    </option>
+                    <option value="profesorado-en-educacion-basica-para-primer-y-segundo-ciclo">
+                      Profesorado en Educación Básica para Primero y Segundo
+                      Ciclo
+                    </option>
+                    <option value="licenciatura-en-ciencias-de-la-educacion-lenguaje-y-literatura">
+                      Licenciatura en Ciencias de la Educación, Especialidad
+                      Lenguaje y Literatura
+                    </option>
+                    <option value="licenciatura-en-ciencias-de-la-educacion-primero-y-segundo-ciclo">
+                      Licenciatura en Ciencias de la Educación, Especialidad en
+                      Primero y Segundo Ciclo de Educación Básica
+                    </option>
+                    <option value="licenciatura-en-ciencias-de-la-educacion-administracion-escolar">
+                      Licenciatura en Ciencias de la Educación, Especialidad en
+                      Administración Escolar
+                    </option>
+                  </optgroup>
+                  <optgroup label="Departamento de idiomas">
+                    <option value="licenciatura-en-idioma-ingles-ensenanza">
+                      Licenciatura en Idioma Inglés: Opción Enseñanza
+                    </option>
+                    <option value="profesorado-en-idioma-ingles-para-tercer-ciclo">
+                      Profesorado en Idioma Inglés para tercer ciclo de
+                      educación básica y educación media
+                    </option>
+                  </optgroup>
+                  <optgroup label="Departamento de Ingenieria y Arquitectura">
+                    {" "}
+                    <option>Arquitectura</option>
+                    <option>Ingeniería Civil</option>
+                    <option>Ingeniería Industrial</option>
+                    <option>Ingeniería Mecánica (4 ciclos)</option>
+                    <option>Ingeniería Eléctrica (4 los)</option>
+                    <option>Ingeniería Química (4 ciclos)</option>
+                    <option>Ingeniería de Sistemas Informáticos</option>
+                    <option>
+                      Ingeniería en Desarrollo de Software (en linea)
+                    </option>
+                  </optgroup>
+                  <optgroup label="Departamento de ciencias economicas">
+                    <option value="licenciatura-en-administracion-de-empresas">
+                      Licenciatura en Administración de Empresas
+                    </option>
+                    <option value="licenciatura-en-mercadeo-internacional">
+                      Licenciatura en Mercadeo Internacional
+                    </option>
+                    <option value="licenciatura-en-contaduria-publica">
+                      Licenciatura en Contaduría Pública
+                    </option>
+                  </optgroup>
+                  <optgroup label="Departamento de matemática">
+                    <option value="licenciatura-en-estadistica">
+                      Licenciatura en Estadística
+                    </option>
+                    <option value="profesorado-en-matematica-para-tercer-ciclo">
+                      Profesorado en Matemática para Tercer Ciclo de Educación
+                      Básica y Educación Media
+                    </option>
+                    <option value="licenciatura-en-ciencias-de-la-educacion-matematica">
+                      Licenciatura en Ciencias de la Educación, Especialidad
+                      Matemática
+                    </option>
+                  </optgroup>
+                  <optgroup label="Departamento de Física">
+                    <option value="licenciatura-en-fisica">
+                      Licenciatura en Física
+                    </option>
+                    <option value="licenciatura-en-geofisica">
+                      Licenciatura en Geofísica
+                    </option>
+                    <option value="profesorado-en-fisica-para-tercer-ciclo">
+                      Profesorado en Física para Tercer Ciclo de Educación
+                      Básica y Educación Media
+                    </option>
+                  </optgroup>
+                  <optgroup label="Departamento de Biologia">
+                    <option value="tecnico-en-turismo-ecologico-y-cultural">
+                      Técnico en Turismo Ecológico y Cultural
+                    </option>
+                    <option value="licenciatura-en-biologia">
+                      Licenciatura en Biología
+                    </option>
+                    <option value="tecnico-en-veterinaria-y-zootecnia">
+                      Técnico en Veterinaria y Zootecnia
+                    </option>
+                    <option value="profesorado-en-biologia-para-tercer-ciclo">
+                      Profesorado en Biología para Tercer Ciclo de Educación
+                      Básica y Educación Media
+                    </option>
+                  </optgroup>
+                </select>
 
                 <br></br>
                 <br />
                 <label htmlFor="trabajoInput" className=" font-normal">Trabajos</label>
                 <br></br>
-                <br />
-                <div className='relative'>
-                  <AreaTrabajo />
-                </div>
+                
+                <select className="rounded-lg border border-black p-3 w-80 mt-4 text-lg bg-Blanco-cremoso">
+                  <option value="">Seleccione trabajos</option>
+                  <option value="encuestador_campo">
+                    Encuestador de campo
+                  </option>
+                  <option value="trabajador_limpieza">
+                    Trabajador de limpieza por horas
+                  </option>
+                  <option value="promotor_productos">
+                    Promotor de productos en supermercados o tiendas
+                  </option>
+                  <option value="traductor_independiente">
+                    Traductor independiente
+                  </option>
+                  <option value="vendedor_ambulante">
+                    Vendedor ambulante de productos diversos
+                  </option>
+                  <option value="trabajador_eventos">
+                    Trabajador de eventos (montaje y desmontaje)
+                  </option>
+                  <option value="trabajo_agricultura">
+                    Trabajo en agricultura temporal (cosecha)
+                  </option>
+                  <option value="servicio_lavado_autos">
+                    Servicio de lavado de autos a domicilio
+                  </option>
+                  <option value="asistente_personal_virtual">
+                    Asistente personal virtual
+                  </option>
+                  <option value="trabajador_entrega_paquetes">
+                    Trabajador de entrega de paquetes
+                  </option>
+                </select>
 
                 <br></br>
                 <br />
@@ -170,7 +303,7 @@ const CreateStudentAccount = () => {
                   </h6>
                 </div>
                 <br />
-                <button className="bg-Azul-Crepúsculo text-white px-4 py-4 rounded-lg w-80 mr-11" onClick={onSubmit}>
+                <button className="bg-Azul-Crepúsculo text-white px-4 py-4 rounded-lg w-80 mr-11 font-normal" onClick={onSubmit}>
                   Crear cuenta estudiante
                 </button>
               </div>

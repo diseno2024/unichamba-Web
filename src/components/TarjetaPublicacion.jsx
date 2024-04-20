@@ -37,7 +37,7 @@ return (
             </div>
         </div>
         :
-        <div className=' h-[150px] py-3 px-5 flex justify-between bg-Azul-oscuro mb-5 rounded-[10px] w-[680px] mx-auto'>
+        <div className=' h-[150px] py-3 px-5 flex justify-between bg-Azul-oscuro mb-5 rounded-[10px] w-[630px] mx-auto'>
             {/* informacion del estudiante */}
             <div className='flex items-center gap-3'>
                 <div className='h-[50px] w-[50px] rounded-full flex items-center justify-center border-[1px] border-white'>

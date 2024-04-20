@@ -27,17 +27,17 @@ const CreateOffer = () => {
 
   return (
         <>
-        {/*Menu Navegador*/}
-        <header className="fixed top-0 left-0 w-full z-50 bg-white shadow-md">
+        <div className="bg-Blanco-cremoso">
+{/*Menu Navegador*/}
+<header className="fixed top-0 left-0 w-full z-50 bg-white shadow-md">
           <NavGeneral/>
-</header>
-        
+        </header>
         {/*Contenedor principal div con padding para darle espacio alrededor de la tarjeta*/}
         {/*Color pastel*/}
-        <div className="bg-Tarjet px-8 pt-4 h-auto w-auto mt-24">
+        <div className="bg-Tarjet px-8  h-auto w-auto pt-24">
         <div className="flex flex-col lg:flex-row rounded-xl border border-gray-500 shadow-lg h-auto">
-     
-        <div className="w-full lg:w-1/3 h-auto w-auto">
+  
+        <div className="w-full lg:w-1/3 h-auto">
             <section className="h-full"> 
                 <img
                     src="./imagenOferta.png"
@@ -48,23 +48,21 @@ const CreateOffer = () => {
         </div>
   
 
-       {/*Div que contiene el formulario*/}
-      <div className="w-full lg:w-3/4 ">
-        <p className="pt-5 pl-6 font-roboto font-bold text-lg">Crea una oferta</p>
-        <main className="w-[100%] mx-auto  rounded shadow pl-4 ">
-        <section className="">  
-
-        <form onSubmit={handleSubmit}>
+      {/*Div que contiene el formulario*/}
+      <main className="w-[100%] mx-auto pl-4 h-[615px]">
+        <section className="w-[95%] mx-auto">  
+        <form onSubmit={handleSubmit} className="h-[615px] space-y-2">
           
+        <p className="pt-5 pl-6 font-roboto font-bold text-lg">Crea una oferta</p>
                           {/*fila 1 Titulo*/}
                           <div className="flex flex-col lg:flex-row p-2" >
                             <div className="w-full lg:w-4/4 ">
-                              <label className="block text-sm font-medium font-black">Titulo</label>
+                              <label className="block text-sm font-medium">Titulo</label>
                               <input 
                               id="Titulo"
                               name="Titulo"
                               type="text" 
-                              className="mx-auto bg-gray-200 rounded-lg border border-black p-2 w-96 mt-1 border-1 border-zinc-950" 
+                              className="mx-aut bg-Blanco-cremoso font-light rounded-lg border border-black p-2 w-96 mt-1 border-1 border-zinc-950" 
                               required
                               pattern="[A-Za-z]+"
                               title="Por favor introduce solo letras."/>
@@ -74,24 +72,24 @@ const CreateOffer = () => {
                         {/*fila 2 Carrera* y imagen*/}
                         <div className="flex flex-col lg:flex-row p-2 ">
                           <div className="w-full lg:w-2/4 ">
-                            <label className="block text-sm font-medium  font-black">Carrera*</label>
+                            <label className="block text-sm font-medium ">Carrera*</label>
                             <input id="Carrera" 
                             type="text" 
-                            className=" bg-gray-200 rounded-lg border border-black p-2 w-96 mt-1 border-1 border-zinc-950" 
+                            className=" bg-Blanco-cremoso font-light rounded-lg border border-black p-2 w-96 mt-1 border-1 border-zinc-950" 
                             required
                             />
                         
                           </div>
-                          <div className="w-full lg:w-2/4 ">
+                          <div className="w-full lg:w-2/4">
                         
                             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-black" 
                             for="file_input">Escoje una imagen para la oferta</label>
                             <input className="
                               text-sm border border-gray-300 
-                              rounded-lg bg-white text-Azul-Crepúsculo 
+                              rounded-lg text-Azul-Crepúsculo font-light 
                               dark:border-gray-600
                               dark:placeholder-gray-400 p-1.5 w-96 mt-0 
-                              hover:bg-Azul-Crepúsculo hover:text-white hover:border-navy
+                              px-3 
                               " 
                               id="file_input" 
                               type="file"
@@ -105,13 +103,13 @@ const CreateOffer = () => {
                                       {/*fila 4 Descripcion*/}
                                       <div className="flex flex-col lg:flex-row p-2" >
                                       <div className="w-full lg:w-4/4 ">
-                                      <label className="block text-sm font-medium font-black">Descripcion</label>
+                                      <label className="block text-sm font-medium ">Descripcion</label>
                                       </div>
                                       </div>
 
                                       {/*fila 5 caja Descripcion*/}
                                       <div className="flex flex-col lg:flex-row p-1 " >
-                                      <textarea id="descripcion" rows="12" className="lg:h-auto w-full h-auto border-2 border-zinc-950 bg-gray-200 w-[94%] p-2.5 text-sm text-gray-900 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:placeholder-gray-400 dark:text-black "
+                                      <textarea id="descripcion" rows="12" className="lg:h-auto w-full h-auto border-2 border-zinc-950 bg-Blanco-cremoso p-2.5 text-sm text-gray-900 rounded-lg font-normal "
                                        placeholder="Escriba una breve descripcion sobre el empleo"
                                         required></textarea>
                                       </div>
@@ -119,11 +117,9 @@ const CreateOffer = () => {
   
 
                     {/*fila 6 boton*/}
-                    <div className="flex flex-col lg:flex-row  lg:justify-end pr-14" >
-                            <div className="lg:w-4/4 ">
+                    <div className="flex justify-end pt-1" >
                             <button type="submit"
-                             className="text-white border-2 w-64 bg-Azul-Crepúsculo border border-black hover:bg-blue-800 hover:text-white font-medium rounded-lg text-sm  py-2.5 ">Crear Oferta</button>
-                            </div>
+                            className="text-white w-64 bg-Azul-Crepúsculo hover:bg-Azul-Crepúsculo/80 hover:text-white font-medium rounded-lg text-sm  py-2.5 ">Crear Oferta</button>
                           </div>
                 
         </form>
@@ -132,14 +128,11 @@ const CreateOffer = () => {
       
        </main>
      </div>
-     </div>
 </div>
 
 <div className="bg-Tarjet h-auto lg:h-20 w-full lg:w-auto"></div>
   
-
-
-
+        </div>
         </>
   )
 }

@@ -22,7 +22,7 @@ const Inicio = () => {
                 <box-icon name='briefcase' color="white"></box-icon>
                 </buttons>
             </NavLink>
-            <NavLink to="/login">
+            <NavLink to="/createAccountStd">
               <buttons className='bg-white h-[55px] w-[180px] text-Azul-Fuerte font-semibold flex items-center justify-center rounded-[8px]'>Crear Cuenta</buttons>
             </NavLink>
           </div>
@@ -38,15 +38,17 @@ const Inicio = () => {
                 <box-icon name='current-location' color="white"></box-icon>
           </div>
           {/* buttons */}
+          <NavLink to="/studentsPublications" className="mx-auto">
           <button className='border-[2px] border-white text-white font-semibold w-[280px] mx-auto mt-8 h-[50px] rounded-[5px]'>Buscar Trabajo</button>
+          </NavLink>
         </div>
 
       <div className='h-[230px] w-full' style={{ backgroundImage: `url(${background})`, backgroundSize: 'cover',backgroundRepeat: 'no-repeat', backgroundPosition: 'center'}}></div>
       </header>
-      <main className='h-[650px] bg-Blanco-cremoso flex justify-center gap-20 pt-10'>
+      <main className='h-[650px] bg-Blanco-cremoso flex justify-center gap-10 pt-10'>
         {/* estudiantes */}
         <section className='flex flex-col items-end'>
-          <div className='w-[750px] h-[450px] bg-Gris-claro py-4 px-4 rounded-[10px] overflow-hidden'>
+          <div className='w-[700px] h-[450px] bg-Gris-claro py-4 px-4 rounded-[10px] overflow-hidden'>
               <h1 className='font-normal pb-3'>Estudiantes</h1>
               <div className='h-[450px] overflow-scroll overflow-x-hidden rounded-[10px] pb-12'>
               { students.map( (student) => (
@@ -62,7 +64,7 @@ const Inicio = () => {
 
           {/* Anuncios lalborales */}
           <section className='flex flex-col items-end'>
-            <div className='w-[750px] h-[450px] bg-Gris-claro py-4 px-4 rounded-[10px] overflow-hidden'>
+            <div className='w-[700px] h-[450px] bg-Gris-claro py-4 px-4 rounded-[10px] overflow-hidden'>
               <h1 className='font-normal pb-3'>Ofertas Laborales</h1>
               <div className='h-[450px] overflow-scroll overflow-x-hidden rounded-[10px] pb-12 px-[10px]'>
               { ofertas.map( (oferta) => (

@@ -14,14 +14,14 @@ const StudentProfile = () => {
     </header>
 
     {/* MAIN */}
-    <main className='flex items-center justify-between pt-28 pb-5 h-auto px-16'>
+    <main className='flex items-center justify-between pt-28 pb-5 h-auto px-10'>
       {/* PERFIL */}
       <div>
         <Perfiles />
       </div>
 
       {/* ACTIVIDADES, ESTADISTICAS Y APTITUDES */}
-      <div className=" bg-Gris-claro/50 rounded-xl w-[78%] h-[800px]">
+      <div className=" bg-Gris-claro/50 rounded-xl w-[73%] h-[800px] space-y-3">
         {/* EMPLEOS FAVORITOS */}
         <h1 className="mt-5 text-2xl font-normal pb-3 px-10">Acerca de</h1>
         <div className=" bg-Azul-oscuro/20 w-[95%] mx-auto rounded-xl h-[150px] items-center flex justify-center flex-col overflow-x-hidden">
