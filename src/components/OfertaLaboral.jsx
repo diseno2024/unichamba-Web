@@ -42,9 +42,9 @@ return (
                         <h2 className='text-md font-normal pt-3 text-white/75 overflow-hidden w-[320px] h-8'>{descripcion}</h2>
                     </div>
                 </div>
-                <div className='text-end flex flex-col justify-around items-end'>
-                    <h2 className='font-normal text-white'>{localidad}</h2>
-                    <div className='space-x-3 pt-5 text-md w-max text-white font-light'>
+                <div className='text-end flex flex-col justify-around items-end '>
+                    <h2 className='font-normal text-white '>{localidad}</h2>
+                    <div className='space-x-3 pt-5 text-md w-max text-white font-light '>
                             {carrera}
                     </div>
                 </div>

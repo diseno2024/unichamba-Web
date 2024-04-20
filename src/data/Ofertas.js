@@ -13,21 +13,14 @@ const Ofertas= [
     {
         "id": 2,
         "oferta": "Cuidar Perros",
-        "localidad": "Santa Ana - Metapan",
+        "localidad":"Santa Ana - Metapan",
         "carrera": "Licenciatura en Educacion",
         "descripcion": "Oportunidad de aprendizaje para jovones, que les sirva de conocimiento y le permita generar ingresos",
         
     },
+
     {
         "id": 3,
-        "oferta": "Supervisor",
-        "localidad": "Santa Ana - Santa Ana",
-        "carrera": "Licenciatura en Administración de Empresa",
-        "descripcion": "Oportunidad de aprendizaje para jovones, que les sirva de conocimiento y le permita generar ingresos",
-        
-    },
-    {
-        "id": 4,
         "oferta": "Auxiliar-Contable",
         "localidad": "Santa Ana - Santa Ana",
         "carrera": "Licenciatura en Contabilidad",
@@ -35,7 +28,7 @@ const Ofertas= [
         
     },
     {
-        "id": 5,
+        "id": 4,
         "oferta": "Pintor",
         "localidad": "Santa Ana - Santa Ana",
         "carrera": "Arquitectura",
@@ -43,7 +36,7 @@ const Ofertas= [
         
     },
     {
-        "id": 6,
+        "id": 5,
         "oferta": "Albañil",
         "localidad": "Santa Ana - Santa Rosa",
         "carrera": "Ingenieria Civil",
@@ -51,7 +44,7 @@ const Ofertas= [
         
     },
     {
-        "id": 7,
+        "id": 6,
         "oferta": "Cuidar Enfermos",
         "localidad": "Santa Ana - Chalchuapa",
         "carrera": "Medicina",
