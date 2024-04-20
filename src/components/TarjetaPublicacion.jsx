@@ -50,11 +50,11 @@ return (
                     <p className='font-normal text-white/75 overflow-hidden w-[320px] h-7'>{descripcion}</p>
                 </div>
             </div>
-            <div className='text-center space-y-11'>
+            <div className='text-center flex flex-col justify-around'>
                 {/* <h2 className='font-normal text-white'>{localidad}</h2> */}
                 <div>
-                    <h2 className='font-normal text-white'>{FechaPublicacion}</h2>
-                    <h2 className='font-normal text-white'>{localidad}</h2>
+                    <h2 className='font-normal text-white '>{FechaPublicacion}</h2>
+                    <h2 className='font-normal text-white '>{localidad}</h2>
                 </div>
                 <div className='space-x-3 pt-2'>
                         <box-icon name='plus-medical' color='white' size="xs"></box-icon>

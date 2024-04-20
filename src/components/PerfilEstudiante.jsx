@@ -5,7 +5,7 @@ const {nombre, ciudad, municipio, contacto, email} = data[0]
 const Perfiles = () => {
     return(
         <>
-        <div className=' bg-Azul-oscuro/20 w-[345px] h-[800px] rounded-lg mx-auto '>
+        <div className=' bg-Azul-oscuro/20 w-[310px] h-[800px] rounded-lg mx-auto'>
           {/* CONTENIDO */}
           <div className=' flex justify-center py-5 '>
             <box-icon name='user-circle' size="110px" color="#2D3250"></box-icon>
@@ -34,7 +34,7 @@ const Perfiles = () => {
             </div>
 
             {/* BTN WHATSAPP */}
-            <a href="#" className="flex justify-center mt-[300px] mx-auto p-3 w-80  bg-WhatsApp rounded-xl shadow-xl"><span className=" text-white font-bold mr-2">Contacta conmigo</span><box-icon type='logo' name='whatsapp' color='white'></box-icon></a>
+            <a href="#" className="flex w-[280px] justify-center mt-[310px] mx-auto p-3  bg-WhatsApp rounded-xl shadow-xl"><span className=" text-white font-bold mr-2">Contacta conmigo</span><box-icon type='logo' name='whatsapp' color='white'></box-icon></a>
           </div>
       </div>
         </>

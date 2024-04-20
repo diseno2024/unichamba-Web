@@ -16,7 +16,7 @@ const StudentProfile = () => {
     {/* MAIN */}
     <main className='flex items-center justify-between pt-28 pb-5 h-auto px-10'>
       {/* PERFIL */}
-      <div>
+      <div >
         <Perfiles />
       </div>
 
