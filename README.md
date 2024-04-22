@@ -9,7 +9,7 @@ App Hecha con :
 - Empaquetado con Vite (v5.2.0)
 
 ### Prerrequisitos para poder desplegar:
-- Haber instalado node.js (v20.12.2 o posteriores)
+- Haber instalado node.js (v20.12.2)
 
 ### Desplegando la aplicacion:
 - Se debe instalar las independencias necesarias  dentro del directorio del proyecto por medio del comando:
