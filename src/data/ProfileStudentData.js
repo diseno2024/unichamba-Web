@@ -7,6 +7,7 @@ export const data = [
         email: 'UserAccount123@gmail.com',
         nivelesEducacion: ['Educacion basica', 'Bachillerato General', 'Eduacion superior'],
         lugaresEducacion: ['C.E.C Madre del Salvador', 'C.E INSA', 'Universidad de El Salvador'],
+        EducacionActual: "Universidad de El Salvador",
         postulaciones: 2,
         perfilVisitado: 10, //Numero de veces que han visitado el perfil del estudiante
         descargaCV: 4, //Numero de veces que han descargado el perfil del estudiante

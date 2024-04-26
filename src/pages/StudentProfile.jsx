@@ -1,7 +1,7 @@
 import Perfiles from "../components/PerfilEstudiante";
 import Navbar from "../components/Navbar";
 import { data } from "../data/ProfileStudentData";
-const {nivelesEducacion, lugaresEducacion} = data[0];
+const {nivelesEducacion, lugaresEducacion, nombre, ciudad, municipio, contacto, email, EducacionActual} = data[0];
 
 // Este es la paginación de Elias  
 
@@ -9,47 +9,49 @@ const StudentProfile = () => {
   return (
     <>
     {/* HEADER */}
-    <header>
-      <Navbar />
-    </header>
+    <header></header>
+
 
     {/* MAIN */}
-    <main className='flex items-center justify-between pt-28 pb-5 h-auto px-10 bg-Blanco-cremoso'>
-      {/* PERFIL */}
-      <div >
-        <Perfiles />
+    <main className=" mb-10">
+      {/* FOTO DE PERFIL Y PORTADA */}
+
+      <div className=" mt-2 mx-5 bg-portada-perfil bg-cover h-[250px]">
+        <div className=" w-[200px] pt-[150px] ml-6 ">
+        <img src="/foto-perfil.jpg" alt="" className=" rounded-full border-8"/>
+        </div>
       </div>
 
-      {/* ACTIVIDADES, ESTADISTICAS Y APTITUDES */}
-      <div className=" bg-Gris-claro/50 rounded-xl w-[73%] h-[800px] space-y-3">
-        {/* EMPLEOS FAVORITOS */}
-        <h1 className="mt-5 text-2xl font-normal pb-3 px-10">Acerca de</h1>
-        <div className=" bg-Azul-oscuro/20 w-[95%] mx-auto rounded-xl h-[150px] items-center flex justify-center flex-col overflow-x-hidden">
-            <p className="font-normal text-Azul-Fuerte/70 tracking-wide">Háblanos de ti</p>
+      {/* INFORMACION */}
+      
+      <div className=" grid grid-cols-3">
+        <div className=" mt-28">
+          <h2 className=" text-3xl font-normal flex justify-center">{nombre}</h2>
+          <h1 className=" flex justify-center text-2xl text-Blue font-bold">{municipio}, {ciudad}</h1>
+
+          <div className=" mt-5">
+          <span className=" ml-5 font-normal">Informacion personal</span>
+          <ul className=" mt-5 ml-4">
+            <li><span class="material-symbols-outlined">call</span> <span className=" ml-2 font-normal">Telefono fijo</span></li>
+            <p className=" ml-9">{contacto}</p>
+
+            <li><span class="material-symbols-outlined">mail</span> <span className=" ml-2 font-normal">Email</span></li>
+            <p className=" ml-9">{email}</p>
+
+            <li><span class="material-symbols-outlined">apartment</span> <span className=" ml-2 font-normal">Educacion atual</span></li>
+            <p className=" ml-9">{EducacionActual}</p>
+          </ul>
+          </div>
         </div>
 
-        <h1 className="mt-5 text-2xl font-normal px-10 pb-3">Estudios</h1>
-        <div className=" bg-Azul-oscuro/20 w-[95%] mx-auto rounded-xl h-[150px] flex-col overflow-x-hidden">
-            <ul className="list-disc w-max py-4 px-10 font-normal text-Azul-Medianoche">
-              <li >{nivelesEducacion[0]} en {lugaresEducacion[0]}</li>
-              <li >{nivelesEducacion[1]} en {lugaresEducacion[1]}</li>
-              <li >{nivelesEducacion[2]} en {lugaresEducacion[2]}</li>
-            </ul>
-        </div>
 
-        <h1 className="mt-5 text-2xl font-normal px-10 pb-3">Experiencias en trabajos</h1>
-        <div className=" bg-Azul-oscuro/20 w-[95%] mx-auto rounded-xl h-[150px] flex-col overflow-x-hidden">
-            <ul className="flex py-7 px-5 gap-4">
-              <li><span className= " bg-Azul-Neblina  text-white p-3 rounded-lg font-normal">Enfermera</span></li>
-              <li><span className= " bg-Azul-Neblina text-white p-3 rounded-lg font-normal">Cuidado de niños</span></li>
-              <li><span className= " bg-Azul-Neblina text-white p-3 rounded-lg font-normal">Educacion basica</span></li>
-              <li><span className= " bg-Azul-Neblina text-white p-3 rounded-lg font-normal">cuidado de mascotas</span></li>
-              <li><span className= " bg-Azul-Neblina text-white p-3 rounded-lg font-normal">Pintor</span></li>
-
-            </ul>
+        <div className=" mt-28 border-2 border-black">
+          <h3 className=" ml-20 text-2xl font-bold">Acerca de</h3>
+          <div className=" w-[100%]">
+            <p>Con una trayectoria marcada por la pasión por la innovación y el compromiso con el crecimiento personal y profesional, me presento como un individuo dedicado a desafiar los límites y explorar nuevos horizontes</p>
+          </div>
         </div>
-        
-        
+        <div className="">3</div>
       </div>
     </main>
     </>
