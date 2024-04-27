@@ -42,7 +42,7 @@ const CreateOffer = () => {
                 <img
                   src="./imagenOferta.png"
                   alt="./public/ofertaimagen.png"
-                  className="w-full h-full object-cover rounded-xl"
+                  className="w-full h-full object-cover rounded-xl "
                 />
               </section>
             </div>
@@ -119,7 +119,7 @@ const CreateOffer = () => {
                   {/*fila 6 boton*/}
                   <div className="flex justify-end pt-1" >
                     <button type="submit"
-                      className="text-white w-64 bg-Azul-Crepúsculo hover:bg-Azul-Crepúsculo/80 hover:text-white font-medium rounded-lg text-sm  py-2.5 ">Crear Oferta</button>
+                      className="transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300 ... text-white w-64 bg-Dark-purple hover:bg-Dark-Blue hover:text-white font-medium rounded-lg text-sm  py-2.5 ">Crear Oferta</button>
                   </div>
 
                 </form>

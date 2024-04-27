@@ -33,7 +33,7 @@ export default {
         "Malachite":"#1AD361",
         "Space-cadet":"#2D3250",
         "Blue":"#0A05FE",
-        "Dark purple":"#360536",
+        "Dark-purple":"#360536",
         "WhatsApp": "#4FCE5D",
         "Navbar": "#D9D9D9",
         "Dark-Blue": "#04061A"
