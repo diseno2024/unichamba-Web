@@ -7,9 +7,14 @@ export default {
 
   theme: {
     extend: {
+      gridTemplateColumns: {
+        'custom': '1fr 2.2fr 1fr'
+      },
+
       fontFamily:{
         "roboto": ['Roboto', 'sans-serif']
       },
+
       colors: {
         // ANTIGUA PALETA DE COLORES
 
