@@ -29,7 +29,7 @@ export default {
         
         // NUEVA PALETA DE COLORES
         
-        "Rich black": "#04061A",
+        "Rich-black": "#04061A",
         "Malachite":"#1AD361",
         "Space-cadet":"#2D3250",
         "Blue":"#0A05FE",

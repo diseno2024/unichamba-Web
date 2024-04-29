@@ -20,7 +20,7 @@ const OfferExploreStudent = () => {
         <Navbar />
       </header>
       <main className='flex h-auto mt-[100px] pt-50 space-y-8 '>
-        <div className=' justify-center ml-14 mt-10 pl-5 py-3 mr-7 min-w-[300px]' >
+        <div className='ml-5 mt-10 pl-4 py-2 mr-5 min-w-[300px]' >
 
           <div className='border-r-2 border-black/40'>
             <CarreraFiltro />
@@ -34,13 +34,13 @@ const OfferExploreStudent = () => {
         </div>
 
 
-        <section className=' w-[38%]  '>
+        <section className=' w-[60%]  '>
           {/* {ofertas.map( (oferta) => ( 
                   <OfertaLaboral listStudent={oferta} key={oferta.id}/>
                             
                 ))} */}
 
-          <div className='flex space-x-10'>
+          <div className='flex space-x-5'>
             {/* Primera columna */}
             <div className='flex-1 '>
               {primeraColumna.map((elemento, index) => (
