@@ -12,9 +12,9 @@ const Ofertas= [
     },
     {
         "id": 2,
-        "oferta": "Cuidar Perros",
+        "oferta": "Seguridad informática",
         "localidad":"Santa Ana - Metapan",
-        "carrera": "Licenciatura en Educacion",
+        "carrera": "Ingeniería Informática",
         "descripcion": "Oportunidad de aprendizaje para jovones, que les sirva de conocimiento y le permita generar ingresos",
         
     },
@@ -29,23 +29,23 @@ const Ofertas= [
     },
     {
         "id": 4,
-        "oferta": "Pintor",
+        "oferta": "Finanzas corporativas",
         "localidad": "Santa Ana - Santa Ana",
-        "carrera": "Arquitectura",
+        "carrera": "Administaración de Empresas",
         "descripcion": "Oportunidad de aprendizaje para jovones, que les sirva de conocimiento y le permita generar ingresos",
         
     },
     {
         "id": 5,
-        "oferta": "Albañil",
+        "oferta": "Marketing estratégico",
         "localidad": "Santa Ana - Santa Rosa",
-        "carrera": "Ingenieria Civil",
+        "carrera": "Marketing",
         "descripcion": "Oportunidad de aprendizaje para jovones, que les sirva de conocimiento y le permita generar ingresos",
         
     },
     {
         "id": 6,
-        "oferta": "Cuidar Enfermos",
+        "oferta": "Cirugía general",
         "localidad": "Santa Ana - Chalchuapa",
         "carrera": "Medicina",
         "descripcion": "Oportunidad de aprendizaje para jovones, que les sirva de conocimiento y le permita generar ingresos",

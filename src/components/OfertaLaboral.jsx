@@ -1,57 +1,69 @@
 import { useLocation } from "react-router-dom";
 
 //Componente de la vista del estudiante para filtrar todo sobre las oportunidades Laborales
-const OfertaLaboral = ({listStudent}) => {
-    const {oferta, localidad, carrera, descripcion} = listStudent;
+const OfertaLaboral = ({ listStudent }) => {
+    const { oferta, localidad, carrera, descripcion } = listStudent;
     const location = useLocation();
-    
-return (
-    <>
-    {/* foto del estudiante */}
-        {location.pathname === '/OfferExploreStudent' 
-            ?
-                <div className=' h-[150px] py-3 px-5 flex justify-between bg-Gris-claro mb-6 rounded-[10px] '>
-                {/* informacion del estudiante */}
-                <div className='flex items-center gap-6'>
-                    <div className='h-[70px] w-[70px] rounded-full flex items-center justify-center border-[1px] border-Azul-Fuerte'>
-                        <box-icon name='user' size='md'></box-icon>
+
+    return (
+        <>
+            {/* foto del estudiante */}
+            {location.pathname === '/OfferExploreStudent'
+                ?
+                <div className=' min-h-[225px]  py-3 px-5 flex justify-between mb-6 border-b-2 border-black/40'>
+                    {/* informacion del estudiante */}
+                    <div className='flex items-center gap-4'>
+                        <div className='min-h-[200px] min-w-[225px] flex items-center justify-start '>
+                            <img src="https://d11cuk1a0j5b57.cloudfront.net/blog/wp-content/uploads/2020/11/empresas-en-el-Buen-Fin-que-estan-contratando-768x461.jpg" style={{ width: '225px', height: '173px' }} />
+                        </div>
+                        <div className='min-h-[160px] '>
+                            <h1 className='text-2xl font-normal text-Blue min-w-max'>{oferta}</h1>
+                            <h2 className=' flex flex-nowrap font-normal text-Dark-Blue mt-2 mr-2'>
+                                <span className="material-symbols-outlined">
+                                    location_on
+                                </span>
+                                {localidad}</h2>
+                            {/* icons */}
+                            <h2 className='text-md font-normal pt-3 text-Dark-Blue overflow-hidden min-w-[320px] h-8'>{descripcion}</h2>
+
+                            <div className='flex justify-end  pt-16 text-md min-w-[300px] text-Dark-Blue font-normal  '>
+                                {carrera}
+                            </div>
+
+                        </div>
                     </div>
-                    <div className='space-y-1'>
-                        <h1 className='text-2xl font-normal'>{oferta}</h1>
-                        {/* icons */}
-                        <h2 className='text-md font-normal pt-3'>{descripcion}</h2>
-                    </div>
+
+
                 </div>
-                <div className='text-center space-y-14'>
-                    <h2 className='font-normal'>{localidad}</h2>
-                    <div className='space-x-3 pt-5 text-xl'>
-                            {carrera}
+                :
+                <div className=' min-h-[225px]  py-3 px-5 flex justify-between mb-6 border-b-2 border-black/40'>
+                    {/* informacion del estudiante */}
+                    <div className='flex items-center gap-4'>
+                        <div className='min-h-[200px] min-w-[225px] flex items-center justify-start '>
+                            <img src="https://d11cuk1a0j5b57.cloudfront.net/blog/wp-content/uploads/2020/11/empresas-en-el-Buen-Fin-que-estan-contratando-768x461.jpg" style={{ width: '225px', height: '173px' }} />
+                        </div>
+                        <div className='min-h-[160px] '>
+                            <h1 className='text-2xl font-normal text-Blue min-w-max'>{oferta}</h1>
+                            <h2 className=' flex flex-nowrap font-normal text-Dark-Blue mt-2 mr-2'>
+                                <span className="material-symbols-outlined">
+                                    location_on
+                                </span>
+                                {localidad}</h2>
+                            {/* icons */}
+                            <h2 className='text-md font-normal pt-3 text-Dark-Blue overflow-hidden min-w-[320px] h-8'>{descripcion}</h2>
+
+                            <div className='flex justify-end  pt-16 text-md min-w-[300px] text-Dark-Blue font-normal  '>
+                                {carrera}
+                            </div>
+
+                        </div>
                     </div>
+
+
                 </div>
-            </div>
-            :
-            <div className=' h-[150px] py-3 px-5 flex justify-between bg-Azul-oscuro mb-6 rounded-[10px] '>
-            {/* informacion del estudiante */}
-                <div className='flex items-center gap-6'>
-                    <div className='h-[50px] w-[50px] rounded-full flex items-center justify-center border-[1px] border-white'>
-                        <box-icon name='user' size='md' color="white" ></box-icon>
-                    </div>
-                    <div className='space-y-1'>
-                        <h1 className='text-2xl font-normal text-white w-max'>{oferta}</h1>
-                        {/* icons */}
-                        <h2 className='text-md font-normal pt-3 text-white/75 overflow-hidden w-[320px] h-8'>{descripcion}</h2>
-                    </div>
-                </div>
-                <div className='text-end flex flex-col justify-around items-end '>
-                    <h2 className='font-normal text-white '>{localidad}</h2>
-                    <div className='space-x-3 pt-5 text-md w-max text-white font-light '>
-                            {carrera}
-                    </div>
-                </div>
-        </div>
-        }
-    </>
-)
+            }
+        </>
+    )
 }
 
 export default OfertaLaboral
