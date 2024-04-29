@@ -1,10 +1,8 @@
 // Aqui trabajara kendall
 import React from 'react';
-import background from '../../public/wave.svg'
-import students from '../data/students'
-import ofertas from '../data/Ofertas'
-import TarjetaPublicacion from '../components/TarjetaPublicacion'
 import { NavLink } from 'react-router-dom';
+import moduleName from '../data/Ofertas'
+import Ofertas from '../data/Ofertas';
 import OfertaLaboral from '../components/OfertaLaboral';
 
 const Inicio = () => {
@@ -42,7 +40,23 @@ const Inicio = () => {
         <img src="/minerva_sola_white.png" alt="minerva" className='w-[180px] h-[230px] absolute top-24 right-8' />
       </header>
 
-      <main className='h-[650px] bg-Blanco-cremoso flex justify-center gap-10 pt-10'>
+      <main className='h-auto justify-center pt-10 border border-black w-[95%] mx-auto grid grid-cols-2'>
+
+        {/* perfiles de estudiantes  */}
+
+        <section className='border border-red-500 px-5'>
+          
+        </section>
+
+        {/* ofertas laborales recientes */}
+
+        <section className='px-5'>
+
+          {Ofertas.map((oferta) => (
+            <OfertaLaboral listStudent={oferta} key={oferta.id}/>
+          ))}
+
+        </section>
         
       </main>
     </>
