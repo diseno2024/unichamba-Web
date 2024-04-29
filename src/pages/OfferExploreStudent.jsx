@@ -20,7 +20,17 @@ const OfferExploreStudent = () => {
         <Navbar />
       </header>
       <main className='flex h-auto mt-[100px] pt-50 space-y-8 '>
-        <div className='ml-5 mt-10 pl-4 py-2 mr-5 min-w-[300px]' >
+
+      <div className=''>
+          <NavLink to="/inicio">
+            <span class="material-symbols-outlined ">
+              arrow_back
+            </span>
+          </NavLink>
+        </div>
+
+
+        <div className='ml-2 mt-10 pl-4 py-2 mr-3 min-w-[300px]' >
 
           <div className='border-r-2 border-black/40'>
             <CarreraFiltro />
@@ -44,14 +54,14 @@ const OfferExploreStudent = () => {
             {/* Primera columna */}
             <div className='flex-1 '>
               {primeraColumna.map((elemento, index) => (
-                <OfertaLaboral listStudent={elemento} key={index} />
+                <NavLink to="/DetailsOffer"><OfertaLaboral listStudent={elemento} key={index} /></NavLink>
               ))}
             </div>
 
             {/* Segunda columna */}
             <div className='flex-1'>
               {segundaColumna.map((elemento, index) => (
-                <OfertaLaboral listStudent={elemento} key={index} />
+                <NavLink to="/DetailsOffer"><OfertaLaboral listStudent={elemento} key={index} /></NavLink>
               ))}
             </div>
           </div>
