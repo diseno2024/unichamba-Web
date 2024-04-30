@@ -8,6 +8,7 @@ import StudentsPublications from '../pages/StudentsPublications';
 import StudentProfile from '../pages/StudentProfile'
 import OfferExploreStudent from '../pages/OfferExploreStudent'
 import Login from '../auth/pages/Login'
+import UserAdmin from '../pages/UserAdmin'
 
 const RouterApp = () => {
 return (
@@ -23,6 +24,7 @@ return (
         <Route path='/studentProfile' element={<StudentProfile/>}/>
         <Route path='/OfferExploreStudent' element={<OfferExploreStudent/>}/> {/** Ofertas del empleo */}
         <Route path='/login' element={<Login/>}/>
+        <Route path='/userAdmin' element={<UserAdmin/>}/>
 
     </Routes>
     
