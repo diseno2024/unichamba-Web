@@ -1,7 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import NavGeneral from "../components/NavGeneral";
 import { Component, Fragment } from "react";
 import OrdenarCarreras from "../components/ordenCarreras";
+import { db } from "../data/firebase";
+import {
+  collection,
+  getFirestore,
+  addDoc,
+  getDocs,
+  doc,
+  getDoc,
+} from "firebase/firestore";
 
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
@@ -27,8 +36,44 @@ const options = [
 const animatedComponents = makeAnimated();
 
 const CreateStudentAccount = () => {
-  const onSubmit = () => {
-    window.location.href = "/inicio";
+  const initialStateValues = {
+    nombre: "",
+    telefono: "",
+    carrera: "",
+    trabajos: [],
+    apellido: "",
+    whatsapp: "",
+    fechaNacimiento: "",
+    acercaDe: "",
+  };
+  const [values, setValues] = useState(initialStateValues);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setValues({ ...values, [name]: value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(values);
+    addOrEditLink(values);
+  };
+
+  const handleTrabajosChange = (selectedOptions) => {
+    const trabajos = selectedOptions.map((option) => option.label);
+    setValues({ ...values, trabajos: trabajos });
+  };
+
+  const addOrEditLink = async (linkObject) => {
+    try {
+      await addDoc(collection(db, "estudiantes"), {
+        ...values,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+    setValues({ ...initialStateValues });
+    alert("nueva tarea agregada");
   };
 
   return (
@@ -50,7 +95,7 @@ const CreateStudentAccount = () => {
               Crea tu cuenta y encuentra el empleo que estas buscando
             </p>
           </div>
-          <form>
+          <form onSubmit={handleSubmit}>
             <div className="flex ml-10">
               <div>
                 <br />
@@ -65,9 +110,9 @@ const CreateStudentAccount = () => {
                   id="nombreInput"
                   className="rounded-lg border border-black p-3 w-80 mt-4 bg-Blanco-cremoso"
                   name="nombre"
-                  required
                   pattern="^[a-zA-Z]+\s[a-zA-Z]+$"
                   title="Por favor introduce entre 5 y 30 dígitos."
+                  onChange={handleInputChange}
                 />
                 <br></br>
                 <br></br>
@@ -81,9 +126,9 @@ const CreateStudentAccount = () => {
                   id="telefonoInput"
                   className="rounded-lg border border-black p-3 w-80 mt-4 bg-Blanco-cremoso"
                   name="telefono"
-                  required
                   pattern="[0-9]{8}"
                   title="Por favor, introduce exactamente 8 números."
+                  onChange={handleInputChange}
                 />
                 <br />
                 <br></br>
@@ -103,7 +148,7 @@ const CreateStudentAccount = () => {
                 <Select
                   closeMenuOnSelect={false}
                   components={animatedComponents}
-                  
+                  onChange={handleTrabajosChange}
                   isMulti
                   options={options}
                   className="rounded-lg border border-black p-3 w-80 mt-4 bg-Blanco-cremoso"
@@ -128,9 +173,9 @@ const CreateStudentAccount = () => {
                   id="apellidoInput"
                   className="rounded-lg border border-black p-3 w-80 mt-4 bg-Blanco-cremoso"
                   name="apellido"
-                  required
                   pattern="^[a-zA-Z]+\s[a-zA-Z]+$"
                   title="Por favor introduce entre 5 y 30 dígitos."
+                  onChange={handleInputChange}
                 />
                 <br></br>
                 <br></br>
@@ -143,8 +188,8 @@ const CreateStudentAccount = () => {
                   type="number"
                   id="whatsappInput"
                   className="rounded-lg border border-black p-3 w-80 mt-4 bg-Blanco-cremoso"
-                  name="email"
-                  required
+                  name="whatsapp"
+                  onChange={handleInputChange}
                 />
                 <br></br>
                 <br></br>
@@ -158,8 +203,8 @@ const CreateStudentAccount = () => {
                   type="date"
                   id="fechaInput"
                   className="rounded-lg border border-black p-3 w-80 mt-4 bg-Blanco-cremoso"
-                  name="repetirContraseña"
-                  required
+                  name="fechaNacimiento"
+                  onChange={handleInputChange}
                 />
               </div>
               <div className="pl-[80px]">
@@ -177,8 +222,9 @@ const CreateStudentAccount = () => {
                 <br></br>
                 <textarea
                   placeholder="Puedes hablar acerca de tus conocimientos o sobre tus aptitudes                                         0-500"
-                  name=""
+                  name="acercaDe"
                   id=""
+                  onChange={handleInputChange}
                   cols="79"
                   rows="4"
                   className="border border-black rounded-lg resize-none p-3 bg-Blanco-cremoso "
@@ -199,17 +245,13 @@ const CreateStudentAccount = () => {
                     name=""
                     id=""
                     className="mt-3 checked:bg-Blanco-cremoso"
-                    required
                   />
                   <h6 className="text-sm text-gray-500 mt-3 ml-3 font-normal">
                     Acepto los terminos y condiciones de unichamba
                   </h6>
                 </div>
                 <br />
-                <button
-                  className="bg-Dark-Blue text-white px-4 py-4 rounded-lg w-80 mr-11 font-normal"
-                  onClick={onSubmit}
-                >
+                <button className="bg-Dark-Blue text-white px-4 py-4 rounded-lg w-80 mr-11 font-normal">
                   Crear cuenta estudiante
                 </button>
               </div>
