@@ -2,15 +2,19 @@ import React, { useState } from "react";
 import listCarrersOrden from "../data/orderCarrers";
 import { useLocation } from "react-router-dom";
 
-const OrdenarCarreras = () => {
+const OrdenarCarreras = ({onSelect}) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedCarrera, setSelectedCarrera] = useState('');
+  const [selectedCarrera, setSelectedCarrera] = useState("");
   const location = useLocation();
 
   const handleSelectChange = (event) => {
-    setSelectedCarrera(event.target.value);
+    const carreraSeleccionada = event.target.value;
+    setSelectedCarrera(carreraSeleccionada);
+    onSelect(carreraSeleccionada);
     setIsOpen(false);
   };
+  
+  
 
   return (
     <>
@@ -19,25 +23,26 @@ const OrdenarCarreras = () => {
         onClick={() => setIsOpen((prev) => !prev)}
         onChange={handleSelectChange}
         value={selectedCarrera}
+        required
       >
         <option value="">Seleccione una carrera</option>
         {listCarrersOrden.map(({ nombre, id }) => (
-          <option value={nombre} key={id}>{nombre}</option>
+          <option value={nombre} key={id}>
+            {nombre}
+          </option>
         ))}
       </select>
       {isOpen && (
-        <div >
+        <div>
           {listCarrersOrden.map(({ nombre, id }) => (
             <div
-             
               key={id}
               onClick={() => {
                 setSelectedCarrera(nombre);
+                onSelect(nombre);
                 setIsOpen(false);
               }}
-            >
-             
-            </div>
+            ></div>
           ))}
         </div>
       )}

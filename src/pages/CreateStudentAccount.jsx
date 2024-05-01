@@ -11,10 +11,10 @@ import {
   doc,
   getDoc,
 } from "firebase/firestore";
-
+import { NavLink } from 'react-router-dom'
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
-
+import Swal from "sweetalert2";
 const options = [
   { value: "uno", label: "Encuestador Campo" },
   { value: "dos", label: "Trabajador de limpieza por horas" },
@@ -46,10 +46,33 @@ const CreateStudentAccount = () => {
     fechaNacimiento: "",
     acercaDe: "",
   };
+
+  const isValidDate = (dateString) => {
+    // Convertir la cadena de fecha a objeto Date
+    const selectedDate = new Date(dateString);
+    // Obtener la fecha actual
+    const today = new Date();
+    // Calcular la diferencia de tiempo entre las fechas
+    const diffTime = Math.abs(today - selectedDate);
+    // Calcular la diferencia de años
+    const diffYears = Math.floor(diffTime / (1000 * 60 * 60 * 24 * 365));
+    // La persona debe tener al menos 18 años
+    return diffYears >= 18;
+  };
   const [values, setValues] = useState(initialStateValues);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    if (name === "fechaNacimiento") {
+      if (!isValidDate(value)) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Necesitas ser mayor de edad para crear una cuenta, por favor ingresa una fecha correcta',
+        });
+          return;
+      }
+    }
     setValues({ ...values, [name]: value });
   };
 
@@ -64,16 +87,33 @@ const CreateStudentAccount = () => {
     setValues({ ...values, trabajos: trabajos });
   };
 
+  const handleCarreraChange = (carrera) => {
+    setValues({ ...values, carrera: carrera });
+  };
+
   const addOrEditLink = async (linkObject) => {
     try {
       await addDoc(collection(db, "estudiantes"), {
         ...values,
       });
+      Swal.fire({
+        icon: 'success',
+        title: 'Registro con éxito',
+        text: '¡Estudiante registrado con éxito!',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.href = "/";
+        }
+      });
+      setValues(initialStateValues);
+      
+      // Redirigir a otra página después de mostrar la alerta
+     
     } catch (error) {
       console.log(error);
     }
-    setValues({ ...initialStateValues });
-    alert("nueva tarea agregada");
+  
+    
   };
 
   return (
@@ -113,6 +153,7 @@ const CreateStudentAccount = () => {
                   pattern="^[a-zA-Z]+\s[a-zA-Z]+$"
                   title="Por favor introduce entre 5 y 30 dígitos."
                   onChange={handleInputChange}
+                  required
                 />
                 <br></br>
                 <br></br>
@@ -129,6 +170,7 @@ const CreateStudentAccount = () => {
                   pattern="[0-9]{8}"
                   title="Por favor, introduce exactamente 8 números."
                   onChange={handleInputChange}
+                  required
                 />
                 <br />
                 <br></br>
@@ -136,7 +178,7 @@ const CreateStudentAccount = () => {
                   Carrera
                 </label>
                 <br />
-                <OrdenarCarreras></OrdenarCarreras>
+                <OrdenarCarreras onSelect={handleCarreraChange}></OrdenarCarreras>
 
                 <br></br>
                 <br />
@@ -151,6 +193,7 @@ const CreateStudentAccount = () => {
                   onChange={handleTrabajosChange}
                   isMulti
                   options={options}
+                  required
                   className="rounded-lg border border-black p-3 w-80 mt-4 bg-Blanco-cremoso"
                 />
 
@@ -176,6 +219,7 @@ const CreateStudentAccount = () => {
                   pattern="^[a-zA-Z]+\s[a-zA-Z]+$"
                   title="Por favor introduce entre 5 y 30 dígitos."
                   onChange={handleInputChange}
+                  required
                 />
                 <br></br>
                 <br></br>
@@ -185,11 +229,14 @@ const CreateStudentAccount = () => {
                 <br></br>
 
                 <input
-                  type="number"
+                  type="text"
                   id="whatsappInput"
                   className="rounded-lg border border-black p-3 w-80 mt-4 bg-Blanco-cremoso"
                   name="whatsapp"
                   onChange={handleInputChange}
+                  required
+                  pattern="[0-9]{8}"
+                  title="Por favor, introduce exactamente 8 números."
                 />
                 <br></br>
                 <br></br>
@@ -205,6 +252,8 @@ const CreateStudentAccount = () => {
                   className="rounded-lg border border-black p-3 w-80 mt-4 bg-Blanco-cremoso"
                   name="fechaNacimiento"
                   onChange={handleInputChange}
+                  required
+                  value={values.fechaNacimiento}
                 />
               </div>
               <div className="pl-[80px]">
@@ -226,6 +275,7 @@ const CreateStudentAccount = () => {
                   id=""
                   onChange={handleInputChange}
                   cols="79"
+                  required
                   rows="4"
                   className="border border-black rounded-lg resize-none p-3 bg-Blanco-cremoso "
                 ></textarea>
@@ -245,6 +295,7 @@ const CreateStudentAccount = () => {
                     name=""
                     id=""
                     className="mt-3 checked:bg-Blanco-cremoso"
+                    required
                   />
                   <h6 className="text-sm text-gray-500 mt-3 ml-3 font-normal">
                     Acepto los terminos y condiciones de unichamba
@@ -254,6 +305,7 @@ const CreateStudentAccount = () => {
                 <button className="bg-Dark-Blue text-white px-4 py-4 rounded-lg w-80 mr-11 font-normal">
                   Crear cuenta estudiante
                 </button>
+                
               </div>
             </div>
           </form>
