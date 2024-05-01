@@ -10,7 +10,9 @@ const NavGeneral = () => {
           className="h-[50px] w-[80px] px-5 border-[1px]  border-transparent rounded-lg placeholder:text-white focus:outline-none mr-3 flex  text-white"
         >
           <button>
-          <box-icon name="arrow-back" color="#FFFFFF" size="35px"></box-icon>
+            <span class="material-symbols-outlined">
+            arrow_back
+            </span>
           </button>
         </NavLink>
 
