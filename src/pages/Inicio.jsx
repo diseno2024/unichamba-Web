@@ -1,9 +1,10 @@
 // Aqui trabajara kendall
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import moduleName from '../data/Ofertas'
+import students from '../data/students'
 import Ofertas from '../data/Ofertas';
 import OfertaLaboral from '../components/OfertaLaboral';
+import TarjetaPublicacion from '../components/TarjetaPublicacion';
 
 const Inicio = () => {
   return (
@@ -15,12 +16,10 @@ const Inicio = () => {
           </div>
           {/* publicar oferta y auth con google  */}
           <div className='flex gap-5'>
-            <NavLink to="/login">
               <buttons className='text-white font-semibold flex items-center gap-4 bg-Malachite h-[55px] px-5 rounded-[8px]'> 
                 Publicar Oferta 
-                <span class="material-symbols-outlined">work</span>
+                <span className="material-symbols-outlined">work</span>
                 </buttons>
-            </NavLink>
             <img src="/iniciar-sesion.svg" alt="" />
           </div>
         </nav>
@@ -33,28 +32,32 @@ const Inicio = () => {
                 <input type="search" placeholder='Cargo o Puesto' className='bg-inherit placeholder:text-white placeholder:font-medium w-[400px]'/>
                 <span className='h-[86%] border-[1px] border-white/50 ml-2'></span>
                 <input type="search" placeholder='Municipio' className='bg-inherit placeholder:text-white placeholder:font-medium h-full w-[400px] pl-[15px]'/>
-                <span class="material-symbols-outlined text-white w-[40px] h-[40px] bg-Malachite text-3xl flex items-center justify-center rounded-lg absolute right-2">search</span>
+                <span className="material-symbols-outlined text-white w-[40px] h-[40px] bg-Malachite text-3xl flex items-center justify-center rounded-lg absolute right-2">search</span>
           </div>
         </div>
 
         <img src="/minerva_sola_white.png" alt="minerva" className='w-[180px] h-[230px] absolute top-24 right-8' />
       </header>
 
-      <main className='h-auto justify-center pt-10 border border-black w-[95%] mx-auto grid grid-cols-2'>
+      <main className='h-auto justify-center pt-10 w-[95%] mx-auto grid grid-cols-2'>
 
         {/* perfiles de estudiantes  */}
 
-        <section className='border border-red-500 px-5'>
-          
+        <section className='px-5 w-full'>
+        {students.map((student) => (
+          <TarjetaPublicacion listStudent={student} key={student.id}/>
+        ))}
+
         </section>
 
         {/* ofertas laborales recientes */}
 
-        <section className='px-5'>
+        <section className='px-5 w-full border-l-2'>
 
           {Ofertas.map((oferta) => (
             <OfertaLaboral listStudent={oferta} key={oferta.id}/>
           ))}
+
 
         </section>
         

@@ -3,7 +3,7 @@ const students = [
         "id": 1,
         "estudiante": "Valeria Esmeralda Escobar Lopez",
         "localidad": "Santa Ana - Santa Ana",
-        "carrera": "Licenciatura en Administracion de Empresa",
+        "carrera": "Arquitectura",
         "descripcion": "Actualmente cursando 4º año , una persona lider, analitica y muy comunicativa",
         "FechaPublicacion":"Hace 1 dia",
         
@@ -44,23 +44,7 @@ const students = [
         "FechaPublicacion": "Hace 3 dias",
         
     },
-    {
-        "id": 6,
-        "estudiante": "Noemi Fuentes Sanchez",
-        "localidad": "Santa Ana - Metapan",
-        "carrera": "Licenciatura en Idiomas",
-        "descripcion": "Actualmente cursando 4º año , una persona lider, analitica y muy comunicativa",
-        "FechaPublicacion": "Hace 4 dias",
-        
-    },
-    {
-        "id": 7,
-        "estudiante": "Jacquelinne Breatriz Alvares Ramos",
-        "localidad": "Santa Ana - Coatepeque",
-        "carrera": "Licenciatura en Mercadeo",
-        "descripcion": "Actualmente cursando 4º año , una persona lider, analitica y muy comunicativa",
-        "FechaPublicacion": "Hace 1 Semana",
-    },
+    
 
 
 ]

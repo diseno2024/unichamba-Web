@@ -36,8 +36,13 @@ export default {
         "Dark-purple":"#360536",
         "WhatsApp": "#4FCE5D",
         "Navbar": "#D9D9D9",
-        "Dark-Blue": "#04061A"
+        "Dark-Blue": "#04061A",
+        "bg-icon": "#0D541E"
 
+      },
+      backgroundImage: {
+        "portada-perfil":"url('Portada-perfil-estudiante.png')",
+        "foto-estudiante": "url('christina-wocintechchat-com-0Zx1bDv5BNY-unsplash.jpg')"
       },
     }
   },

@@ -51,10 +51,10 @@ const AreasDeTrabajo = () => {
 
     return (
         <>
-            <div className='container pt-7'>
+            <div className='container pt-7 font-normal'>
                 <form className='form'>
                     <h3 className='pb-3'>
-                      Areas de Trabajo
+                    Areas de Trabajo
                     </h3>
                     {carreras.map((carrera, index) => (
                         <div className='form-check' key={index}>

@@ -36,7 +36,7 @@ const OfertaLaboral = ({ listStudent }) => {
 
                 </div>
                 :
-                <div className=' min-h-[225px]  py-3 px-5 flex justify-between mb-6 border-b-2 border-black/40 hover:bg-Malachite/10'>
+                <div className='py-8 px-5 flex justify-between mb-6 border-b-2 hover:bg-Malachite/10'>
                     {/* informacion del estudiante */}
                     <div className='flex items-center gap-3'>
                         <div className='min-h-[200px] min-w-[200px] flex items-center justify-start '>

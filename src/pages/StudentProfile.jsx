@@ -9,11 +9,13 @@ const StudentProfile = () => {
   return (
     <>
     {/* HEADER */}
-    <header></header>
+    <header>
+      <Navbar/>
+    </header>
 
 
     {/* MAIN */}
-    <main className=" mb-10">
+    <main className=" mb-10 mt-24">
       {/* FOTO DE PERFIL Y PORTADA */}
 
       <div className=" mt-2 mx-5 bg-portada-perfil bg-cover h-[250px]">

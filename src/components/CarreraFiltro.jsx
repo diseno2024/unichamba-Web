@@ -46,7 +46,7 @@ const CarreraFiltro = () => {
 
     return (
         <>
-            <div className='container '>
+            <div className='container'>
                 <h3 className=' flex flex-wrap font-normal justify-normal  pb-5 text-Dark-Blue'>
                     <span class="material-symbols-outlined mx-5">
                         filter_alt
