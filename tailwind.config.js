@@ -44,6 +44,9 @@ export default {
         "portada-perfil":"url('Portada-perfil-estudiante.png')",
         "foto-estudiante": "url('christina-wocintechchat-com-0Zx1bDv5BNY-unsplash.jpg')"
       },
+      width: {
+        '670': '670px',
+      },
     }
   },
   plugins: [],

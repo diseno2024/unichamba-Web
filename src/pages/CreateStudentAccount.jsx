@@ -11,7 +11,7 @@ import {
   doc,
   getDoc,
 } from "firebase/firestore";
-import { NavLink } from 'react-router-dom'
+import { NavLink } from "react-router-dom";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
 import Swal from "sweetalert2";
@@ -66,11 +66,11 @@ const CreateStudentAccount = () => {
     if (name === "fechaNacimiento") {
       if (!isValidDate(value)) {
         Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: 'Necesitas ser mayor de edad para crear una cuenta, por favor ingresa una fecha correcta',
+          icon: "error",
+          title: "Oops...",
+          text: "Necesitas ser mayor de edad para crear una cuenta, por favor ingresa una fecha correcta",
         });
-          return;
+        return;
       }
     }
     setValues({ ...values, [name]: value });
@@ -97,23 +97,20 @@ const CreateStudentAccount = () => {
         ...values,
       });
       Swal.fire({
-        icon: 'success',
-        title: 'Registro con éxito',
-        text: '¡Estudiante registrado con éxito!',
+        icon: "success",
+        title: "Registro con éxito",
+        text: "¡Estudiante registrado con éxito!",
       }).then((result) => {
         if (result.isConfirmed) {
           window.location.href = "/";
         }
       });
       setValues(initialStateValues);
-      
+
       // Redirigir a otra página después de mostrar la alerta
-     
     } catch (error) {
       console.log(error);
     }
-  
-    
   };
 
   return (
@@ -178,29 +175,10 @@ const CreateStudentAccount = () => {
                   Carrera
                 </label>
                 <br />
-                <OrdenarCarreras onSelect={handleCarreraChange}></OrdenarCarreras>
+                <OrdenarCarreras
+                  onSelect={handleCarreraChange}
+                ></OrdenarCarreras>
 
-                <br></br>
-                <br />
-                <label htmlFor="trabajoInput" className=" font-normal">
-                  Trabajos
-                </label>
-                <br></br>
-
-                <Select
-                  closeMenuOnSelect={false}
-                  components={animatedComponents}
-                  onChange={handleTrabajosChange}
-                  isMulti
-                  options={options}
-                  required
-                  className="rounded-lg border border-black p-3 w-80 mt-4 bg-Blanco-cremoso"
-                />
-
-                <br></br>
-                <br />
-
-                <br></br>
               </div>
 
               <div className="ml-9">
@@ -256,11 +234,30 @@ const CreateStudentAccount = () => {
                   value={values.fechaNacimiento}
                 />
               </div>
-              <div className="pl-[80px]">
-                <img src="./public/Computer login-rafiki 1.png" alt="" />
+              <div className="pl-[150px]" >
+              <img src="./public/Computer login-rafiki 1.png" alt="" width="350px" height="500px"/>
               </div>
             </div>
+            <div>
+              <br />
+              <div className="ml-10">
+                <label htmlFor="trabajoInput" className=" font-normal">
+                  Trabajos
+                </label>
+                <br></br>
 
+                <Select
+                  closeMenuOnSelect={false}
+                  components={animatedComponents}
+                  onChange={handleTrabajosChange}
+                  isMulti
+                  options={options}
+                  required
+                  className="rounded-lg border border-black p-3 w-670 mt-4 bg-Blanco-cremoso"
+                />
+              </div>
+              <br />
+            </div>
             <div className="flex ml-10 bg-Blanco-cremoso ">
               <div>
                 {" "}
@@ -305,7 +302,6 @@ const CreateStudentAccount = () => {
                 <button className="bg-Dark-Blue text-white px-4 py-4 rounded-lg w-80 mr-11 font-normal">
                   Crear cuenta estudiante
                 </button>
-                
               </div>
             </div>
           </form>
