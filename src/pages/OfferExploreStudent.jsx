@@ -45,12 +45,11 @@ const OfferExploreStudent = () => {
         </div>
 
 
-        <section className=' w-auto '>
+        <section className=' w-[60%] '>
           {/* {ofertas.map( (oferta) => ( 
                   <OfertaLaboral listStudent={oferta} key={oferta.id}/>
                             
                 ))} */}
-
           <div className='flex space-x-5'>
             {/* Primera columna */}
             <div className='flex-1 '>
@@ -66,10 +65,6 @@ const OfferExploreStudent = () => {
               ))}
             </div>
           </div>
-
-
-
-
         </section>
 
       </main>

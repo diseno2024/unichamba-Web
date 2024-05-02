@@ -36,13 +36,13 @@ const OfertaLaboral = ({ listStudent }) => {
 
                 </div>
                 :
-                <div className='py-8 px-5 flex justify-between mb-6 border-b-2 hover:bg-Malachite/10'>
+                <div className='py-3 px-5 flex justify-between mb-3 border-b-2 hover:bg-Malachite/10'>
                     {/* informacion del estudiante */}
-                    <div className='flex items-center gap-3'>
-                        <div className='min-h-[200px] min-w-[200px] flex items-center justify-start '>
-                            <img src="https://d11cuk1a0j5b57.cloudfront.net/blog/wp-content/uploads/2020/11/empresas-en-el-Buen-Fin-que-estan-contratando-768x461.jpg" style={{ width: '200px', height: '173px' }} />
+                    <div className='flex l items-center gap-3'>
+                        <div className='relative min-h-[235px] min-w-[200px] flex items-center justify-start '>
+                            <img src="https://d11cuk1a0j5b57.cloudfront.net/blog/wp-content/uploads/2020/11/empresas-en-el-Buen-Fin-que-estan-contratando-768x461.jpg" style={{ width: '200px', height: '200px' }} />
                         </div>
-                        <div className='min-h-[160px] '>
+                        <div className=' flex flex-col relative  min-h-[225px] '>
                             <h1 className='text-2xl font-normal text-Blue min-w-max'>{oferta}</h1>
                             <h2 className=' flex flex-nowrap font-normal text-Dark-Blue mt-2 mr-2'>
                                 <span className="material-symbols-outlined">
@@ -51,12 +51,11 @@ const OfertaLaboral = ({ listStudent }) => {
                                 {localidad}</h2>
                             {/* icons */}
                             <h2 className='text-md font-normal pt-3 text-Dark-Blue overflow-hidden min-w-[320px] h-8'>{descripcion}</h2>
-
-                            <div className='flex justify-end  pt-16 text-md min-w-[300px] text-Dark-Blue font-normal  '>
+                            <div className='absolute bottom-0 right-0  text-md  text-Dark-Blue font-normal  '>
                                 {carrera}
                             </div>
-
                         </div>
+                       
                     </div>
 
 
