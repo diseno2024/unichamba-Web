@@ -19,7 +19,7 @@ const UserAdmin = () => {
                 <NavGeneral />
             </header>
             <main className='flex mt-[20px]'>
-                <section className='min-w-[260px] max-w-[500px] mx-[20px] justify-center rounded-lg bg-[#D9D9D9]'>
+                <section className='w-[475px] mx-[20px] justify-center rounded-lg bg-[#D9D9D9]'>
                     <div className='grid my-[20px] py-[10px] justify-center items-center'>
                         <div className='flex justify-center items-center rounded-full border-[1px] border-black w-[140px] h-[140px]'>
                             <span class="material-symbols-outlined text-[70px]">
@@ -96,10 +96,10 @@ const UserAdmin = () => {
                     
                     
                 </section>
-                <section className='min-w-[850px] max-w-[1000px] mx-auto justify-center rounded-md'>
+                <section className='w-[1000px] mx-auto justify-center rounded-md'>
                         <div className='grid grid-cols-3 grid-rows-2 gap-y-[20px] w-[750px] mx-auto'>   
-                            <div className='flex items-center justify-between w-[200px] bg-[#D9D9D9] p-[15px] rounded-lg'>
-                                <div className='mr-[20px]'>
+                            <div className='flex items-center justify-between w-[225px] bg-[#D9D9D9] p-[12px] rounded-lg'>
+                                <div className='mr-[15px]'>
                                     <h1 className='text-3xl font-medium font-roboto'>0</h1>
                                     <h1 className='text-xl font-roboto font-medium'>Estudiantes</h1>
                                 </div>
@@ -107,8 +107,8 @@ const UserAdmin = () => {
                                     school
                                 </span>
                             </div>
-                            <div className='flex items-center justify-between w-[200px] bg-[#D9D9D9] p-[15px] rounded-lg'>
-                                <div className='mr-[20px]'>
+                            <div className='flex items-center justify-between w-[225px] bg-[#D9D9D9] p-[12px] rounded-lg'>
+                                <div className='mr-[15px]'>
                                     <h1 className='text-3xl font-medium font-roboto'>0</h1>
                                     <h1 className='text-xl font-roboto font-medium'>Usuarios</h1>
                                 </div>
@@ -116,8 +116,8 @@ const UserAdmin = () => {
                                     person
                                 </span>
                             </div>
-                            <div className='flex items-center justify-between w-[200px] bg-[#D9D9D9] p-[15px] rounded-lg'>
-                                <div className='mr-[20px]'>
+                            <div className='flex items-center justify-between w-[225px] bg-[#D9D9D9] p-[12px] rounded-lg'>
+                                <div className='mr-[15px]'>
                                     <h1 className='text-3xl font-medium font-roboto'>0</h1>
                                     <h1 className='text-lg font-roboto font-medium'>Ofertas Laborales</h1>
                                 </div>
@@ -125,19 +125,19 @@ const UserAdmin = () => {
                                     description
                                 </span>
                             </div>
-                            <div className='flex items-center justify-between w-[200px] bg-[#D9D9D9] p-[15px] rounded-lg'>
-                                <div className='mr-[20px]'>
+                            <div className='flex items-center justify-between w-[225px] bg-[#D9D9D9] p-[12px] rounded-lg'>
+                                <div className='mr-[15px]'>
                                     <h1 className='text-3xl font-medium font-roboto'>0</h1>
-                                    <h1 className='text-xl font-roboto font-medium'>Estudiantes</h1>
+                                    <h1 className='text-xl font-roboto font-medium'>Carreras</h1>
                                 </div>
                                 <span class="material-symbols-outlined text-[40px]">
                                     auto_stories
                                 </span>
                             </div>
-                            <div className='flex items-center justify-between w-[200px] bg-[#D9D9D9] p-[15px] rounded-lg'>
-                                <div className='mr-[20px]'>
+                            <div className='flex items-center justify-between w-[225px] bg-[#D9D9D9] p-[12px] rounded-lg'>
+                                <div className='mr-[15px]'>
                                     <h1 className='text-3xl font-medium font-roboto'>0</h1>
-                                    <h1 className='text-xl font-roboto font-medium'>Estudiantes</h1>
+                                    <h1 className='text-xl font-roboto font-medium'>Administradores</h1>
                                 </div>
                                 <span class="material-symbols-outlined text-[40px]">
                                     admin_panel_settings
