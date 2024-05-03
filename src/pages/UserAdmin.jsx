@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import NavGeneral from '../components/NavGeneral'
 import TrabajosUserAdmin from '../components/TrabajosUserAdmin'
+import AdministradoresUserAdmin from '../components/AdministradoresUserAdmin'
 
 
 
@@ -85,7 +86,7 @@ const UserAdmin = () => {
                         </button>
                         <button 
                         className={`grid grid-cols-2 rounded-md h-[45px] items-center pr-[30px] hover:bg-white ${activeButton === 'administrators' ? 'bg-white' : ''}`}
-                        onClick={() => showComponent(<h1>Administradores</h1>, 'administrators')}
+                        onClick={() => showComponent(<h1><AdministradoresUserAdmin/></h1>, 'administrators')}
                         >
                             <span class="material-symbols-outlined text-[38px]">
                                 admin_panel_settings
