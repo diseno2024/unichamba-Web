@@ -1,5 +1,8 @@
 import React, { useState } from 'react'
 import NavGeneral from '../components/NavGeneral'
+import TrabajosUserAdmin from '../components/TrabajosUserAdmin'
+
+
 
 const UserAdmin = () => {
     const [visibleComponent, setVisibleComponent] = useState()
@@ -46,7 +49,7 @@ const UserAdmin = () => {
                         </button>
                         <button 
                         className={`grid grid-cols-2 rounded-md h-[85px] items-center pr-[30px] hover:bg-white ${activeButton === 'jobOffers' ? 'bg-white' : ''}`}
-                        onClick={() => showComponent(<h1>Ofertas Laborales</h1>, 'jobOffers')}
+                        onClick={() => showComponent(<TrabajosUserAdmin/>, 'jobOffers')}
                         >
                             <span class="material-symbols-outlined text-[38px]">
                                 description
