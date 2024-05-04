@@ -3,7 +3,7 @@ const AdministradoresData = [
         "id" : 1, 
         "foto":"",
         "nombre" : "Alejandra Michelle Rodriguez Perez",
-        "correo" :" am20005@ues.edu.sv"
+        "correo" :"am20005@ues.edu.sv"
     },
     {
         "id": 2,

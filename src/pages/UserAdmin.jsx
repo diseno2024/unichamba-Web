@@ -1,26 +1,29 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import NavGeneral from '../components/NavGeneral'
 import TrabajosUserAdmin from '../components/TrabajosUserAdmin'
 import AdministradoresUserAdmin from '../components/AdministradoresUserAdmin'
-
+import { collection, getDocs } from 'firebase/firestore'
+import { db } from '../data/firebase'
 
 
 const UserAdmin = () => {
     const [visibleComponent, setVisibleComponent] = useState()
     const [activeButton, setActiveButton] = useState()
-    
+    const [trabajos, setTrabajos] = useState()
+
     const showComponent = (component, buttonID) => {
         setVisibleComponent(component)
         setActiveButton(buttonID)
     }
 
+    
     return (
         <>
             <header>
                 <NavGeneral />
             </header>
             <main className='flex mt-[20px]'>
-                <section className='w-[475px] mx-[20px] justify-center rounded-lg bg-[#D9D9D9]'>
+                <section className='w-[475px] h-[700px] mx-[20px] justify-center rounded-lg bg-[#D9D9D9]'>
                     <div className='grid my-[20px] py-[10px] justify-center items-center'>
                         <div className='flex justify-center items-center rounded-full border-[1px] border-black w-[140px] h-[140px]'>
                             <span class="material-symbols-outlined text-[70px]">
@@ -86,7 +89,7 @@ const UserAdmin = () => {
                         </button>
                         <button 
                         className={`grid grid-cols-2 rounded-md h-[45px] items-center pr-[30px] hover:bg-white ${activeButton === 'administrators' ? 'bg-white' : ''}`}
-                        onClick={() => showComponent(<h1><AdministradoresUserAdmin/></h1>, 'administrators')}
+                        onClick={() => showComponent(<AdministradoresUserAdmin/>, 'administrators')}
                         >
                             <span class="material-symbols-outlined text-[38px]">
                                 admin_panel_settings
