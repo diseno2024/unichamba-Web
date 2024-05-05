@@ -5,16 +5,15 @@ import OfertaLaboral from '../components/OfertaLaboral';
 import CarreraFiltro from '../components/CarreraFiltro'
 import Municipio from '../components/Municipio'
 import { NavLink } from 'react-router-dom'
-import AdminCarrera from '../components/AdmiCarrera'
-import AdmiMunicipio from '../components/AdmiMunicipio';
+
 
 
 const OfferExploreStudent = () => {
 
   // Dividir la lista de elementos en dos partes
-  const mitad = Math.ceil(ofertas.length / 2);
-  const primeraColumna = ofertas.slice(0, mitad);
-  const segundaColumna = ofertas.slice(mitad);
+  // const mitad = Math.ceil(ofertas.length / 2);
+  // const primeraColumna = ofertas.slice(0, mitad);
+  // const segundaColumna = ofertas.slice(mitad);
 
   return (
     <>
