@@ -7,20 +7,18 @@ const TrabajosUserAdmin = () => {
     /* Esta estructura es para traer la colección de firebase solo pones el nombre de la colección dentro de las comillas de linea 12 y renombrar los const*/
     const [trabajos, setTrabajos] = useState([])
 
-    useEffect(() => {
-        const fetchTrabajos = async () => {
-            const trabajosRef = collection(db, 'anuncios')
-            await getDocs(trabajosRef)
-                .then((resp) => {
-                    setTrabajos(resp.docs.map((doc) => {
-                        return { ...doc.data(), id: doc.id }
-                    }))
-                })
-        }
+    const fetchTrabajos = async () => {
+        const trabajosRef = collection(db, 'anuncios')
+        await getDocs(trabajosRef)
+            .then((resp) => {
+                setTrabajos(resp.docs.map((doc) => {
+                    return { ...doc.data(), id: doc.id }
+                }))
+            })
+    }
 
-        fetchTrabajos()
-        // Devuelve una función de limpieza para cancelar la suscripción
-        return () => { }
+    useEffect(() => {
+        return fetchTrabajos
     }, [])
 
     return (

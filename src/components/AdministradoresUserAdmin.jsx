@@ -6,22 +6,19 @@ import { collection, getDocs } from "firebase/firestore";
 const AdministradoresUserAdmin = () => {
   const [administradores, setAdministradores] = useState([])
 
+  const fetchAdministradores = async () => {
+    const administradoresRef = collection(db, 'administradores')
+    await getDocs(administradoresRef)
+      .then((resp) => {
+        setAdministradores(resp.docs.map((doc) => {
+          return { ...doc.data(), id: doc.id }
+        }))
+      })
+  }
+
   useEffect(() => {
-    const fetchAdministradores = async () => {
-      const administradoresRef = collection(db, 'administradores')
-      await getDocs(administradoresRef)
-        .then((resp) => {
-          setAdministradores(resp.docs.map((doc) => {
-            return { ...doc.data(), id: doc.id }
-          }))
-        })
-    }
-
-    fetchAdministradores()
-
-    return () => { }
+    return fetchAdministradores
   }, [])
-
 
   // Modal para confirmar la eliminación
   const modalEliminarAdmin = (admin) => {
