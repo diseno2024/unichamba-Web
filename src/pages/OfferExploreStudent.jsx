@@ -6,6 +6,7 @@ import CarreraFiltro from '../components/CarreraFiltro'
 import Municipio from '../components/Municipio'
 import { NavLink } from 'react-router-dom'
 import AdminCarrera from '../components/AdmiCarrera'
+import AdmiMunicipio from '../components/AdmiMunicipio';
 
 
 const OfferExploreStudent = () => {
@@ -43,12 +44,10 @@ const OfferExploreStudent = () => {
         </div>
 
         <section className=' grid grid-cols-2 gap-3 mr-3'>
-          {/* {ofertas.map( (oferta) => ( 
+          {ofertas.map( (oferta) => ( 
                   <OfertaLaboral listStudent={oferta} key={oferta.id}/>
                             
-                ))} */}
-          
-          <AdminCarrera/>
+                ))}
 
         </section>
 
