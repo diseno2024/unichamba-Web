@@ -8,16 +8,21 @@ const TrabajosUserAdmin = () => {
     const [trabajos, setTrabajos] = useState([])
 
     useEffect(() => {
-        const trabajosRef = collection(db, 'anuncios')
-        getDocs(trabajosRef)
-            .then((resp) => {
-                setTrabajos(resp.docs.map((doc) => {
-                    return { ...doc.data(), id: doc.id }
-                }))
+        const fetchTrabajos = async () => {
+            const trabajosRef = collection(db, 'anuncios')
+            await getDocs(trabajosRef)
+                .then((resp) => {
+                    setTrabajos(resp.docs.map((doc) => {
+                        return { ...doc.data(), id: doc.id }
+                    }))
+                })
+        }
 
-            })
-    })
-    
+        fetchTrabajos()
+        // Devuelve una función de limpieza para cancelar la suscripción
+        return () => { }
+    }, [])
+
     return (
         <>
             {/* TITULO */}

@@ -7,17 +7,20 @@ const AdministradoresUserAdmin = () => {
   const [administradores, setAdministradores] = useState([])
 
   useEffect(() => {
-    const administradoresRef = collection(db, 'administradores')
-    getDocs(administradoresRef)
-      .then((resp) => {
-        setAdministradores(resp.docs.map((doc) => {
-          return { ...doc.data(), id: doc.id }
-        }))
+    const fetchAdministradores = async () => {
+      const administradoresRef = collection(db, 'administradores')
+      await getDocs(administradoresRef)
+        .then((resp) => {
+          setAdministradores(resp.docs.map((doc) => {
+            return { ...doc.data(), id: doc.id }
+          }))
+        })
+    }
 
-      })
-  })
+    fetchAdministradores()
 
-
+    return () => { }
+  }, [])
 
 
   // Modal para confirmar la eliminación
