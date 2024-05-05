@@ -5,6 +5,7 @@ import OfertaLaboral from '../components/OfertaLaboral';
 import CarreraFiltro from '../components/CarreraFiltro'
 import Municipio from '../components/Municipio'
 import { NavLink } from 'react-router-dom'
+import AdminCarrera from '../components/AdmiCarrera'
 
 
 const OfferExploreStudent = () => {
@@ -20,20 +21,17 @@ const OfferExploreStudent = () => {
         <Navbar />
       </header>
 
-      <main className='flex h-auto mt-[100px] pt-50 space-y-8'>
-
-      <div>
-          <NavLink to="/inicio">
-            <span class="material-symbols-outlined ">
-              arrow_back
-            </span>
-          </NavLink>
-        </div>
-
-
+      <main className='flex h-auto mt-[90px]  space-y-8 relative'>
         <div className='ml-2 mt-10 pl-4 py-2 mr-3 min-w-[300px]' >
+          <div>
+            <NavLink to="/inicio">
+              <span class="material-symbols-outlined ">
+                arrow_back
+              </span>
+            </NavLink>
+          </div>
 
-          <div className='border-r-2 border-black/20'>
+          <div className='mt-5 border-r-2 border-black/20 '>
             <CarreraFiltro />
 
           </div>
@@ -44,27 +42,14 @@ const OfferExploreStudent = () => {
 
         </div>
 
-
-        <section className=' w-[60%] '>
+        <section className=' grid grid-cols-2 gap-3 mr-3'>
           {/* {ofertas.map( (oferta) => ( 
                   <OfertaLaboral listStudent={oferta} key={oferta.id}/>
                             
                 ))} */}
-          <div className='flex space-x-5'>
-            {/* Primera columna */}
-            <div className='flex-1 '>
-              {primeraColumna.map((elemento, index) => (
-                <NavLink to="/DetailsOffer"><OfertaLaboral listStudent={elemento} key={index} /></NavLink>
-              ))}
-            </div>
+          
+          <AdminCarrera/>
 
-            {/* Segunda columna */}
-            <div className='flex-1'>
-              {segundaColumna.map((elemento, index) => (
-                <NavLink to="/DetailsOffer"><OfertaLaboral listStudent={elemento} key={index} /></NavLink>
-              ))}
-            </div>
-          </div>
         </section>
 
       </main>

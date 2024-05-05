@@ -1,45 +1,42 @@
-import React, { useState } from 'react';
-
-// ACLARO ESTA FORMA COMO ESTA LA MODIFICARE CUANDO SE TENGA QUE TRABAJAR CON LA BASE DE DATOS, ESTO ES PREVENTIVO
-// DE IGUAL FORMA VARIABLES Y COSAS ASI LAS CAMBIARE, AHORITA PARA VISUALIZAR COMO SE IRA VIENDO CON LA BASE DE DATOS
-// QUE SE CREARA EN FIREBASE
+import React, { useState, useEffect } from 'react';
+import { db } from '../data/firebase';
+import { collection, getDocs } from 'firebase/firestore';
 
 const CarreraFiltro = () => {
-    const carrerasIniciales = [
-        'Administración de Empresas',
-        'Ingeniería Informática',
-        'Psicología',
-        'Medicina',
-        'Derecho',
-        'Arquitectura',
-        'Contabilidad',
-        'Ingeniería Civil',
-        'Marketing',
-        'Diseño Gráfico',
-        // Agrega más carreras aquí
-    ];
-
-    const [carreras, setCarreras] = useState(carrerasIniciales.slice(0, 5)); // Mostrar las primeras 5 carreras inicialmente
-    const [indiceMostrar, setIndiceMostrar] = useState(5);
-    const [mostrarBoton, setMostrarBoton] = useState(true);
+    const [carreras, setCarreras] = useState([]);
+    const [carrerasMostradas, setCarrerasMostradas] = useState([]);
     const [carreraSeleccionada, setCarreraSeleccionada] = useState(null);
+    const [mostrarBoton, setMostrarBoton] = useState(true);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const carrerasSnapshot = await getDocs(collection(db, 'carreras')); // 'carreras' es el nombre de tu colección en Firestore
+            const carrerasData = carrerasSnapshot.docs.map(doc => doc.data().carrera); // Suponiendo que tienes un campo 'nombre' en tus documentos de carrera
+            const carrerasOrdenadas = carrerasData.sort((a, b) => a.localeCompare(b)); // Orden alfabético
+            setCarreras(carrerasOrdenadas);
+            setCarrerasMostradas(carrerasOrdenadas.slice(0, 5)); // Mostrar solo las primeras 5 carreras inicialmente
+            if (carrerasOrdenadas.length <= 5) {
+                setMostrarBoton(false); // Ocultar el botón "Ver más" si hay menos de 5 carreras en total
+            }
+        };
+
+        fetchData();
+    }, []);
 
     const seleccionarCarrera = (index) => {
         setCarreraSeleccionada(index);
     };
 
     const mostrarMasCarreras = () => {
-        const nuevasCarreras = carrerasIniciales.slice(indiceMostrar, indiceMostrar + 5); // Mostrar 5 carreras más
-        setCarreras([...carreras, ...nuevasCarreras]);
-        setIndiceMostrar(indiceMostrar + 5);
-        if (indiceMostrar + 5 >= carrerasIniciales.length) {
+        const nuevasCarrerasMostradas = carreras.slice(carrerasMostradas.length, carrerasMostradas.length + 5); // Mostrar 5 carreras más
+        setCarrerasMostradas([...carrerasMostradas, ...nuevasCarrerasMostradas]);
+        if (carrerasMostradas.length + nuevasCarrerasMostradas.length >= carreras.length) {
             setMostrarBoton(false); // Ocultar el botón "Ver más" cuando se han mostrado todas las carreras
         }
     };
 
     const reiniciarCarreras = () => {
-        setCarreras(carrerasIniciales.slice(0, 5)); // Mostrar las primeras 5 carreras nuevamente
-        setIndiceMostrar(5);
+        setCarrerasMostradas(carreras.slice(0, 5)); // Mostrar las primeras 5 carreras nuevamente
         setMostrarBoton(true); // Mostrar el botón "Ver más"
         setCarreraSeleccionada(null); // Reiniciar la carrera seleccionada
     };
@@ -47,17 +44,17 @@ const CarreraFiltro = () => {
     return (
         <>
             <div className='container'>
-                <h3 className=' flex flex-wrap font-normal justify-normal  pb-5 text-Dark-Blue'>
-                    <span class="material-symbols-outlined mx-5">
+                <h3 className='flex flex-wrap font-normal pb-5 text-Dark-Blue'>
+                    <span className="material-symbols-outlined mx-5">
                         filter_alt
                     </span>
                     FILTROS
                 </h3>
-                <form className='form font-normal text-Dark-Blue'>
-                    <h3 className='pb-3'>
+                <form className='form font-normal text-Dark-Blue text-sm'>
+                    <h3 className='pb-1'>
                         Carreras
                     </h3>
-                    {carreras.map((carrera, index) => (
+                    {carrerasMostradas.map((carrera, index) => (
                         <div className='form-check' key={index}>
                             <input
                                 type='checkbox'
@@ -70,10 +67,10 @@ const CarreraFiltro = () => {
                         </div>
                     ))}
                     {mostrarBoton && (
-                        <button type='button' className='btn btn-primary mt-3 text-Blue' onClick={mostrarMasCarreras}>Ver Más..</button>
+                        <button type='button' className='btn btn-primary mt-1 text-Blue' onClick={mostrarMasCarreras}>Ver Más..</button>
                     )}
                     {!mostrarBoton && (
-                        <button type='button' className='btn btn-secondary mt-3  text-Blue' onClick={reiniciarCarreras}>Mostrar Menos...</button>
+                        <button type='button' className='btn btn-secondary mt-1 text-Blue' onClick={reiniciarCarreras}>Mostrar Menos...</button>
                     )}
                 </form>
             </div>
@@ -82,6 +79,9 @@ const CarreraFiltro = () => {
 };
 
 export default CarreraFiltro;
+
+
+
 
 /*
 import { useState } from 'react';
