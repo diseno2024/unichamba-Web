@@ -66,8 +66,8 @@ const AdmiCarrera = () => {
 
 
     return (
-        <div className="container min-w-[300px] max-w-[900px] pt-7 px-10 mx-10 mt-7">
-            <h2 className="text-3xl font-normal my-8">Carreras</h2>
+        <div className="container min-w-[100px] max-w-[400px] pt-7 px-10 mx-10 mt-7">
+            <h2 className="text-3xl font-normal my-8">Careras</h2>
             <div className="flex items-center space-x-10  ">
 
                 <div className='flex space-x-1'>

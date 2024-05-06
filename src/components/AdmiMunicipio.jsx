@@ -75,7 +75,7 @@ const AdmiMunicipio = () => {
                 )}
             </div>
             <div className=" flex flex-col list-disc mt-5 mb-4 space-y-3 ">
-                <h1 className='font-medium'>Seleccione un Monicipio para Modificar o Eliminar:</h1>
+                <h1 className='font-medium'>Seleccione un Municipio para Modificar o Eliminar:</h1>
                 {municipios.map(municipio => (
                     <div key={municipio.id} className="flex items-center text-Dark-Blue font-medium mb-3 pl-4 ml-1  min-h-14 hover:bg-Space-cadet/20  border-b-2 " >
                         <span onClick={() => seleccionarMunicipio(municipio)} className="cursor-pointer">{municipio.nombre}</span>

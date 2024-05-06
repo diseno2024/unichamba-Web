@@ -3,7 +3,7 @@ import NavGeneral from '../components/NavGeneral'
 import TrabajosUserAdmin from '../components/TrabajosUserAdmin'
 import AdministradoresUserAdmin from '../components/AdministradoresUserAdmin'
 import AdmiCarrera from '../components/AdmiCarrera';
-// import AdmiMunicipio from '../components/AdmiMunicipio'
+import AdmiMunicipio from '../components/AdmiMunicipio'
 import { collection, getDocs } from 'firebase/firestore'
 import { db } from '../data/firebase'
 
@@ -64,7 +64,7 @@ const UserAdmin = () => {
                         </button>
                         <button 
                         className={`grid grid-cols-2 rounded-md h-[45px] items-center pr-[30px] hover:bg-white ${activeButton === 'municipalities' ? 'bg-white' : ''}`}
-                        onClick={() => showComponent(<h1>Municipios</h1>, 'municipalities')}
+                        onClick={() => showComponent(<AdmiMunicipio/>, 'municipalities')}
                         >
                             <span class="material-symbols-outlined text-[38px]">
                                 location_city
