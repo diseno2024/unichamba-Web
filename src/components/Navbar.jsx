@@ -33,10 +33,10 @@ return (
             {/* search */}
             <div className='border-[1px] border-Azul-Fuerte h-[50px] rounded-[15px] w-[750px] flex items-center justify-between px-5'>
                 <input type="search" placeholder='Cargo o Puesto' className='focus:outline-none font-normal bg-inherit placeholder:text-Azul-Fuerte placeholder:font-normal w-[400px]'/>
-                <span class="material-symbols-outlined text-white/50">close</span>
+                <span className="material-symbols-outlined text-white/50">close</span>
                 <span className='h-[90%] border-[1px] border-white/50 ml-2'></span>
                 <input type="search" placeholder='Municipio' className='focus:outline-none font-normal bg-inherit placeholder:text-Azul-Fuerte placeholder:font-normal h-full w-[400px] pl-[15px]'/>
-                <span class="material-symbols-outlined text-white/50">close</span>
+                <span className="material-symbols-outlined text-white/50">close</span>
             </div>
             {/* info del user  */}
             <div className='flex w-[200px] items-center justify-center'>

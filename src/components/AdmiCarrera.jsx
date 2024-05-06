@@ -66,12 +66,12 @@ const AdmiCarrera = () => {
 
 
     return (
-        <div className="container mx-auto mt-5">
-            <h2 className="text-3xl font-normal mb-1">Carreras</h2>
+        <div className="container min-w-[300px] max-w-[900px] pt-7 px-10 mx-10 mt-7">
+            <h2 className="text-3xl font-normal my-8">Carreras</h2>
             <div className="flex items-center space-x-10  ">
 
                 <div className='flex space-x-1'>
-                    <input type="text" value={nuevaCarrera} onChange={handleChange} placeholder="Agregar Carrera" className="border  text-Dark-Blue  font-medium border-Dark-Blue rounded-md px-4 py-2 w-64" />
+                    <input type="text" value={nuevaCarrera} onChange={handleChange} placeholder="Agregar Carrera" className="border  text-Dark-Blue  font-medium border-Dark-Blue rounded-md px-4 py-2 min-w-[500px] max-w-[600px]" />
                     <button onClick={agregarCarrera} className="bg-Dark-Blue hover:bg-blue-600 text-white font-normal py-2 px-4 rounded-md"><span className="material-symbols-outlined flex justify-center">
                         add_circle
                     </span></button>
@@ -96,7 +96,7 @@ const AdmiCarrera = () => {
                 )}
             </div>
             <div className=" flex flex-col list-disc mt-5 mb-4 space-y-3 ">
-                <h1 className='font-medium'>Seleccione una Carrera para Modificar o Eliminar:</h1>
+                <h1 className='font-[700] text-Blue my-2'>Seleccione una Carrera para Modificar o Eliminar:</h1>
                 {carreras.map(carrera => (
                     <div key={carrera.id} className="flex items-center text-Dark-Blue font-medium mb-3 pl-4 ml-1  min-h-14 hover:bg-Space-cadet/20  border-b-2 " >
                         <span onClick={() => seleccionarCarrera(carrera)} className="cursor-pointer">{carrera.nombre}</span>
