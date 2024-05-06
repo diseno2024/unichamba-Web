@@ -66,19 +66,19 @@ const AdmiCarrera = () => {
 
 
     return (
-        <div className="container min-w-[100px] max-w-[400px] pt-7 px-10 mx-10 mt-7">
-            <h2 className="text-3xl font-normal my-8">Careras</h2>
+        <div className="container min-w-[300px] max-w-[900px] pt-7 px-10 mx-10 mt-7">
+            <h2 className="text-3xl font-normal my-8">Carreras</h2>
             <div className="flex items-center space-x-10  ">
 
                 <div className='flex space-x-1'>
-                    <input type="text" value={nuevaCarrera} onChange={handleChange} placeholder="Agregar Carrera" className="border  text-Dark-Blue  font-medium border-Dark-Blue rounded-md px-4 py-2 min-w-[500px] max-w-[600px]" />
+                    <input type="text" value={nuevaCarrera} onChange={handleChange} placeholder="Agregar Carrera" className="border  text-Dark-Blue  font-medium border-Dark-Blue rounded-md px-4 py-2 w-64" />
                     <button onClick={agregarCarrera} className="bg-Dark-Blue hover:bg-blue-600 text-white font-normal py-2 px-4 rounded-md"><span className="material-symbols-outlined flex justify-center">
                         add_circle
                     </span></button>
                 </div>
 
                 {carreraSeleccionada.id && (
-                    <div className=" mt-1 min-h-[125px]">
+                    <div className=" mt-1 min-h-[115px]">
                         <h3 className="text-xl font-bold mb-2">Editar Carrera</h3>
                         <div className='flex '>
                             <input type="text" value={carreraSeleccionada.nombre} onChange={e => setCarreraSeleccionada({ ...carreraSeleccionada, nombre: e.target.value })} className="border  text-Dark-Blue  font-medium border-Dark-Blue rounded-md px-4 py-2 w-64" />
