@@ -15,6 +15,7 @@ import { NavLink } from "react-router-dom";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
 import Swal from "sweetalert2";
+import { UserAuth } from "../context/AuthContext";
 const options = [
   { value: "uno", label: "Encuestador Campo" },
   { value: "dos", label: "Trabajador de limpieza por horas" },
@@ -36,6 +37,9 @@ const options = [
 const animatedComponents = makeAnimated();
 
 const CreateStudentAccount = () => {
+  const {user} = UserAuth();
+  // user.email
+
   const initialStateValues = {
     nombre: "",
     telefono: "",
@@ -45,7 +49,9 @@ const CreateStudentAccount = () => {
     whatsapp: "",
     fechaNacimiento: "",
     acercaDe: "",
+    correo: ''
   };
+
 
   const isValidDate = (dateString) => {
     // Convertir la cadena de fecha a objeto Date
@@ -78,7 +84,7 @@ const CreateStudentAccount = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(values);
+    console.log(values); // values 
     addOrEditLink(values);
   };
 
