@@ -38,7 +38,7 @@ const animatedComponents = makeAnimated();
 
 const CreateStudentAccount = () => {
   const {user} = UserAuth();
-  // user.email
+  const correoElectronico=user.email
 
   const initialStateValues = {
     nombre: "",
@@ -49,7 +49,7 @@ const CreateStudentAccount = () => {
     whatsapp: "",
     fechaNacimiento: "",
     acercaDe: "",
-    correo: ''
+    correo: correoElectronico
   };
 
 
