@@ -7,36 +7,29 @@ import TarjetaPublicacion from '../components/TarjetaPublicacion';
 import { UserAuth } from '../context/AuthContext';
 import { collection, getDocs } from "firebase/firestore";
 import { db } from '../data/firebase';
-import { useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 
 
 const Inicio = () => {
 
-  const {googleSingIn, user} = UserAuth();
+  const {googleSingIn, user, googleSingOut} = UserAuth();
   const result = /@ues\.edu\.sv$/.test(user.email);
   const navigate = useNavigate();
-  let student = []
-
-
-
+  let student = [];
+  let URLphoto = user.photoURL;
 
   useEffect(() => {
     const fetchData = async () => {
       const studentsSnapshot = await getDocs(collection(db, 'estudiantes')); // 'carreras' es el nombre de tu colección en Firestore
       const studentsData = studentsSnapshot.docs.map(doc => doc.data().email); // Suponiendo que tienes un campo 'nombre' en tus documentos de carrera
       student = studentsData;
-      console.log(student);
-      console.log(user.email)
 
       if(Object.keys(user).length !== 0 ){
         if(result){
-          for(let i = 0; i<student.length; i++){
-            console.log('for')
-            if(student[i] !== user.email){
-              console.log('validacion')
-              navigate('/createAccountStd')
-            }
+          if(!student.includes(user.email)){
+            console.log('no hay perfil relacionado al email')
+            navigate('/createAccountStd')
           }
         }  
       }
@@ -45,9 +38,6 @@ const Inicio = () => {
   fetchData();
   }, [user])
   
-  
-  //const result = /@ues\.edu\.sv$/.test(user.email);
-  //const navigate = useNavigate(); si hay match con la coleccion
 
   const handleGoogleSingIn = async() => {
     try {
@@ -55,14 +45,21 @@ const Inicio = () => {
     } catch (error) {
     console.log(error)
     }
-
-  //   useEffect(() => {
-  //     if(result){
-  //         console.log('se inicio sesion estudiante')
-  //         navigate("/createAccountStd")
-  //     }
-  // }, [user]) creo que esto no se usara
 }
+
+const handleGoogleSingOut = async() => {
+  try {
+  await googleSingOut ();
+  } catch (error) {
+  console.log(error)
+  }
+}
+
+
+
+// console.log('user :', user);
+// console.log('photo: ', URLphoto)
+
 
   return (
     <>  
@@ -72,19 +69,36 @@ const Inicio = () => {
             <img src="/LOGO.svg" alt="" />
           </div>
           {/* publicar oferta y auth con google  */}
-          <div className='flex gap-5'>
-              <buttons className='text-white font-semibold flex items-center gap-4 bg-Malachite h-[55px] px-5 rounded-[8px]'> 
+          <div className='flex gap-5 items-center'>
+              <buttons className='text-white font-semibold flex items-center gap-4 bg-Malachite h-[45px] px-5 rounded-[8px]'> 
                 Publicar Oferta 
                 <span className="material-symbols-outlined">work</span>
                 </buttons>
 
-                {Object.keys(user).length === 0 ?
-                  <button className='relative text-white font-semibold flex items-center gap-4 bg-Malachite h-[55px] justify-between pl-3 pr-[2px] rounded-[8px]' onClick={handleGoogleSingIn}>
+                {Object.keys(user).length === 0  ?
+                  <button className='relative text-white font-semibold flex items-center gap-4 bg-Malachite h-[45px] justify-between pl-3 pr-[2px] rounded-[8px]' onClick={handleGoogleSingIn}>
                   Iniciar sesion con Google
-                  <img src="/google 2.svg" alt="google-icon" className='bg-white py-[13px] px-[13px] rounded-lg' />
+                  <img src="/google 2.svg" alt="google-icon" className='bg-white py-[10px] px-[10px] rounded-lg' />
                   </button>  
+              : result ?
+                <div className='flex items-center gap-4'>
+
+                  <button className='relative text-white font-semibold flex items-center gap-4 bg-Malachite h-[45px] justify-between px-4 rounded-[8px]' onClick={handleGoogleSingOut}>
+                    Cerrar Sesion
+                  </button>
+
+                  <NavLink to='/studentProfile' className= 'flex items-center'>
+                    {/* <h1 className='text-white font-normal px-2'></h1>6 */}
+                    <div className='h-[50px] w-[50px] rounded-full'>
+                    {/* <span className="material-symbols-outlined text-white" style={{fontSize: '35px'}}>person</span> */}
+                    <img src={URLphoto} alt="imagen-estudiante"  className='w-full h-full rounded-full'/> 
+                    </div>
+                  </NavLink>  
+                  
+                </div>
+                
               :
-                  <button className='relative text-white font-semibold flex items-center gap-4 bg-Malachite h-[55px] justify-between pl-3 pr-[2px] rounded-[8px]'>
+                  <button className='relative text-white font-semibold flex items-center gap-4 bg-Malachite h-[45px] justify-between px-4 rounded-[8px]' onClick={handleGoogleSingOut}>
                     Cerrar Sesion
                   </button>
               }

@@ -15,6 +15,11 @@ export const AuthContextProvider = ({children}) => {
         signInWithRedirect(auth, provider);
     }
 
+    const googleSingOut = () => {
+        console.log('cierre de sesion')
+        signOut(auth);
+    }
+
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
                 if(currentUser != null){
                     setUser(currentUser);
@@ -32,7 +37,7 @@ export const AuthContextProvider = ({children}) => {
 
 
     return (
-        <AuthContext.Provider value={{googleSingIn, user}}>
+        <AuthContext.Provider value={{googleSingIn, user, googleSingOut}}>
             {children}
         </AuthContext.Provider>
     )

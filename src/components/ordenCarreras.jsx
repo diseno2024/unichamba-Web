@@ -19,13 +19,13 @@ const OrdenarCarreras = ({onSelect}) => {
   return (
     <>
       <select
-        className="rounded-lg border border-black p-3 w-80 mt-4 text-lg bg-Blanco-cremoso"
+        className="rounded-lg border border-black p-3 w-80 mt-4 text-lg bg-white"
         onClick={() => setIsOpen((prev) => !prev)}
         onChange={handleSelectChange}
         value={selectedCarrera}
         required
       >
-        <option value="">Seleccione una carrera</option>
+        <option value="" >Seleccione una carrera</option>
         {listCarrersOrden.map(({ nombre, id }) => (
           <option value={nombre} key={id}>
             {nombre}
