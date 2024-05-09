@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { db } from "../data/firebase";
-import { addDoc, collection, deleteDoc, doc, getDocs } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDocs,getDoc } from "firebase/firestore";
 
 const AdministradoresUserAdmin = () => {
+  
   const [administradores, setAdministradores] = useState([])
 
   const fetchAdministradores = async () => {
@@ -57,45 +58,54 @@ const AdministradoresUserAdmin = () => {
 
 
   // Modal para agregar administradores
-  const modalAgregarAdministradores = () => {
+  const modalAgregarAdministradores = async () => {
     Swal.fire({
-      title: "Agregar Correo Electrónico y Nombre",
-      html: `<input id="correo" name="correo" class="swal2-input" placeholder="Ingrese su correo electrónico">
-      <input id="nombre" name="nombre" class="swal2-input" placeholder="Ingrese su nombre">`
-      ,
+      title: "Agregar Correo Electrónico ",
+      html: `<input id="correo" name="correo" class="swal2-input" placeholder="Ingrese su correo electrónico required">`,
       showCancelButton: true,
       confirmButtonText: "Agregar",
       cancelButtonText: "Cancelar",
+      confirmButtonColor: "#240D5E",
+      cancelButtonColor: "#3F11B5",
       showLoaderOnConfirm: true,
-      preConfirm: () => {
+      preConfirm: async () => {
         const email = document.getElementById("correo").value;
-        const nombre = document.getElementById("nombre").value;
-        if (!email || !nombre) {
-          Swal.showValidationMessage("Por favor, complete ambos campos");
-        } else {
-          agregarAdmin(nombre, email);
+        try {
+          console.log("Correo electrónico ingresado:", email); 
+          const estudiantesSnapshot = await getDocs(collection(db, 'estudiantes'));  // Obtenemos todos los documentos de la colección "estudiantes"
+          console.log("Documentos de estudiantes:", estudiantesSnapshot.docs); // verificar los  obtenidos
+          const estudianteEncontrado = estudiantesSnapshot.docs.find(doc => doc.data().email === email);//verificamos que exista el email 
+          
+          //verificamos si existe ya el administrador
+          const adminSnapshot = await getDocs(collection(db, 'administradores'));  // Obtenemos todos los documentos de la colección "estudiantes"
+          const adminEncontrado = adminSnapshot.docs.find(doc => doc.data().correo === email);//verificamos que exista el email 
+          
+          if(adminEncontrado){
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: "Ya existe el Administrador!",
+              
+            });
+          }else if (estudianteEncontrado && !adminEncontrado) {// Si se encontró el estudiante, agregar el administrador y no existe admin
+            const datos=estudianteEncontrado.data(); //el doc lo convertimos en datos
+            const nombreEstudiante=datos.nombre +' '+ datos.apellido; //y recivimos los datos para que se almacenen nombre+apellido
+            agregarAdmin(nombreEstudiante, email);
+          
+            Swal.fire({
+              title: "Administrador",
+              html: `${nombreEstudiante}<br>Agregado Con Exito`,
+              icon: "success"
+            });
+          } else {
+            // Si no se encontró, mostrar un mensaje de error
+            throw new Error('El correo no pertenece a un estudiante');
+          }
+        } catch (error) {
+          Swal.showValidationMessage(error.message);
         }
       },
       allowOutsideClick: () => !Swal.isLoading(),
-    });
-  };
-  
-
-  // Modal que confirma que se guardó el correo como admin
-  const modalConfirmacion = () => {
-    Swal.fire({
-      html: "Administrador agregado",
-      toast: true,
-      icon: "success",
-      padding: "1rem",
-      position: "top-right",
-      timer: "3000",
-      timerProgressBar: true,
-      showConfirmButton: false, // Ocultar el botón OK
-      customClass: {
-        popup: "text-black",
-      },
-
     });
   };
 
