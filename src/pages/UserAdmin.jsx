@@ -1,24 +1,19 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import NavGeneral from '../components/NavGeneral'
 import TrabajosUserAdmin from '../components/TrabajosUserAdmin'
 import AdministradoresUserAdmin from '../components/AdministradoresUserAdmin'
 import AdmiCarrera from '../components/AdmiCarrera';
 import AdmiMunicipio from '../components/AdmiMunicipio'
-import { collection, getDocs } from 'firebase/firestore'
-import { db } from '../data/firebase'
+import DocNumber from '../components/DocNumber';
 
 
 const UserAdmin = () => {
     const [visibleComponent, setVisibleComponent] = useState()
     const [activeButton, setActiveButton] = useState()
-    const [trabajos, setTrabajos] = useState()
-
     const showComponent = (component, buttonID) => {
         setVisibleComponent(component)
         setActiveButton(buttonID)
     }
-
-    
     return (
         <>
             <header>
@@ -106,7 +101,7 @@ const UserAdmin = () => {
                         <div className='grid grid-cols-3 grid-rows-2 gap-y-[20px] w-[750px] mx-auto'>   
                             <div className='flex items-center justify-between w-[225px] bg-[#D9D9D9] p-[12px] rounded-lg'>
                                 <div className='mr-[15px]'>
-                                    <h1 className='text-3xl font-medium font-roboto'>0</h1>
+                                    <h1 className='text-3xl font-medium font-roboto'><DocNumber name='estudiantes'/></h1>
                                     <h1 className='text-xl font-roboto font-medium'>Estudiantes</h1>
                                 </div>
                                 <span class="material-symbols-outlined text-[40px]">
@@ -115,7 +110,7 @@ const UserAdmin = () => {
                             </div>
                             <div className='flex items-center justify-between w-[225px] bg-[#D9D9D9] p-[12px] rounded-lg'>
                                 <div className='mr-[15px]'>
-                                    <h1 className='text-3xl font-medium font-roboto'>0</h1>
+                                    <h1 className='text-3xl font-medium font-roboto'><DocNumber name='usuarios'/></h1>
                                     <h1 className='text-xl font-roboto font-medium'>Usuarios</h1>
                                 </div>
                                 <span class="material-symbols-outlined text-[40px]">
@@ -124,7 +119,7 @@ const UserAdmin = () => {
                             </div>
                             <div className='flex items-center justify-between w-[225px] bg-[#D9D9D9] p-[12px] rounded-lg'>
                                 <div className='mr-[15px]'>
-                                    <h1 className='text-3xl font-medium font-roboto'>0</h1>
+                                    <h1 className='text-3xl font-medium font-roboto'><DocNumber name='anuncios'/></h1>
                                     <h1 className='text-lg font-roboto font-medium'>Ofertas Laborales</h1>
                                 </div>
                                 <span class="material-symbols-outlined text-[40px]">
@@ -133,7 +128,7 @@ const UserAdmin = () => {
                             </div>
                             <div className='flex items-center justify-between w-[225px] bg-[#D9D9D9] p-[12px] rounded-lg'>
                                 <div className='mr-[15px]'>
-                                    <h1 className='text-3xl font-medium font-roboto'>0</h1>
+                                    <h1 className='text-3xl font-medium font-roboto'><DocNumber name='carreras'/></h1>
                                     <h1 className='text-xl font-roboto font-medium'>Carreras</h1>
                                 </div>
                                 <span class="material-symbols-outlined text-[40px]">
@@ -142,7 +137,7 @@ const UserAdmin = () => {
                             </div>
                             <div className='flex items-center justify-between w-[225px] bg-[#D9D9D9] p-[12px] rounded-lg'>
                                 <div className='mr-[15px]'>
-                                    <h1 className='text-3xl font-medium font-roboto'>0</h1>
+                                    <h1 className='text-3xl font-medium font-roboto'><DocNumber name='administradores'/></h1>
                                     <h1 className='text-xl font-roboto font-medium'>Administradores</h1>
                                 </div>
                                 <span class="material-symbols-outlined text-[40px]">
@@ -150,7 +145,7 @@ const UserAdmin = () => {
                                 </span>
                             </div>
                         </div>
-                        <div>
+                        <div className='w-[900px]'>
                             {visibleComponent}
                         </div>
                     </section>

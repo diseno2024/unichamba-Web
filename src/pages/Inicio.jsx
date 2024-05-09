@@ -70,10 +70,10 @@ const handleGoogleSingOut = async() => {
           </div>
           {/* publicar oferta y auth con google  */}
           <div className='flex gap-5 items-center'>
-              <buttons className='text-white font-semibold flex items-center gap-4 bg-Malachite h-[45px] px-5 rounded-[8px]'> 
+              <button className='text-white font-semibold flex items-center gap-4 bg-Malachite h-[45px] px-5 rounded-[8px]'> 
                 Publicar Oferta 
                 <span className="material-symbols-outlined">work</span>
-                </buttons>
+                </button>
 
                 {Object.keys(user).length === 0  ?
                   <button className='relative text-white font-semibold flex items-center gap-4 bg-Malachite h-[45px] justify-between pl-3 pr-[2px] rounded-[8px]' onClick={handleGoogleSingIn}>
