@@ -9,20 +9,21 @@ const AdmiCarrera = () => {
 
     useEffect(() => {
         cargarCarreras();
+        return () => {
+            cargarCarreras();
+        }
     }, []);
-
     const cargarCarreras = async () => {
         try {
             const carrerasSnapshot = await getDocs(collection(db, 'carreras'));
             const carrerasData = carrerasSnapshot.docs.map(doc => ({ id: doc.id, nombre: doc.data().carrera }));
             setCarreras(carrerasData);
+        } catch (error) {
+            console.error("Error al cargar carreras:", error);
+            Swal.fire("Error", "Hubo un error al cargar las carreras", "error");
         };
-
-        fetchCarreras();
-        return () => {
-            fetchCarreras(); //linea modificada
-        }
-    }, []);
+    }
+        
 
     const agregarCarrera = async () => {
         try {
