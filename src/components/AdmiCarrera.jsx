@@ -78,6 +78,7 @@ const AdmiCarrera = () => {
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
       confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar",
     }).then((result) => {
       if (result.isConfirmed) {
         // Aquí se puede implementar el metodo para eliminar al administrado
@@ -86,6 +87,57 @@ const AdmiCarrera = () => {
       }
     });
   }; 
+  // let carreramodificada = ''
+  const modalModificarCarrera=(carrera) =>{
+    // const campo = carrera.nombre
+    Swal.fire({
+        title:`Modifica la carrera ${carrera.nombre}`,
+        
+        // html:`
+        // <input class="" id="carerramodificada" type="text" value="${carrera.nombre}" /> 
+        // `,
+        input:"text",
+        inputLabel:"Editalo aca",
+        inputValue:carrera.nombre,
+        icon:"info",
+        showCancelButton:true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Modificar",
+        cancelButtonText: "Cancelar",
+    }).then((result) => {
+        if (result.isConfirmed) {
+          // Aquí se puede implementar el metodo para eliminar al administrado
+          // carrera.nombre = carreraSeleccionada.nombre
+
+        //   const carreramod =document.getElementById("carreramodificada").value
+        //   setCarreraSeleccionada({...carreraSeleccionada, nombre:carreramod})
+         setCarreraSeleccionada<
+          modificarCarrera()
+          console.log('Cualquier cosa')
+          Swal.fire("Modificado", `${carrera.nombre} fue cambiado con exito`, "success");
+        }
+      });
+  }
+  const modaldePrueba = (carrera) => {
+        
+        Swal.fire({
+            title: "Enter your IP address",
+            input: "text",
+            inputLabel: "Your IP address",
+            inputValue:carrera.nombre,
+            showCancelButton: true,
+            inputValidator: (value) => {
+                if (!value) {
+                    return "You need to write something!";
+                }
+            }
+        });
+        if (ipAddress) {
+            Swal.fire(`Your IP address is ${ipAddress}`);
+        }
+    }
+  
 
 
 
@@ -123,8 +175,11 @@ const AdmiCarrera = () => {
                 <h1 className='font-[700] text-Blue my-2'>Seleccione una Carrera para Modificar o Eliminar:</h1>
                 {carreras.map(carrera => (
                     <div key={carrera.id} className="flex items-center text-Dark-Blue font-medium mb-3 pl-4 ml-1  min-h-14 hover:bg-Space-cadet/20  border-b-2 " >
-                        <span onClick={() => seleccionarCarrera(carrera)} className="cursor-pointer">{carrera.nombre}</span>
-                        <button onClick={modalEliminarCarrera} className='ml-8' >delete</button>
+                        <span onClick={() => seleccionarCarrera(carrera)} className="cursor-pointer">{carrera.nombre}
+                           
+                        </span>
+                        <button onClick={()=>modalEliminarCarrera(carrera)} className='bg-red-600 text-white font-medium py-2 px-4 rounded-md ml-4' ><span className='material-symbols-outlined'>delete</span></button>
+                            <button onClick={()=>modalModificarCarrera(carrera)} className='bg-green-600 text-white font-medium py-2 px-4 rounded-md ml-4' ><span className='material-symbols-outlined'>edit_square</span></button>
                     </div>
 
                 ))}
