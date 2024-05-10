@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../data/firebase';
 import { collection, addDoc, deleteDoc, doc, updateDoc, getDocs } from 'firebase/firestore';
+import Swal from 'sweetalert2';
 
 const AdmiCarrera = () => {
     const [carreras, setCarreras] = useState([]);
     const [nuevaCarrera, setNuevaCarrera] = useState('');
-    const [carreraSeleccionada, setCarreraSeleccionada] = useState({ id: '', nombre: '' });
+    const [carreraSeleccionada, setCarreraSeleccionada] = useState({ id: '', nombre: '' }); //Tentativamente esto se elimine, pero queda pendiente a cambios
 
     useEffect(() => {
         const fetchCarreras = async () => {
@@ -64,6 +65,29 @@ const AdmiCarrera = () => {
         }
     };
 
+    const modalEliminarCarrera = (carrera) => {
+    Swal.fire({
+      title: `Elimina la carrera  ${carrera.nombre}`,
+      html: `
+      
+      <hr class="my-4">
+      <p>¿Estás seguro de que deseas eliminar la carrera : ${carrera.nombre}?</p>
+    `,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Sí, eliminar",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Aquí se puede implementar el metodo para eliminar al administrado
+        eliminarCarrera()
+        Swal.fire("Eliminado", `${carrera.nombre} ha sido eliminado`, "success");
+      }
+    });
+  }; 
+
+
 
     return (
         <div className="container min-w-[300px] max-w-[900px] pt-7 px-10 mx-10 mt-7">
@@ -83,7 +107,7 @@ const AdmiCarrera = () => {
                         <div className='flex '>
                             <input type="text" value={carreraSeleccionada.nombre} onChange={e => setCarreraSeleccionada({ ...carreraSeleccionada, nombre: e.target.value })} className="border  text-Dark-Blue  font-medium border-Dark-Blue rounded-md px-4 py-2 w-64" />
                             <button onClick={modificarCarrera} className="bg-green-500 flex justify-center hover:bg-green-600 text-white font-medium py-2 px-4 rounded-md ml-4"><span className="material-symbols-outlined">
-                                edit_square
+                                   edit_square
                             </span></button>
                             <button onClick={eliminarCarrera} className="bg-red-500 flex justify-center hover:bg-red-600 text-white font-medium py-2 px-4 rounded-md ml-2"><span className="material-symbols-outlined">
                                 delete
@@ -100,6 +124,7 @@ const AdmiCarrera = () => {
                 {carreras.map(carrera => (
                     <div key={carrera.id} className="flex items-center text-Dark-Blue font-medium mb-3 pl-4 ml-1  min-h-14 hover:bg-Space-cadet/20  border-b-2 " >
                         <span onClick={() => seleccionarCarrera(carrera)} className="cursor-pointer">{carrera.nombre}</span>
+                        <button onClick={modalEliminarCarrera} className='ml-8' >delete</button>
                     </div>
 
                 ))}
