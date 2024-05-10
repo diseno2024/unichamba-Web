@@ -11,21 +11,35 @@ import makeAnimated from "react-select/animated";
 import Swal from "sweetalert2";
 import { UserAuth } from "../context/AuthContext";
 const options = [
-  { value: "uno", label: "Encuestador Campo" },
-  { value: "dos", label: "Trabajador de limpieza por horas" },
-  { value: "tres", label: "Promotor de productos en supermercados o tiendas" },
-  { value: "cuatro", label: "Traductor independiente" },
-  { value: "cinco", label: "Vendedor ambulante de productos diversos" },
-  { value: "seis", label: "Trabajador de eventos (montaje y desmontaje)" },
-  { value: "siete", label: "Trabajo en agricultura temporal (cosecha)" },
-  { value: "ocho", label: "Servicio de lavado de autos a domicilio" },
-  { value: "nueve", label: "Trabajador de entrega de paquetes" },
-  { value: "diez", label: "Cuidar Enfermos" },
-  { value: "once", label: "Pasear perros" },
-  { value: "doce", label: "Electricista" },
-  { value: "trece", label: "Supervisor" },
-  { value: "catorce", label: "Pintor" },
-  { value: "quince", label: "Albañil" },
+  { value: "uno", label: "Panaderia" },
+  { value: "dos", label: "Musico" },
+  { value: "tres", label: "Asistente contable" },
+  { value: "cuatro", label: "Atencion al cliente" },
+  { value: "cinco", label: "Cajero" },
+  { value: "seis", label: "Secretaria" },
+  { value: "siete", label: "Mesero" },
+  { value: "ocho", label: "Recepcionista" },
+  { value: "nueve", label: "Vendedor de farmacia" },
+  { value: "diez", label: "Comerciante" },
+  { value: "once", label: "Albañileria" },
+  { value: "doce", label: "Cortar cafe" },
+  { value: "trece", label: "Pasteleria" },
+  { value: "catorce", label: "Cosmetologia" },
+  { value: "quince", label: "Sublimacion de tazas" },
+  { value: "dieciseis", label: "limpieza" },
+  { value: "diecisiete", label: "Carpintero" },
+  { value: "dieciocho", label: "Primeros Auxilios" },
+  { value: "diecinueve", label: "Agricultura" },
+  { value: "veinte", label: "Mantenimiento electrico" },
+  { value: "veinteuno", label: "Manicura" },
+  { value: "veintedos", label: "Gestion Administrativa" },
+  { value: "veintetres", label: "Pintor de casas" },
+  { value: "veintecuatro", label: "Manejo de inventario" },
+  { value: "veintecinco", label: "Florista" },
+  { value: "veinteseis", label: "Emprendimiento" },
+  { value: "veintesiete", label: "Mantenimiento de computadoras" },
+  { value: "veinteocho", label: "Cocina" },
+  { value: "veintenueve", label: "Bisuteria" },
 ];
 
 const animatedComponents = makeAnimated();
@@ -274,6 +288,7 @@ const CreateStudentAccount = () => {
                   cols="79"
                   required
                   rows="4"
+                  maxLength={500}
                   className="border border-black rounded-lg resize-none p-3 font-light"
                 ></textarea>
               </div>
