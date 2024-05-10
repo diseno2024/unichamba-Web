@@ -60,7 +60,7 @@ const AdmiMunicipio = () => {
                     <div className=" mt-1 min-h-[125px]">
                         <h3 className="text-xl font-bold mb-2">Editar Municipio</h3>
                         <div className='flex '>
-                            <input type="text" value={municipioSeleccionada.nombre} onChange={e => setCarreraSeleccionada({ ...carreraSeleccionada, nombre: e.target.value })} className="border  text-Dark-Blue  font-medium border-Dark-Blue rounded-md px-4 py-2 w-64" />
+                            <input type="text" value={municipioSeleccionada.nombre} onChange={e => setMunicipioSeleccionada({ ...municipioSeleccionada, nombre: e.target.value })} className="border  text-Dark-Blue  font-medium border-Dark-Blue rounded-md px-4 py-2 w-64" />
                             <button onClick={modificarMunicipio} className="bg-green-500 flex justify-center hover:bg-green-600 text-white font-medium py-2 px-4 rounded-md ml-4"><span className="material-symbols-outlined">
                                 edit_square
                             </span></button>
