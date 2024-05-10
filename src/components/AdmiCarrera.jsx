@@ -15,6 +15,9 @@ const AdmiCarrera = () => {
         };
 
         fetchCarreras();
+        return () => {
+            fetchCarreras(); //linea modificada
+        }
     }, []);
 
     const agregarCarrera = async () => {

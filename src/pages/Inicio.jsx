@@ -17,27 +17,52 @@ const Inicio = () => {
   const result = /@ues\.edu\.sv$/.test(user.email);
   const navigate = useNavigate();
   let student = [];
+  let administradores = [];
   let URLphoto = user.photoURL;
+  const [permiso, setpermiso] = useState(false)
+
+
+  const fetchData = async () => {
+    const studentsSnapshot = await getDocs(collection(db, 'estudiantes')); // 'carreras' es el nombre de tu colección en Firestore
+    const studentsData = studentsSnapshot.docs.map(doc => doc.data().email); // Suponiendo que tienes un campo 'nombre' en tus documentos de carrera
+    student = studentsData; // emails de los estudiantes ya registrados 
+    // administradores 
+    const adminSnapshot = await getDocs(collection(db, 'administradores'));
+    const admins = adminSnapshot.docs.map( doc => doc.data().correo)
+    administradores = admins;
+
+    if(Object.keys(user).length !== 0){
+      if(administradores.includes(user.email)){
+        console.log('no creara cuenta')
+        setpermiso(true);
+        console.log(permiso)
+      }else{
+        if(result){
+          // //   // validacion si el correo no esta incluido en el arreglo de los admins, que se vaya a crear cuenta
+            if(!administradores.includes(user.email)){
+              if(!student.includes(user.email)){
+                console.log('no hay perfil relacionado al email')
+                      navigate('/createAccountStd')
+              }
+            } 
+          }
+      }  
+
+        
+    }
+};
 
   useEffect(() => {
-    const fetchData = async () => {
-      const studentsSnapshot = await getDocs(collection(db, 'estudiantes')); // 'carreras' es el nombre de tu colección en Firestore
-      const studentsData = studentsSnapshot.docs.map(doc => doc.data().email); // Suponiendo que tienes un campo 'nombre' en tus documentos de carrera
-      student = studentsData;
-
-      if(Object.keys(user).length !== 0 ){
-        if(result){
-          if(!student.includes(user.email)){
-            console.log('no hay perfil relacionado al email')
-            navigate('/createAccountStd')
-          }
-        }  
-      }
-  };
 
   fetchData();
-  }, [user])
+
+  return () => {
+    fetchData();
+  }
   
+  }, [user])
+
+
 
   const handleGoogleSingIn = async() => {
     try {
@@ -75,33 +100,64 @@ const handleGoogleSingOut = async() => {
                 <span className="material-symbols-outlined">work</span>
                 </button>
 
-                {Object.keys(user).length === 0  ?
-                  <button className='relative text-white font-semibold flex items-center gap-4 bg-Malachite h-[45px] justify-between pl-3 pr-[2px] rounded-[8px]' onClick={handleGoogleSingIn}>
-                  Iniciar sesion con Google
-                  <img src="/google 2.svg" alt="google-icon" className='bg-white py-[10px] px-[10px] rounded-lg' />
-                  </button>  
-              : result ?
-                <div className='flex items-center gap-4'>
-
-                  <button className='relative text-white font-semibold flex items-center gap-4 bg-Malachite h-[45px] justify-between px-4 rounded-[8px]' onClick={handleGoogleSingOut}>
-                    Cerrar Sesion
-                  </button>
-
-                  <NavLink to='/studentProfile' className= 'flex items-center'>
-                    {/* <h1 className='text-white font-normal px-2'></h1>6 */}
-                    <div className='h-[50px] w-[50px] rounded-full'>
-                    {/* <span className="material-symbols-outlined text-white" style={{fontSize: '35px'}}>person</span> */}
-                    <img src={URLphoto} alt="imagen-estudiante"  className='w-full h-full rounded-full'/> 
-                    </div>
-                  </NavLink>  
+                { Object.keys(user).length === 0 ?
                   
-                </div>
-                
-              :
-                  <button className='relative text-white font-semibold flex items-center gap-4 bg-Malachite h-[45px] justify-between px-4 rounded-[8px]' onClick={handleGoogleSingOut}>
+                  <button className='relative text-white font-semibold flex items-center gap-4 bg-Malachite h-[55px] justify-between pl-3 pr-[2px] rounded-[8px]' onClick={handleGoogleSingIn}>
+                  Iniciar sesion con Google
+                  <img src="/google 2.svg" alt="google-icon" className='bg-white py-[13px] px-[13px] rounded-lg' />
+                  </button>
+                  : !result ?
+
+                  <button className='relative text-white font-semibold flex items-center gap-4 bg-Malachite h-[55px] justify-between pl-3 pr-[2px] rounded-[8px]' onClick={handleGoogleSingOut}>
                     Cerrar Sesion
                   </button>
-              }
+                  
+                  :permiso ?
+                    <div className='flex items-center gap-4'>
+                    {console.log('administrador', permiso)}
+                      <button className='relative text-white font-semibold flex items-center gap-4 bg-Malachite h-[45px] justify-between px-4 rounded-[8px]' onClick={handleGoogleSingOut}>
+                        Cerrar Sesion
+                      </button>
+
+                      <NavLink to='/userAdmin' className= 'flex items-center'>
+                        {/* <h1 className='text-white font-normal px-2'></h1>6 */}
+                        <div className='h-[50px] w-[50px] rounded-full'>
+                        {/* <span className="material-symbols-outlined text-white" style={{fontSize: '35px'}}>person</span> */}
+                        <img src={URLphoto} alt="imagen-estudiante"  className='w-full h-full rounded-full'/> 
+                        </div>
+                      </NavLink>  
+                      
+                    </div>
+                    
+                      :
+                    <div className='flex items-center gap-4'>
+                      {console.log('estudiante', permiso)}
+                        <button className='relative text-white font-semibold flex items-center gap-4 bg-Malachite h-[45px] justify-between px-4 rounded-[8px]' onClick={handleGoogleSingOut}>
+                          Cerrar Sesion
+                        </button>
+
+                        <NavLink to='/studentProfile' className= 'flex items-center'>
+                          {/* <h1 className='text-white font-normal px-2'></h1>6 */}
+                          <div className='h-[50px] w-[50px] rounded-full'>
+                          {/* <span className="material-symbols-outlined text-white" style={{fontSize: '35px'}}>person</span> */}
+                          <img src={URLphoto} alt="imagen-estudiante"  className='w-full h-full rounded-full'/> 
+                          </div>
+                        </NavLink>  
+                        
+                      </div>
+                }
+                  {/* 
+                  
+                  si nadie se a logeado ?
+
+                    btn iniciar sesio 
+
+                    : (inicio sesion) (es adiminstrador o estudiante )
+
+
+                  
+                  */}
+
           </div>
         </nav>
         <h1 className='text-white font-medium text-4xl w-[35%] relative left-[100px] text-center'>Te ayudamos a encontrar tu primer empleo</h1>

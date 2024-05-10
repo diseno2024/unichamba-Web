@@ -34,7 +34,7 @@ const TrabajosUserAdmin = () => {
             cancelButtonColor: "#d33",
             confirmButtonText: "Si, borrar",
             cancelButtonText: "Cancelar"
-          }).then((result) => {
+        }).then((result) => {
             if (result.isConfirmed) {
                 eliminarTrabajo(id)
               Swal.fire({
@@ -47,9 +47,18 @@ const TrabajosUserAdmin = () => {
     }
 
 
+    // useEffect(() => {
+    //     return fetchTrabajos
+    // }, [])
+
     useEffect(() => {
-        return fetchTrabajos
+        fetchTrabajos();
+        
+        return () => {
+            fetchTrabajos(); //linea modificada
+        }
     }, [])
+    
 
     return (
         <>

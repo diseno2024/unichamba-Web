@@ -5,6 +5,7 @@ import { collection, getDocs } from 'firebase/firestore';
 const CarreraFiltro = () => {
     const [municipios, setmunicipios] = useState([]);
     const [municipioSeleccionada, setmunicipioSeleccionada] = useState(null);
+
     
     useEffect(() => {
         const fetchData = async () => {
@@ -13,9 +14,12 @@ const CarreraFiltro = () => {
             const municipiosOrdenadas = municipiosData.sort((a, b) => a.localeCompare(b)); // Orden alfabético
             setmunicipios(municipiosOrdenadas);
         };
-
         fetchData();
-    }, []);
+        return () => {
+            
+            fetchData(); //linea modificada
+        }
+    }, []); 
 
     const seleccionarCarrera = (index) => {
         setmunicipioSeleccionada(index);

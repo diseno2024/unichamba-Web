@@ -16,9 +16,18 @@ const DocNumber = ({ name }) => {
             })
     }
 
+    // useEffect(() => {
+    //     return getDoc
+    // }, [])
+    
     useEffect(() => {
-        return getDoc
+        getDoc();
+    
+        return () => {
+            getDoc();
+        }
     }, [])
+    
 
     return (
         <>

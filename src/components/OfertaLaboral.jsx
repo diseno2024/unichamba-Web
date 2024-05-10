@@ -53,7 +53,6 @@ const OfertaLaboral = ({ listStudent }) => {
                                 {carrera}
                             </div>
                         </div>
-                       
                     </div>
 
 

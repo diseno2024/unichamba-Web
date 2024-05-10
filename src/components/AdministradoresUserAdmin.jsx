@@ -17,9 +17,17 @@ const AdministradoresUserAdmin = () => {
       })
   }
 
+  // useEffect(() => {
+  //   return fetchAdministradores
+  // }, [])
+
   useEffect(() => {
-    return fetchAdministradores
+    fetchAdministradores();
+    return () => {
+      fetchAdministradores(); //linea modificada
+  }
   }, [])
+  
 
   const agregarAdmin = async (name, email) => {
     await addDoc(collection(db, 'administradores'), { correo: email, nombre: name })

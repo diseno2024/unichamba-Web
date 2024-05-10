@@ -1,17 +1,11 @@
 import React, { useState } from "react";
 import NavGeneral from "../components/NavGeneral";
-import { Component, Fragment } from "react";
 import OrdenarCarreras from "../components/ordenCarreras";
 import { db } from "../data/firebase";
 import {
   collection,
-  getFirestore,
   addDoc,
-  getDocs,
-  doc,
-  getDoc,
 } from "firebase/firestore";
-import { NavLink } from "react-router-dom";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
 import Swal from "sweetalert2";

@@ -14,6 +14,9 @@ const AdmiMunicipio = () => {
         };
 
         fetchMunicipios();
+        return () => {
+            fetchMunicipios(); //linea modificada
+        }
     }, []);
 
   ;
