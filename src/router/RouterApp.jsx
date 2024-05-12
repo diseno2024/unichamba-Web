@@ -8,6 +8,7 @@ import StudentsPublications from '../pages/StudentsPublications';
 import StudentProfile from '../pages/StudentProfile'
 import OfferExploreStudent from '../pages/OfferExploreStudent'
 import UserAdmin from '../pages/UserAdmin'
+import Secure from '../components/Secure'
 
 const RouterApp = () => {
 return (
@@ -22,7 +23,7 @@ return (
         <Route path='studentsPublications' element={<StudentsPublications/>}/>{/** Perfiles de estudiante, vista empleador */}
         <Route path='/studentProfile' element={<StudentProfile/>}/>
         <Route path='/OfferExploreStudent' element={<OfferExploreStudent/>}/> {/** Ofertas del empleo */}
-        <Route path='/userAdmin' element={<UserAdmin/>}/>
+        <Route path='/userAdmin' element={ <Secure> <UserAdmin/> </Secure> }/>
 
     </Routes>
     
