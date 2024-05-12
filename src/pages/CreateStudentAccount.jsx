@@ -2,10 +2,7 @@ import React, { useState } from "react";
 import NavGeneral from "../components/NavGeneral";
 import OrdenarCarreras from "../components/ordenCarreras";
 import { db } from "../data/firebase";
-import {
-  collection,
-  addDoc,
-} from "firebase/firestore";
+import { collection, addDoc } from "firebase/firestore";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
 import Swal from "sweetalert2";
@@ -45,8 +42,9 @@ const options = [
 const animatedComponents = makeAnimated();
 
 const CreateStudentAccount = () => {
-  const {user} = UserAuth();
-  const correoElectronico=user.email
+  const { user } = UserAuth();
+  const correoElectronico = user.email;
+  const fechaRegistro = new Date().toISOString().split("T")[0];
 
   const initialStateValues = {
     nombre: "",
@@ -57,9 +55,9 @@ const CreateStudentAccount = () => {
     whatsapp: "",
     fechaNacimiento: "",
     acercaDe: "",
-    email: correoElectronico
+    email: correoElectronico,
+    fecRegistro: fechaRegistro,
   };
-
 
   const isValidDate = (dateString) => {
     // Convertir la cadena de fecha a objeto Date
@@ -92,7 +90,7 @@ const CreateStudentAccount = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(values); // values 
+    console.log(values); // values
     addOrEditLink(values);
   };
 
@@ -134,7 +132,6 @@ const CreateStudentAccount = () => {
       </header>
       <main className=" h-screen my-10">
         <div className="bg-Blanco-cremoso pl-5 pb-10">
-          
           <div
             className="flex justify-between items-center"
             style={{ color: "#424769" }}
@@ -158,8 +155,9 @@ const CreateStudentAccount = () => {
                   id="nombreInput"
                   className="rounded-lg border border-black p-3 w-80 mt-4 font-normal"
                   name="nombre"
-                  pattern="^[a-zA-Z]+\s[a-zA-Z]+$"
-                  title="Por favor introduce entre 5 y 30 dígitos."
+                  
+                  pattern="^[A-Za-záéíóúÁÉÍÓÚ]+\s[A-Za-záéíóúÁÉÍÓÚ]+$"
+                  title="Por favor introduce tus nombres adecuadamente"
                   onChange={handleInputChange}
                   required
                 />
@@ -189,7 +187,6 @@ const CreateStudentAccount = () => {
                 <OrdenarCarreras
                   onSelect={handleCarreraChange}
                 ></OrdenarCarreras>
-
               </div>
 
               <div className="ml-9">
@@ -205,7 +202,7 @@ const CreateStudentAccount = () => {
                   id="apellidoInput"
                   className="rounded-lg border border-black p-3 w-80 mt-4 font-normal"
                   name="apellido"
-                  pattern="^[a-zA-Z]+\s[a-zA-Z]+$"
+                  pattern="^[A-Za-záéíóúÁÉÍÓÚ]+\s[A-Za-záéíóúÁÉÍÓÚ]+$"
                   title="Por favor introduce entre 5 y 30 dígitos."
                   onChange={handleInputChange}
                   required
@@ -246,11 +243,15 @@ const CreateStudentAccount = () => {
                 />
               </div>
 
-                {/* imagen svg */}
-              <div className="pl-[150px] absolute right-20 top-16" >
-              <img src="./public/Computer login-rafiki 1.png" alt="" width="400px" height="500px"/>
+              {/* imagen svg */}
+              <div className="pl-[150px] absolute right-20 top-16">
+                <img
+                  src="./public/Computer login-rafiki 1.png"
+                  alt=""
+                  width="400px"
+                  height="500px"
+                />
               </div>
-
             </div>
             <div>
               <br />
@@ -292,11 +293,11 @@ const CreateStudentAccount = () => {
                   className="border border-black rounded-lg resize-none p-3 font-light"
                 ></textarea>
               </div>
-                <br />
+              <br />
 
-                  {/* btn crear cuenta */}
-                <div className="mt-5 px-5">
-                  <div className="flex my-5">
+              {/* btn crear cuenta */}
+              <div className="mt-5 px-5">
+                <div className="flex my-5">
                   <input
                     type="checkbox"
                     name=""
@@ -307,12 +308,11 @@ const CreateStudentAccount = () => {
                   <h6 className="text-sm text-gray-500 mt-3 ml-3 font-normal">
                     Acepto los terminos y condiciones de unichamba
                   </h6>
-                  </div>
-                  <button className="bg-Dark-Blue text-white px-4 py-4 rounded-lg w-80 mr-11 font-normal">
-                  Crear cuenta estudiante
-                  </button>
                 </div>
-
+                <button className="bg-Dark-Blue text-white px-4 py-4 rounded-lg w-80 mr-11 font-normal">
+                  Crear cuenta estudiante
+                </button>
+              </div>
             </div>
           </form>
         </div>
