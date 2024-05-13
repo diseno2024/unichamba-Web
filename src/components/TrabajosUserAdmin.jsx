@@ -80,13 +80,13 @@ const TrabajosUserAdmin = () => {
                             <p className=" pl-4 py-1 font-normal text-slate-800">{trabajo.emailEmployer}</p>
                             <p className=" pl-4 font-light">{trabajo.description}</p>
                         </div>
-                        <div className=" flex justify-center items-center ">
+                        {/* <div className=" flex justify-center items-center ">
                             <button onClick={ () => modalEliminarTrabajo(trabajo.id) }>
                             <span class="material-symbols-outlined text-3xl text-red-600">
                                 delete
                             </span>
                             </button>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             )}
