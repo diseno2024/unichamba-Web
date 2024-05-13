@@ -5,6 +5,10 @@ import AdministradoresUserAdmin from '../components/AdministradoresUserAdmin'
 import AdmiCarrera from '../components/AdmiCarrera';
 import AdmiMunicipio from '../components/AdmiMunicipio'
 import DocNumber from '../components/DocNumber';
+import { BlacklistUserAdmin } from '../components/BlacklistUserAdmin';
+
+
+
 
 
 const UserAdmin = () => {
@@ -77,7 +81,7 @@ const UserAdmin = () => {
                         </button>
                         <button 
                         className={`grid grid-cols-2 rounded-md h-[45px] items-center pr-[30px] hover:bg-white ${activeButton === 'blacklist' ? 'bg-white' : ''}`}
-                        onClick={() => showComponent(<h1>Lista negra</h1>, 'blacklist')}
+                        onClick={() => showComponent(<BlacklistUserAdmin/>, 'blacklist')}
                         >
                             <span class="material-symbols-outlined text-[38px]">
                                 person_off
