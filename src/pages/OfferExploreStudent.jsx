@@ -8,6 +8,7 @@ import { NavLink } from 'react-router-dom'
 
 
 
+
 const OfferExploreStudent = () => {
 
   // Dividir la lista de elementos en dos partes

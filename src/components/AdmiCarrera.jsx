@@ -70,7 +70,7 @@ const AdmiCarrera = () => {
             <div className="flex items-center space-x-10">
                 <div className='flex space-x-1'>
                     <input type="text" value={nuevaCarrera} onChange={handleChange} placeholder="Agregar Carrera" className="border text-Dark-Blue font-medium border-Dark-Blue rounded-md px-4 py-2 w-64" />
-                    <button onClick={agregarCarrera} className="bg-Dark-Blue hover:bg-blue-600 text-white font-normal py-2 px-4 rounded-md">
+                    <button onClick={agregarCarrera} className="bg-Dark-Blue hover:bg-blue-600 text-white font-normal py-2 px-4 rounded-md flex justify-center">
                         <span className="material-symbols-outlined">
                             add_circle
                         </span>
