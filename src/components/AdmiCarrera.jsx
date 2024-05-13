@@ -69,7 +69,7 @@ const AdmiCarrera = () => {
             <h2 className="text-3xl font-normal my-8">Carreras</h2>
             <div className="flex items-center space-x-10">
                 <div className='flex space-x-1'>
-                    <input type="text" value={nuevaCarrera} onChange={handleChange} placeholder="Agregar Carrera" className="border text-Dark-Blue font-medium border-Dark-Blue rounded-md px-4 py-2 w-64" />
+                    <input type="text" value={nuevaCarrera} onChange={handleChange} placeholder="Agregar Carrera" className="border text-Dark-Blue font-medium border-Dark-Blue rounded-md px-4 py-2 min-w-[725px] max-w-[900px] " />
                     <button onClick={agregarCarrera} className="bg-Dark-Blue hover:bg-blue-600 text-white font-normal py-2 px-4 rounded-md flex justify-center">
                         <span className="material-symbols-outlined">
                             add_circle
@@ -80,7 +80,7 @@ const AdmiCarrera = () => {
             <div className="flex flex-col list-disc mt-5 mb-4 space-y-3">
                 <h1 className='font-[700] text-Blue my-2'>Carreras:</h1>
                 {carreras.map(carrera => (
-                    <div key={carrera.id} className="flex items-center text-Dark-Blue font-medium mb-3 pl-4 ml-1 min-h-14 hover:bg-Space-cadet/20 border-b-2">
+                    <div key={carrera.id} className="flex relative items-center text-Dark-Blue font-medium mb-3 pl-4 ml-1 min-h-14 hover:bg-Space-cadet/20 border-b-2">
                         <span>{carrera.nombre}</span>
                         <button onClick={() => Swal.fire({
                             title: `Eliminar la carrera ${carrera.nombre}`,
@@ -95,7 +95,7 @@ const AdmiCarrera = () => {
                             if (result.isConfirmed) {
                                 eliminarCarrera(carrera);
                             }
-                        })} className='bg-red-600 text-white font-medium py-2 px-4 rounded-md ml-4 material-symbols-outlined   absolute right-48'>
+                        })} className='bg-red-600 text-white font-medium py-2 px-4 rounded-md ml-4 material-symbols-outlined absolute right-[88px]'>
                             <span className=' '>
                                 delete
                             </span>
@@ -115,7 +115,7 @@ const AdmiCarrera = () => {
                             if (result.isConfirmed) {
                                 modificarCarrera(carrera, result.value);
                             }
-                        })} className='bg-green-600 text-white font-medium py-2 px-4 rounded-md ml-4 material-symbols-outlined absolute right-32'>
+                        })} className='bg-green-600 text-white font-medium py-2 px-4 rounded-md ml-4 material-symbols-outlined absolute right-6'>
                             <span className=' '>
                                 edit_square
                             </span>

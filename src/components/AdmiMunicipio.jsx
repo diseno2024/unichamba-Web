@@ -69,7 +69,7 @@ const AdmiMunicipio = () => {
             <h2 className="text-3xl font-normal my-8">Municipios</h2>
             <div className="flex items-center space-x-10">
                 <div className='flex space-x-1'>
-                    <input type="text" value={nuevaMunicipio} onChange={handleChange} placeholder="Agregar Municipio" className="border text-Dark-Blue font-medium border-Dark-Blue rounded-md px-4 py-2 w-64" />
+                    <input type="text" value={nuevaMunicipio} onChange={handleChange} placeholder="Agregar Municipio" className="border text-Dark-Blue font-medium border-Dark-Blue rounded-md px-4 py-2 min-w-[725px] max-w-[900px] " />
                     <button onClick={agregarMunicipio} className="bg-Dark-Blue hover:bg-blue-600 text-white font-normal py-2 px-4 rounded-md flex justify-center">
                         <span className="material-symbols-outlined">
                             add_circle
@@ -80,7 +80,7 @@ const AdmiMunicipio = () => {
             <div className="flex flex-col list-disc mt-5 mb-4 space-y-3">
                 <h1 className='font-[700] text-Blue my-2'>Municipios:</h1>
                 {municipios.map(municipio => (
-                    <div key={municipio.id} className="flex items-center text-Dark-Blue font-medium mb-3 pl-4 ml-1 min-h-14 hover:bg-Space-cadet/20 border-b-2 ">
+                    <div key={municipio.id} className="flex relative items-center text-Dark-Blue font-medium mb-3 pl-4 ml-1  min-h-14 hover:bg-Space-cadet/20 border-b-2 ">
                         <span>{municipio.nombre}</span>
                         <button onClick={() => Swal.fire({
                             title: `Eliminar El municipio ${municipio.nombre}`,
@@ -95,7 +95,7 @@ const AdmiMunicipio = () => {
                             if (result.isConfirmed) {
                                 eliminarMunicipio(municipio);
                             }
-                        })} className='bg-red-600 text-white font-medium py-2 px-4 rounded-md ml-4 material-symbols-outlined absolute inset-y-68 left-[725px]'>
+                        })} className='bg-red-600 text-white font-medium py-2 px-4 rounded-md ml-4 material-symbols-outlined absolute right-[88px]'>
                             <span className=' '>
                                 delete
                             </span>
@@ -115,7 +115,7 @@ const AdmiMunicipio = () => {
                             if (result.isConfirmed) {
                                 modificarMunicipio(municipio, result.value);
                             }
-                        })} className='bg-green-600 text-white font-medium py-2 px-4 rounded-md ml-4 material-symbols-outlined absolute inset-y-68 left-[663px]'>
+                        })} className='bg-green-600 text-white font-medium py-2 px-4 rounded-md ml-4 material-symbols-outlined absolute right-6'>
                             <span className=' '>
                                 edit_square
                             </span>
