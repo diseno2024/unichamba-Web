@@ -1,6 +1,8 @@
 import Perfiles from "../components/PerfilEstudiante";
 import Navbar from "../components/Navbar";
 import { data } from "../data/ProfileStudentData";
+import { NavLink } from "react-router-dom";
+
 const {nivelesEducacion, lugaresEducacion, nombre, ciudad, municipio, contacto, email, EducacionActual} = data[0];
 
 // Este es la paginación de Elias  
@@ -19,7 +21,17 @@ const StudentProfile = () => {
       {/* FOTO DE PERFIL Y PORTADA */}
 
       <div className=" mt-2 mx-5 bg-portada-perfil bg-cover h-[250px]">
-        <div className=" w-[200px] pt-[150px] ml-9 ">
+        <NavLink
+            to="/"
+            className="h-[50px] w-[80px] px-5 border-[1px]  border-transparent rounded-lg placeholder:text-white focus:outline-none mr-3 flex  text-white"
+          >
+            <button>
+              <span class="material-symbols-outlined">
+              arrow_back
+              </span>
+            </button>
+          </NavLink>
+        <div className=" w-[200px] pt-[100px] ml-9 ">
         <img src="/foto-perfil.jpg" alt="" className=" rounded-full border-8"/>
         </div>
       </div>
