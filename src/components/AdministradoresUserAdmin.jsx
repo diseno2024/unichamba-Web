@@ -79,6 +79,11 @@ const AdministradoresUserAdmin = () => {
       preConfirm: async () => {
         const email = document.getElementById("correo").value;
         try {
+
+          console.log("Correo electrónico ingresado:", email);
+        if (!email.endsWith("@ues.edu.sv")) {
+          throw new Error("El dominio del correo electrónico debe ser '@ues.edu.sv'");
+        }
           console.log("Correo electrónico ingresado:", email); 
           const estudiantesSnapshot = await getDocs(collection(db, 'estudiantes'));  // Obtenemos todos los documentos de la colección "estudiantes"
           console.log("Documentos de estudiantes:", estudiantesSnapshot.docs); // verificar los  obtenidos
@@ -107,7 +112,7 @@ const AdministradoresUserAdmin = () => {
             });
           } else {
             // Si no se encontró, mostrar un mensaje de error
-            throw new Error('El correo no pertenece a un estudiante');
+            throw new Error('Correo invalido o No pertenece a la Universidad');
           }
         } catch (error) {
           Swal.showValidationMessage(error.message);
