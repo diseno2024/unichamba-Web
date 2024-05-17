@@ -124,25 +124,25 @@ const AdministradoresUserAdmin = () => {
 
   return (
     <>
-      <div className="w-[95%] py-10 flex items-center justify-between px-5 mx-auto">
+      <div className="w-[95%] py-10 flex items-center justify-between pl-20 mx-auto">
         <h3 className="font-normal text-2xl">Administradores</h3>
-        <span className="cursor-pointer material-symbols-outlined text-black text-4xl hover:text-green-600" onClick={modalAgregarAdministradores}>
+        <span className="cursor-pointer material-symbols-outlined text-black text-4xl hover:text-green-600 pr-24" onClick={modalAgregarAdministradores}>
           add_circle
         </span>
       </div>
 
       {/* Se muestran las tarjetas de los administradores */}
-      <div className="w-[95%] mx-auto">
+      <div className="w-[95%] mx-auto pl-14">
         {administradores.map((admin) => (
-          <div key={admin.id} className="transition ease-in-out delay-50 hover:-translate-y-1 hover:scale-110 duration-100 w-[85%] h-[150px] mx-auto border-b-2 border-gray-500 grid grid-cols-5 hover:border-b-2 hover:border-blue-500">
+          <div key={admin.id} className=" transition ease-in-out delay-50 hover:-translate-y-1 hover:scale-105 duration-100 w-[90%] h-[100px] mx-auto mb-3 pl-4  ml-1 hover:bg-Space-cadet/20 border-b-2 grid grid-cols-5 hover:border-2 hover:border-blue-500">
             <div className="col-span-4 flex items-center">
-              <div className="ml-4">
+              <div className="ml-1">
                 <h1 className="font-normal text-Blue text-xl">{admin.nombre}</h1>
                 <p className="font-light">{admin.correo}</p>
               </div>
             </div>
-            <div className="flex justify-center gap-6 items-center">
-              <span className="cursor-pointer ... material-symbols-outlined text-3xl text-red-600" key={admin.id} onClick={() => modalEliminarAdmin(admin)}>
+            <div className="flex justify-center items-center">
+              <span className='cursor-pointer bg-red-600 text-white font-medium py-2 px-4 rounded-md ml-1 material-symbols-outlined absolute ' key={admin.id} onClick={() => modalEliminarAdmin(admin)}>
                 delete
               </span>
             </div>
