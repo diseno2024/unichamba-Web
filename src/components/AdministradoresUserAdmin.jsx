@@ -124,17 +124,17 @@ const AdministradoresUserAdmin = () => {
 
   return (
     <>
-      <div className="w-[85%]">
-        <h3 className="mt-16 ml-20 font-normal text-2xl">Administradores</h3>
-        <span className="cursor-pointer ... material-symbols-outlined text-black text-4xl flex justify-end hover:text-green-600" onClick={modalAgregarAdministradores}>
+      <div className="w-[95%] py-10 flex items-center justify-between px-5 mx-auto">
+        <h3 className="font-normal text-2xl">Administradores</h3>
+        <span className="cursor-pointer material-symbols-outlined text-black text-4xl hover:text-green-600" onClick={modalAgregarAdministradores}>
           add_circle
         </span>
       </div>
 
       {/* Se muestran las tarjetas de los administradores */}
-      <div className="ml-20">
+      <div className="w-[95%] mx-auto">
         {administradores.map((admin) => (
-          <div key={admin.id} className="transition ease-in-out delay-50 hover:-translate-y-1 hover:scale-110 duration-100 ... w-[80%] h-[150px] border-b-2 border-gray-500 grid grid-cols-5 hover:border-b-2 hover:border-blue-500">
+          <div key={admin.id} className="transition ease-in-out delay-50 hover:-translate-y-1 hover:scale-110 duration-100 w-[85%] h-[150px] mx-auto border-b-2 border-gray-500 grid grid-cols-5 hover:border-b-2 hover:border-blue-500">
             <div className="col-span-4 flex items-center">
               <div className="ml-4">
                 <h1 className="font-normal text-Blue text-xl">{admin.nombre}</h1>

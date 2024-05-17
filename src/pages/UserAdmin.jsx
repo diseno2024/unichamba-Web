@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import NavGeneral from '../components/NavGeneral'
 import TrabajosUserAdmin from '../components/TrabajosUserAdmin'
 import AdministradoresUserAdmin from '../components/AdministradoresUserAdmin'
@@ -6,54 +6,71 @@ import AdmiCarrera from '../components/AdmiCarrera';
 import AdmiMunicipio from '../components/AdmiMunicipio'
 import DocNumber from '../components/DocNumber';
 import { BlacklistUserAdmin } from '../components/BlacklistUserAdmin';
-
-
+import { UserAuth } from '../context/AuthContext';
+import AdminStudents from '../components/AdminStudents';
 
 
 
 const UserAdmin = () => {
+    const {user} = UserAuth();
     const [visibleComponent, setVisibleComponent] = useState()
     const [activeButton, setActiveButton] = useState()
     const showComponent = (component, buttonID) => {
         setVisibleComponent(component)
         setActiveButton(buttonID)
     }
+
+
+
+    const fullName = user.displayName; 
+    // const expresionRegular = /\\w+/g;
+    // const palabras = fullName.match(expresionRegular);
+    const palabrasSeparadas = fullName.split(" ");
+
+    const names = palabrasSeparadas[0] +' ' + palabrasSeparadas[1];
+    const photo = user.photoURL;
+    
+
     return (
         <>
             <header>
                 <NavGeneral />
             </header>
-            <main className='flex mt-[20px]'>
+            <main className='flex mt-[20px] pb-5'>
                 <section className='w-[475px] h-[700px] mx-[20px] justify-center rounded-lg bg-[#D9D9D9]'>
+
                     <div className='grid my-[20px] py-[10px] justify-center items-center'>
                         <div className='flex justify-center items-center rounded-full border-[1px] border-black w-[140px] h-[140px]'>
-                            <span class="material-symbols-outlined text-[70px]">
+                            {/* <span class=    "material-symbols-outlined text-[70px]">
                                 person
-                            </span>
+                            </span> */}
+                            <img src={photo} alt="" className='w-full h-full rounded-full'/>
                         </div>
-                        <h1 className='font-roboto font-medium text-[20px] mt-[10px] text-center'>User Admin</h1>
+                        <h1 className='font-roboto font-medium text-2xl pt-[20px] text-center'>{names}</h1>
                     </div>
-                    <div className='grid grid-cols-1 w-[400x] pl-[30px] justify-center'>
+
+                    <div className='flex flex-col justify-around space-y-1 py-5 '>
                         <button 
-                        className={`grid grid-cols-2 rounded-md h-[45px] items-center pr-[30px] hover:bg-white ${activeButton === 'students' ? 'bg-white' : ''}`}
-                        onClick={() => showComponent(<h1>Estudiantes</h1>, 'students')}
+                        className={`grid grid-cols-2 rounded-md h-[55px] items-center pr-[30px] hover:bg-white ${activeButton === 'students' ? 'bg-white' : ''}`}
+                        onClick={() => showComponent(<AdminStudents/>, 'students')}
                         >
                             <span class="material-symbols-outlined text-[38px]">
                                 school
                             </span>
                             <h1 className='font-roboto font-light text-[20px] mr-[50px]'>Estudiantes</h1>
                         </button>
-                        <button 
-                        className={`grid grid-cols-2 rounded-md h-[45px] items-center pr-[30px] hover:bg-white ${activeButton === 'users' ? 'bg-white' : ''}`}
+                        {/* <button 
+                        className={`grid grid-cols-2 rounded-md h-[55px] items-center pr-[30px] hover:bg-white ${activeButton === 'users' ? 'bg-white' : ''}`}
                         onClick={() => showComponent(<h1>Usuarios</h1>, 'users')}
                         >
                             <span class="material-symbols-outlined text-[38px]">
                                 person
                             </span>
                             <h1 className='font-roboto font-light text-[20px] mr-[50px]'>Usuarios</h1>
-                        </button>
+                        </button> */}
+
                         <button 
-                        className={`grid grid-cols-2 rounded-md h-[85px] items-center pr-[30px] hover:bg-white ${activeButton === 'jobOffers' ? 'bg-white' : ''}`}
+                        className={`grid grid-cols-2 rounded-md h-[55px] items-center pr-[30px] hover:bg-white ${activeButton === 'jobOffers' ? 'bg-white' : ''}`}
                         onClick={() => showComponent(<TrabajosUserAdmin/>, 'jobOffers')}
                         >
                             <span class="material-symbols-outlined text-[38px]">
@@ -62,7 +79,7 @@ const UserAdmin = () => {
                             <h1 className='font-roboto font-light text-[20px] mr-[50px]'>Ofertas Laborales</h1>
                         </button>
                         <button 
-                        className={`grid grid-cols-2 rounded-md h-[45px] items-center pr-[30px] hover:bg-white ${activeButton === 'municipalities' ? 'bg-white' : ''}`}
+                        className={`grid grid-cols-2 rounded-md h-[55px] items-center pr-[30px] hover:bg-white ${activeButton === 'municipalities' ? 'bg-white' : ''}`}
                         onClick={() => showComponent(<AdmiMunicipio/>, 'municipalities')}
                         >
                             <span class="material-symbols-outlined text-[38px]">
@@ -70,8 +87,9 @@ const UserAdmin = () => {
                             </span>
                             <h1 className='font-roboto font-light text-[20px] mr-[50px]'>Municipios</h1>
                         </button>
+
                         <button 
-                        className={`grid grid-cols-2 rounded-md h-[45px] items-center pr-[30px] hover:bg-white ${activeButton === 'careers' ? 'bg-white' : ''}`}
+                        className={`grid grid-cols-2 rounded-md h-[55px] items-center pr-[30px] hover:bg-white ${activeButton === 'careers' ? 'bg-white' : ''}`}
                         onClick={() => showComponent(<AdmiCarrera/>, 'careers')}
                         >
                             <span class="material-symbols-outlined text-[38px]">
@@ -80,7 +98,7 @@ const UserAdmin = () => {
                             <h1 className='font-roboto font-light text-[20px] mr-[50px]'>Carreras</h1>
                         </button>
                         <button 
-                        className={`grid grid-cols-2 rounded-md h-[45px] items-center pr-[30px] hover:bg-white ${activeButton === 'blacklist' ? 'bg-white' : ''}`}
+                        className={`grid grid-cols-2 rounded-md h-[55px] items-center pr-[30px] hover:bg-white ${activeButton === 'blacklist' ? 'bg-white' : ''}`}
                         onClick={() => showComponent(<BlacklistUserAdmin/>, 'blacklist')}
                         >
                             <span class="material-symbols-outlined text-[38px]">
@@ -89,7 +107,7 @@ const UserAdmin = () => {
                             <h1 className='font-roboto font-light text-[20px] mr-[50px]'>Lista negra</h1>
                         </button>
                         <button 
-                        className={`grid grid-cols-2 rounded-md h-[45px] items-center pr-[30px] hover:bg-white ${activeButton === 'administrators' ? 'bg-white' : ''}`}
+                        className={`grid grid-cols-2 rounded-md h-[55px] items-center pr-[30px] hover:bg-white ${activeButton === 'administrators' ? 'bg-white' : ''}`}
                         onClick={() => showComponent(<AdministradoresUserAdmin/>, 'administrators')}
                         >
                             <span class="material-symbols-outlined text-[38px]">
@@ -149,7 +167,7 @@ const UserAdmin = () => {
                                 </span>
                             </div>
                         </div>
-                        <div className='w-[900px]'>
+                        <div className='w-[950px] mx-auto'>
                             {visibleComponent}
                         </div>
                     </section>

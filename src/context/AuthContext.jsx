@@ -20,19 +20,20 @@ export const AuthContextProvider = ({children}) => {
         signOut(auth);
     }
 
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-                if(currentUser != null){
-                    setUser(currentUser);
-                }
-    })
+    // const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+    //             if(currentUser != null){
+    //                 setUser(currentUser);
+    //             }
+    // })
 
     useEffect(() => {
-        unsubscribe();
-    
-        return () => {
-            unsubscribe
-    }
-    }, [])
+        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+            if(currentUser != null){
+                setUser(currentUser);
+            }
+    unsubscribe();
+})
+    }, [user])
     
 
 

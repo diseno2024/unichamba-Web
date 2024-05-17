@@ -5,18 +5,17 @@ import CarreraFiltro from "../components/CarreraFiltro";
 import Municipio from "../components/Municipio";
 import AreadeTrabajo from "../components/AreaTrabajo";
 import TarjetaPublicacion from "../components/TarjetaPublicacion";
+import { NavLink } from "react-router-dom";
 
 
 const studentsPublications = () => {
-  // Dividir la lista de elementos en dos partes
-  // const mitad = Math.ceil(students.length / 2);
-  // const primeraColumna = students.slice(0, mitad);
-  // const segundaColumna = students.slice(mitad);
+
+
 
   return (
     <>
       <header>
-        <Navbar />
+        <Navbar/>
       </header>
 
       <main className=" w-[95%] mx-auto mt-28 flex">
@@ -36,6 +35,11 @@ const studentsPublications = () => {
           </div>
 
         </section>
+        <div className=" ml-2 px-3">
+          <NavLink to='/inicio'>
+            <span class="material-symbols-outlined">arrow_back</span>
+          </NavLink>
+        </div>
         <section className="grid grid-cols-2 mx-auto gap-4">
 
         {students.map((student) => (

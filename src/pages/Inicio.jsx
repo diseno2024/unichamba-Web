@@ -8,46 +8,85 @@ import { UserAuth } from '../context/AuthContext';
 import { collection, getDocs } from "firebase/firestore";
 import { db } from '../data/firebase';
 import { NavLink, useNavigate } from 'react-router-dom';
+//import Swal from "sweetalert2";
 
 
 
 const Inicio = () => {
 
   const {googleSingIn, user, googleSingOut} = UserAuth();
-  const result = /@ues\.edu\.sv$/.test(user.email);
+  const result = /\..+@.*ues\.edu/gm.test(user.email); // expresion que valida si hay un punto y luego un @
+  const cuentaExterna = /@g(oogle)?mail\.com/gm.test(user.email); // expresion que valida si el dominio del correo es gmail
+  //const estudiante = /@ues\.edu\.sv$/.test(user.email);
   const navigate = useNavigate();
   let student = [];
   let administradores = [];
   let URLphoto = user.photoURL;
-  const [permiso, setpermiso] = useState(false)
+  const [permiso, setpermiso] = useState(false);
+const [login, setLogin] = useState(false)
+
+  const handleGoogleSingIn = async() => {
+    try {
+    await googleSingIn ()
+    } catch (error) {
+    console.log(error)
+    }
+}
+
+const handleGoogleSingOut = async() => {
+  try {
+  await googleSingOut ();
+  setLogin(false);
+  } catch (error) {
+  console.log(error)
+  }
+}
 
 
   const fetchData = async () => {
-    const studentsSnapshot = await getDocs(collection(db, 'estudiantes')); // 'carreras' es el nombre de tu colección en Firestore
-    const studentsData = studentsSnapshot.docs.map(doc => doc.data().email); // Suponiendo que tienes un campo 'nombre' en tus documentos de carrera
+    const studentsSnapshot = await getDocs(collection(db, 'estudiantes'));
+    const studentsData = studentsSnapshot.docs.map(doc => doc.data().email);
     student = studentsData; // emails de los estudiantes ya registrados 
+    
     // administradores 
     const adminSnapshot = await getDocs(collection(db, 'administradores'));
     const admins = adminSnapshot.docs.map( doc => doc.data().correo)
     administradores = admins;
-
     if(Object.keys(user).length !== 0){
-      if(administradores.includes(user.email)){
-        console.log('no creara cuenta')
-        setpermiso(true);
-        console.log(permiso)
-      }else{
-        if(result){
-          // //   // validacion si el correo no esta incluido en el arreglo de los admins, que se vaya a crear cuenta
-            if(!administradores.includes(user.email)){
-              if(!student.includes(user.email)){
-                console.log('no hay perfil relacionado al email')
-                      navigate('/createAccountStd')
-              }
-            } 
-          }
-      }  
+      setLogin(true);
+      // validacion de que el correo no sea personal 
+      // if(cuentaExterna){
+      //   // la cuenta no pertenece a la ues
+      //   handleGoogleSingOut();
 
+      //   Swal.fire({
+      //     title: "Error al iniciar sesión",
+      //     text: "para iniciar sesion, el correo debe pertenecer a la Universidad Nacional de El Salvador",
+      //     icon: "error"
+      //   });
+      //   setLogin(false);
+
+      // }else{
+
+      console.log('cuenta externa gmail ', cuentaExterna)
+        if(!cuentaExterna){
+          if(administradores.includes(user.email)){
+            setpermiso(true);
+            console.log(permiso)
+          }else{
+            if(!result){  
+              // no es empleado de la use
+                if(!administradores.includes(user.email)){
+                  // no es administrador 
+                  if(!student.includes(user.email)){
+                    // no tiene cuenta registrada 
+                          navigate('/createAccountStd')
+                  }
+                } 
+              }
+          } 
+        }
+      //}
         
     }
 };
@@ -62,28 +101,8 @@ const Inicio = () => {
   
   }, [user])
 
+  // console.log(user)
 
-
-  const handleGoogleSingIn = async() => {
-    try {
-    await googleSingIn ()
-    } catch (error) {
-    console.log(error)
-    }
-}
-
-const handleGoogleSingOut = async() => {
-  try {
-  await googleSingOut ();
-  } catch (error) {
-  console.log(error)
-  }
-}
-
-
-
-// console.log('user :', user);
-// console.log('photo: ', URLphoto)
 
 
   return (
@@ -95,33 +114,32 @@ const handleGoogleSingOut = async() => {
           </div>
           {/* publicar oferta y auth con google  */}
           <div className='flex gap-5 items-center'>
-              <button className='text-white font-semibold flex items-center gap-4 bg-Malachite h-[45px] px-5 rounded-[8px]'> 
+              <button className='text-white font-semibold flex items-center gap-4 bg-Malachite h-[55px] px-5 rounded-[8px]'> 
                 Publicar Oferta 
                 <span className="material-symbols-outlined">work</span>
                 </button>
 
-                { Object.keys(user).length === 0 ?
+                { !login ?
                   
                   <button className='relative text-white font-semibold flex items-center gap-4 bg-Malachite h-[55px] justify-between pl-3 pr-[2px] rounded-[8px]' onClick={handleGoogleSingIn}>
                   Iniciar sesion con Google
                   <img src="/google 2.svg" alt="google-icon" className='bg-white py-[13px] px-[13px] rounded-lg' />
                   </button>
-                  : !result ?
+                  : result || cuentaExterna ?
 
                   <button className='relative text-white font-semibold flex items-center gap-4 bg-Malachite h-[55px] justify-between pl-3 pr-[2px] rounded-[8px]' onClick={handleGoogleSingOut}>
-                    Cerrar Sesion
+                    Cerrar Sesión
                   </button>
                   
                   :permiso ?
                     <div className='flex items-center gap-4'>
-                    {console.log('administrador', permiso)}
-                      <button className='relative text-white font-semibold flex items-center gap-4 bg-Malachite h-[45px] justify-between px-4 rounded-[8px]' onClick={handleGoogleSingOut}>
-                        Cerrar Sesion
+                      <button className='relative text-white font-semibold flex items-center gap-4 bg-Malachite h-[55px] justify-between px-4 rounded-[8px]' onClick={handleGoogleSingOut}>
+                        Cerrar Sesión
                       </button>
 
                       <NavLink to='/userAdmin' className= 'flex items-center'>
                         {/* <h1 className='text-white font-normal px-2'></h1>6 */}
-                        <div className='h-[50px] w-[50px] rounded-full'>
+                        <div className='h-[55px] w-[55px] rounded-full'>
                         {/* <span className="material-symbols-outlined text-white" style={{fontSize: '35px'}}>person</span> */}
                         <img src={URLphoto} alt="imagen-estudiante"  className='w-full h-full rounded-full'/> 
                         </div>
@@ -131,14 +149,13 @@ const handleGoogleSingOut = async() => {
                     
                       :
                     <div className='flex items-center gap-4'>
-                      {console.log('estudiante', permiso)}
-                        <button className='relative text-white font-semibold flex items-center gap-4 bg-Malachite h-[45px] justify-between px-4 rounded-[8px]' onClick={handleGoogleSingOut}>
-                          Cerrar Sesion
+                        <button className='relative text-white font-semibold flex items-center gap-4 bg-Malachite h-[55px] justify-between px-4 rounded-[8px]' onClick={handleGoogleSingOut}>
+                          Cerrar Sesión
                         </button>
 
                         <NavLink to='/studentProfile' className= 'flex items-center'>
                           {/* <h1 className='text-white font-normal px-2'></h1>6 */}
-                          <div className='h-[50px] w-[50px] rounded-full'>
+                          <div className='h-[55px] w-[55px] rounded-full'>
                           {/* <span className="material-symbols-outlined text-white" style={{fontSize: '35px'}}>person</span> */}
                           <img src={URLphoto} alt="imagen-estudiante"  className='w-full h-full rounded-full'/> 
                           </div>
@@ -146,17 +163,6 @@ const handleGoogleSingOut = async() => {
                         
                       </div>
                 }
-                  {/* 
-                  
-                  si nadie se a logeado ?
-
-                    btn iniciar sesio 
-
-                    : (inicio sesion) (es adiminstrador o estudiante )
-
-
-                  
-                  */}
 
           </div>
         </nav>
@@ -180,21 +186,21 @@ const handleGoogleSingOut = async() => {
 
         {/* perfiles de estudiantes  */}
 
-        <section className='px-5 w-full'>
+        <section className='px-5 w-full flex flex-col items-end'>
         {students.map((student) => (
           <TarjetaPublicacion listStudent={student} key={student.id}/>
         ))}
-
+        <NavLink to='/studentsPublications' className='mt-14 h-14 w-52 bg-Malachite font-normal text-white rounded-lg flex justify-center items-center text-xl'>Ver más</NavLink>
         </section>
 
         {/* ofertas laborales recientes */}
 
-        <section className='px-5 w-full border-l-2'>
+        <section className='px-5 w-full border-l-2 flex flex-col items-end py-6'>
 
           {Ofertas.map((oferta) => (
             <OfertaLaboral listStudent={oferta} key={oferta.id}/>
           ))}
-
+          <NavLink to='/OfferExploreStudent' className='mt-12 h-14 w-52 bg-Malachite font-normal text-white rounded-lg flex justify-center items-center text-xl'>Ver más</NavLink>
 
         </section>
         

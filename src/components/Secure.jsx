@@ -24,7 +24,6 @@ const Secure = ({children}) => {
         administradores = admins;
     
         if(!user){
-            console.log('usuario no registrado')
             navigate('/inicio')
 
         }else if(!result){

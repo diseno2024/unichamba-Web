@@ -11,15 +11,13 @@ import { NavLink } from 'react-router-dom'
 
 const OfferExploreStudent = () => {
 
-  // Dividir la lista de elementos en dos partes
-  // const mitad = Math.ceil(ofertas.length / 2);
-  // const primeraColumna = ofertas.slice(0, mitad);
-  // const segundaColumna = ofertas.slice(mitad);
+  
+  // console.log(names)
 
   return (
     <>
       <header>
-        <Navbar />
+        <Navbar/>
       </header>
 
       <main className='flex h-auto mt-[90px]  space-y-8 relative'>
