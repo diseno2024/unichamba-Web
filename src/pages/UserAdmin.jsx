@@ -7,7 +7,7 @@ import AdmiMunicipio from '../components/AdmiMunicipio'
 import DocNumber from '../components/DocNumber';
 import { BlacklistUserAdmin } from '../components/BlacklistUserAdmin';
 import { UserAuth } from '../context/AuthContext';
-import AdminStudents from '../components/AdminStudents';
+import AdminWorks from '../components/AdminWorks';
 
 
 
@@ -25,10 +25,10 @@ const UserAdmin = () => {
     const fullName = user.displayName; 
     // const expresionRegular = /\\w+/g;
     // const palabras = fullName.match(expresionRegular);
-    const palabrasSeparadas = fullName.split(" ");
+    // const palabrasSeparadas = fullName.split(" ");
 
-    const names = palabrasSeparadas[0] +' ' + palabrasSeparadas[1];
-    const photo = user.photoURL;
+    // const names = palabrasSeparadas[0] +' ' + palabrasSeparadas[1];
+    // const photo = user.photoURL;
     
 
     return (
@@ -40,34 +40,16 @@ const UserAdmin = () => {
                 <section className='w-[475px] h-[700px] mx-[20px] justify-center rounded-lg bg-[#D9D9D9]'>
 
                     <div className='grid my-[20px] py-[10px] justify-center items-center'>
-                        <div className='flex justify-center items-center rounded-full border-[1px] border-black w-[140px] h-[140px]'>
-                            {/* <span class=    "material-symbols-outlined text-[70px]">
+                        <div className='flex justify-center items-center rounded-full border-[1px] border-black w-[140px] h-[140px] mx-auto'>
+                            <span class="material-symbols-outlined text-[70px]">
                                 person
-                            </span> */}
-                            <img src={photo} alt="" className='w-full h-full rounded-full'/>
+                            </span>
+                            {/* <img src={photo} alt="" className='w-full h-full rounded-full'/> */}
                         </div>
-                        <h1 className='font-roboto font-medium text-2xl pt-[20px] text-center'>{names}</h1>
+                        <h1 className='font-roboto font-medium text-2xl pt-[20px] text-center'>PANEL ADMINISTRATIVO</h1>
                     </div>
 
                     <div className='flex flex-col justify-around space-y-1 py-5 '>
-                        <button 
-                        className={`grid grid-cols-2 rounded-md h-[55px] items-center pr-[30px] hover:bg-white ${activeButton === 'students' ? 'bg-white' : ''}`}
-                        onClick={() => showComponent(<AdminStudents/>, 'students')}
-                        >
-                            <span class="material-symbols-outlined text-[38px]">
-                                school
-                            </span>
-                            <h1 className='font-roboto font-light text-[20px] mr-[50px]'>Estudiantes</h1>
-                        </button>
-                        {/* <button 
-                        className={`grid grid-cols-2 rounded-md h-[55px] items-center pr-[30px] hover:bg-white ${activeButton === 'users' ? 'bg-white' : ''}`}
-                        onClick={() => showComponent(<h1>Usuarios</h1>, 'users')}
-                        >
-                            <span class="material-symbols-outlined text-[38px]">
-                                person
-                            </span>
-                            <h1 className='font-roboto font-light text-[20px] mr-[50px]'>Usuarios</h1>
-                        </button> */}
 
                         <button 
                         className={`grid grid-cols-2 rounded-md h-[55px] items-center pr-[30px] hover:bg-white ${activeButton === 'jobOffers' ? 'bg-white' : ''}`}
@@ -78,6 +60,15 @@ const UserAdmin = () => {
                             </span>
                             <h1 className='font-roboto font-light text-[20px] mr-[50px]'>Ofertas Laborales</h1>
                         </button>
+
+                        <button 
+                        className={`grid grid-cols-2 rounded-md h-[55px] items-center pr-[30px] hover:bg-white ${activeButton === 'students' ? 'bg-white' : ''}`}
+                        onClick={() => showComponent(<AdminWorks/>, 'students')}
+                        >
+                            <span class="material-symbols-outlined text-[38px]">work</span>
+                            <h1 className='font-roboto font-light text-[20px] mr-[50px]'>Trabajos</h1>
+                        </button>
+
                         <button 
                         className={`grid grid-cols-2 rounded-md h-[55px] items-center pr-[30px] hover:bg-white ${activeButton === 'municipalities' ? 'bg-white' : ''}`}
                         onClick={() => showComponent(<AdmiMunicipio/>, 'municipalities')}
