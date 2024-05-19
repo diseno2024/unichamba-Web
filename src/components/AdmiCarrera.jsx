@@ -9,10 +9,8 @@ const AdmiCarrera = () => {
 
     useEffect(() => {
         cargarCarreras();
-        return () => {
-            cargarCarreras();
-        }
     }, []);
+
     const cargarCarreras = async () => {
         try {
             const carrerasSnapshot = await getDocs(collection(db, 'carreras'));
@@ -21,16 +19,24 @@ const AdmiCarrera = () => {
         } catch (error) {
             console.error("Error al cargar carreras:", error);
             Swal.fire("Error", "Hubo un error al cargar las carreras", "error");
-        };
-    }
-        
+        }
+    };
 
     const agregarCarrera = async () => {
         try {
             if (nuevaCarrera.trim() !== '') {
-                await addDoc(collection(db, 'carreras'), { carrera: nuevaCarrera });
+                // Verificar si la carrera ya existe
+                const carreraExistente = carreras.some(carrera => carrera.nombre.toLowerCase() === nuevaCarrera.trim().toLowerCase());
+
+                if (carreraExistente) {
+                    Swal.fire("Error", "La carrera ya existe", "error");
+                } else {
+                    await addDoc(collection(db, 'carreras'), { carrera: nuevaCarrera });
+                    Swal.fire("Agregado", "La carrera ha sido agregada", "success");
+                    cargarCarreras();
+                }
+                // Vaciar el input después de intentar agregar
                 setNuevaCarrera('');
-                cargarCarreras();
             }
         } catch (error) {
             console.error("Error al agregar carrera:", error);
@@ -128,6 +134,7 @@ const AdmiCarrera = () => {
 };
 
 export default AdmiCarrera;
+
 
 
 

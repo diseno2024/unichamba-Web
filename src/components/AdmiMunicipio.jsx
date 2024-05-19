@@ -5,14 +5,12 @@ import Swal from 'sweetalert2';
 
 const AdmiMunicipio = () => {
     const [municipios, setMunicipios] = useState([]);
-    const [nuevaMunicipio, setNuevaMunicipio] = useState('');
+    const [nuevoMunicipio, setNuevoMunicipio] = useState('');
 
     useEffect(() => {
         cargarMunicipios();
-        return () => {
-            cargarMunicipios();
-        }
     }, []);
+
     const cargarMunicipios = async () => {
         try {
             const municipiosSnapshot = await getDocs(collection(db, 'municipios'));
@@ -21,16 +19,24 @@ const AdmiMunicipio = () => {
         } catch (error) {
             console.error("Error al cargar los Municipios:", error);
             Swal.fire("Error", "Hubo un error al cargar los municipios", "error");
-        };
-    }
-        
+        }
+    };
 
     const agregarMunicipio = async () => {
         try {
-            if (nuevaMunicipio.trim() !== '') {
-                await addDoc(collection(db, 'municipios'), { municipio: nuevaMunicipio });
-                setNuevaMunicipio('');
-                cargarMunicipios();
+            if (nuevoMunicipio.trim() !== '') {
+                // Verificar si el municipio ya existe
+                const municipioExistente = municipios.some(municipio => municipio.nombre.toLowerCase() === nuevoMunicipio.trim().toLowerCase());
+
+                if (municipioExistente) {
+                    Swal.fire("Error", "El municipio ya existe", "error");
+                } else {
+                    await addDoc(collection(db, 'municipios'), { municipio: nuevoMunicipio });
+                    Swal.fire("Agregado", "El municipio ha sido agregado", "success");
+                    cargarMunicipios();
+                }
+                // Vaciar el input después de intentar agregar
+                setNuevoMunicipio('');
             }
         } catch (error) {
             console.error("Error al agregar el municipio:", error);
@@ -38,7 +44,7 @@ const AdmiMunicipio = () => {
         }
     };
 
-    const eliminarMunicipio= async (municipio) => {
+    const eliminarMunicipio = async (municipio) => {
         try {
             await deleteDoc(doc(db, 'municipios', municipio.id));
             cargarMunicipios();
@@ -61,7 +67,7 @@ const AdmiMunicipio = () => {
     };
 
     const handleChange = (e) => {
-        setNuevaMunicipio(e.target.value);
+        setNuevoMunicipio(e.target.value);
     };
 
     return (
@@ -69,7 +75,7 @@ const AdmiMunicipio = () => {
             <h2 className="text-3xl font-normal my-8">Municipios</h2>
             <div className="flex items-center space-x-10">
                 <div className='flex space-x-1'>
-                    <input type="text" value={nuevaMunicipio} onChange={handleChange} placeholder="Agregar Municipio" className="border text-Dark-Blue font-medium border-Dark-Blue rounded-md px-4 py-2 min-w-[725px] max-w-[900px] " />
+                    <input type="text" value={nuevoMunicipio} onChange={handleChange} placeholder="Agregar Municipio" className="border text-Dark-Blue font-medium border-Dark-Blue rounded-md px-4 py-2 min-w-[725px] max-w-[900px] " />
                     <button onClick={agregarMunicipio} className="bg-Dark-Blue hover:bg-blue-600 text-white font-normal py-2 px-4 rounded-md flex justify-center">
                         <span className="material-symbols-outlined">
                             add_circle
@@ -83,7 +89,7 @@ const AdmiMunicipio = () => {
                     <div key={municipio.id} className="flex relative items-center text-Dark-Blue font-medium mb-3 pl-4 ml-1  min-h-14 hover:bg-Space-cadet/20 border-b-2 ">
                         <span>{municipio.nombre}</span>
                         <button onClick={() => Swal.fire({
-                            title: `Eliminar El municipio ${municipio.nombre}`,
+                            title: `Eliminar el municipio ${municipio.nombre}`,
                             html: `<hr class="my-4"><p>¿Estás seguro de que deseas eliminar el Municipio: ${municipio.nombre}?</p>`,
                             icon: "warning",
                             showCancelButton: true,
@@ -128,6 +134,7 @@ const AdmiMunicipio = () => {
 };
 
 export default AdmiMunicipio;
+
 
 
 
