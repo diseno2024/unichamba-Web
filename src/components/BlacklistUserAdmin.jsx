@@ -21,8 +21,10 @@ export const BlacklistUserAdmin = () => {
     }
 
     useEffect(() => {
+        // Se monta la data
         fetchListaNegra();
 
+        // Se desmonta la data
         return () => {
             fetchListaNegra();
         }
@@ -43,7 +45,34 @@ export const BlacklistUserAdmin = () => {
     const eliminarCorreoEmpleador = async (id) => {
         await deleteDoc(doc(db, 'anuncios', id))
     }
-    
+
+    // ELIMINA UN CORREO DE LA COLECCIÓN LISTA NEGRA
+    const eliminarCorreo = async (id) => {
+        await deleteDoc(doc(db, 'listaNegra', id))
+        fetchListaNegra()
+    }
+
+    const modalEliminarCorreo = (id) => {
+        Swal.fire({
+            title: "¿Seguro que quieres borrar este correo?",
+            text: "¡No podrás recuperarlo!",
+            icon: "warning|",
+            showCancelButton: true,
+            confirmButtonColor: "#161A30",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Si, borrar",
+            cancelButtonText: "Cancelar"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                eliminarCorreo(id)
+                Swal.fire({
+                    title: "¡Borrado!",
+                    text: "El correo fue borrada exitosamente.",
+                    icon: "success"
+                });
+            }
+            });
+    }
 
     const modalAgregarEmail = async () => {
         Swal.fire({
@@ -116,10 +145,21 @@ export const BlacklistUserAdmin = () => {
 
         {/* LISTA NEGRA */}
         {listaNegra.map((usuario) => (
-            <div key={usuario.id}>
-                <h3 className=" text-2xl font-bold pl-16 pb-5">{usuario.correo}</h3>
+            <div key={usuario.id} className=" grid grid-cols-5 mt-5">
+                <div className=" col-span-4">
+                    <h3 className=" text-2xl font-bold pl-16 pb-5">{usuario.correo}</h3>
+                </div>
+
+                <div className="flex justify-end">
+                    <button onClick={() => modalEliminarCorreo(usuario.id)}>
+                        <span class="material-symbols-outlined text-3xl text-red-600">
+                            delete
+                        </span>
+                    </button>
+                </div>
             </div>
         ))}
+
 
 
     </div>

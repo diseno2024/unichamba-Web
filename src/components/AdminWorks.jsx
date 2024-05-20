@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { collection, deleteDoc, doc, getDocs } from 'firebase/firestore';
+import { collection, deleteDoc, doc, getDocs, addDoc } from 'firebase/firestore';
 import { db } from '../data/firebase';
 import Swal from 'sweetalert2';
 
@@ -31,12 +31,67 @@ const AdminWorks = () => {
         }
     };
 
+    // Aqui se agrega el trabajo a la BD
+    const agregarTrabajo = async ( trabajo, icono ) => {
+        await addDoc(collection(db, 'trabajos'), {nombre: trabajo, icono: icono})
+        fetchData()
+    }
+
+    const modalAgregarTrabajo = () => {
+        Swal.fire({
+            title: "Agregar un trabajo",
+            html: `
+            <div style="padding-bottom: 20px;">
+            <label>Nombre del trabajo</label>
+            <input id="nombreTrabajo" name="nombreTrabajo" placeholder="Ingrese el nombre del trabajo" class="swal2-input" required>
+            </div>
+
+            <div style="padding-bottom: 20px;">
+            <label>Icono del trabajo</label>
+            <input id="iconoTrabajo" name="iconoTrabajo" placeholder="Ingrese el tag correspondiente" class="swal2-input" required>
+        <p style="margin-top: 15px; font-weight: 300;">Los iconos se extraen de <a href="https://fonts.google.com/icons" target="_blank" style="text-decoration: underline;">Google Icons</a></p>
+            </div>
+            `,
+
+            showCancelButton: true,
+            cancelButtonText: "Cancelar",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Agregar",
+            confirmButtonColor: "#04061A",
+            preConfirm: async () => {
+                const nombre = document.getElementById('nombreTrabajo').value
+                const tag = document.getElementById('iconoTrabajo').value
+                try {
+                    const trabajoSnapshot= await getDocs(collection(db, 'trabajos'));
+
+                    const trabajoExiste = trabajoSnapshot.docs.find( doc => doc.data().nombre === nombre )
+
+                    if(trabajoExiste){
+                        Swal.fire({
+                            icon: "error",
+                            title: "Error",
+                            text: "Este trabajo ya existe"
+                        })
+                    } else {
+                        agregarTrabajo(nombre, tag)
+                        Swal.fire({
+                            title: "Trabajo agregado con exito",
+                            icon: "success"
+                        })
+                    }
+                } catch (error) {
+                    console.log(error)
+                }
+            }
+            })
+    }
+
     return (
         <main className='py-10'>
             <div className="w-[95%] mx-auto pl-14">
                 <div className='flex justify-between my-5'>
                     <h1 className='text-3xl font-medium'>Trabajos</h1>
-                    <button className="bg-Dark-Blue hover:bg-Dark-Blue/75 text-white font-normal py-2 px-4 rounded-md flex justify-center">
+                    <button onClick={modalAgregarTrabajo} className="bg-Dark-Blue hover:bg-Dark-Blue/75 text-white font-normal py-2 px-4 rounded-md flex justify-center">
                         <span className="material-symbols-outlined">add_circle</span>
                     </button>
                 </div>
