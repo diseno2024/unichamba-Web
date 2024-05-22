@@ -27,3 +27,9 @@ $npm run dev
 La app correra en el localhost en el puerto 5173:
 
 [http://localhost:5173](http://localhost:5173)
+
+- Para compilar la app se usa el comando:
+
+```
+$npm run build
+```
