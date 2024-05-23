@@ -19,6 +19,7 @@ const Inicio = () => {
   const cuentaExterna = /@g(oogle)?mail\.com/gm.test(user.email); // expresion que valida si el dominio del correo es gmail
   //const estudiante = /@ues\.edu\.sv$/.test(user.email);
   const navigate = useNavigate();
+  const cuentaIngeniero = 'ernesto.calderon@ues.edu.sv';
   let student = [];
   let administradores = [];
   let URLphoto = user.photoURL;
@@ -54,38 +55,27 @@ const handleGoogleSingOut = async() => {
     administradores = admins;
     if(Object.keys(user).length !== 0){
       setLogin(true);
-      // validacion de que el correo no sea personal 
-      // if(cuentaExterna){
-      //   // la cuenta no pertenece a la ues
-      //   handleGoogleSingOut();
 
-      //   Swal.fire({
-      //     title: "Error al iniciar sesión",
-      //     text: "para iniciar sesion, el correo debe pertenecer a la Universidad Nacional de El Salvador",
-      //     icon: "error"
-      //   });
-      //   setLogin(false);
-
-      // }else{
-
-      console.log('cuenta externa gmail ', cuentaExterna)
-        if(!cuentaExterna){
-          if(administradores.includes(user.email)){
-            setpermiso(true);
-            console.log(permiso)
-          }else{
-            if(!result){  
-              // no es empleado de la use
-                if(!administradores.includes(user.email)){
-                  // no es administrador 
-                  if(!student.includes(user.email)){
-                    // no tiene cuenta registrada 
-                          navigate('/createAccountStd')
-                  }
-                } 
-              }
-          } 
-        }
+      if(user.email !== cuentaIngeniero){
+          if(!cuentaExterna){
+            if(administradores.includes(user.email)){
+              setpermiso(true);
+            }else{
+              if(!result){  
+                // no es empleado de la use
+                  if(!administradores.includes(user.email)){
+                    // no es administrador 
+                    if(!student.includes(user.email)){
+                      // no tiene cuenta registrada 
+                            navigate('/createAccountStd')
+                    }
+                  } 
+                }
+            } 
+          }
+      } else{
+        setpermiso(true);
+      }
       //}
         
     }
@@ -114,10 +104,12 @@ const handleGoogleSingOut = async() => {
           </div>
           {/* publicar oferta y auth con google  */}
           <div className='flex gap-5 items-center'>
-              <button className='text-white font-semibold flex items-center gap-4 bg-Malachite h-[55px] px-5 rounded-[8px]'> 
+            <NavLink to='/createOffer'>
+                <button className='text-white font-semibold flex items-center gap-4 bg-Malachite h-[55px] px-5 rounded-[8px]'> 
                 Publicar Oferta 
                 <span className="material-symbols-outlined">work</span>
                 </button>
+            </NavLink>
 
                 { !login ?
                   
@@ -138,7 +130,7 @@ const handleGoogleSingOut = async() => {
                       </button>
 
                       <NavLink to='/userAdmin' className= 'flex items-center'>
-                        {/* <h1 className='text-white font-normal px-2'></h1>6 */}
+                        <h1 className='text-white font-normal px-2 text-xl'>Admin</h1>6
                         <div className='h-[55px] w-[55px] rounded-full'>
                         {/* <span className="material-symbols-outlined text-white" style={{fontSize: '35px'}}>person</span> */}
                         <img src={URLphoto} alt="imagen-estudiante"  className='w-full h-full rounded-full'/> 
