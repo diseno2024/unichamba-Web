@@ -12,14 +12,17 @@ import { NavLink, useNavigate } from 'react-router-dom';
 
 
 
-const Inicio = () => {
+const Inicio = () => { 
 
   const {googleSingIn, user, googleSingOut} = UserAuth();
-  const result = /\..+@.*ues\.edu/gm.test(user.email); // expresion que valida si hay un punto y luego un @
-  const cuentaExterna = /@g(oogle)?mail\.com/gm.test(user.email); // expresion que valida si el dominio del correo es gmail
+  //const result = /\..+@.*ues\.edu/gm.test(user.email); // expresion que valida si hay un punto y luego un @
+  //const cuentaExterna = /@g(oogle)?mail\.com/gm.test(user.email); // expresion que valida si el dominio del correo es gmail
   //const estudiante = /@ues\.edu\.sv$/.test(user.email);
+  const cuentaEmpleado = /\..+@.*ues\.edu/gm.test(user.email);
+  const cuentaEstudiante = /^[a-zA-Z]{2}[0-9]{5}@.*ues\.edu/gm.test(user.email);
+  const cuentaExterna = /@g(oogle)?mail\.com/gm.test(user.email);
   const navigate = useNavigate();
-  const cuentaIngeniero = 'ernesto.calderon@ues.edu.sv';
+  //const cuentaIngeniero = 'ernesto.calderon@ues.edu.sv';
   let student = [];
   let administradores = [];
   let URLphoto = user.photoURL;
@@ -56,27 +59,40 @@ const handleGoogleSingOut = async() => {
     if(Object.keys(user).length !== 0){
       setLogin(true);
 
-      if(user.email !== cuentaIngeniero){
-          if(!cuentaExterna){
-            if(administradores.includes(user.email)){
-              setpermiso(true);
-            }else{
-              if(!result){  
-                // no es empleado de la use
-                  if(!administradores.includes(user.email)){
-                    // no es administrador 
-                    if(!student.includes(user.email)){
-                      // no tiene cuenta registrada 
-                            navigate('/createAccountStd')
-                    }
-                  } 
-                }
-            } 
+      // if(user.email !== cuentaIngeniero){
+      //     if(!cuentaExterna){
+      //       if(administradores.includes(user.email)){
+      //         setpermiso(true);
+      //         navigate('/userAdmin')
+      //       }else{
+      //         if(!result){  
+      //           // no es empleado de la use
+      //             if(!administradores.includes(user.email)){
+      //               // no es administrador 
+      //               if(!student.includes(user.email)){
+      //                 // no tiene cuenta registrada 
+      //                       navigate('/createAccountStd')
+      //               }
+      //             } 
+      //           }
+      //       } 
+      //     }
+      // } else{
+      //   setpermiso(true);
+      //   navigate('/userAdmin')
+      // }
+
+      //validamos de primero si esta accediendo un administrador 
+      if(administradores.includes(user.email)){
+        setpermiso(true) // le damos permiso para vea el panel
+      }else{
+        if(!cuentaExterna){
+          if(!student.includes(user.email)){
+            // que vaya a crear cuenta 
+            navigate('/createAccountStd')
           }
-      } else{
-        setpermiso(true);
+        }
       }
-      //}
         
     }
 };
@@ -91,7 +107,6 @@ const handleGoogleSingOut = async() => {
   
   }, [user])
 
-  // console.log(user)
 
 
 
@@ -117,8 +132,8 @@ const handleGoogleSingOut = async() => {
                   Iniciar sesion con Google
                   <img src="/google 2.svg" alt="google-icon" className='bg-white py-[13px] px-[13px] rounded-lg' />
                   </button>
-                  : result || cuentaExterna ?
-
+                  : cuentaExterna ? // cuenta externa o cuenta empleado
+                  // : result || cuentaExterna ?
                   <button className='relative text-white font-semibold flex items-center gap-4 bg-Malachite h-[55px] justify-between pl-3 pr-[2px] rounded-[8px]' onClick={handleGoogleSingOut}>
                     Cerrar Sesión
                   </button>
