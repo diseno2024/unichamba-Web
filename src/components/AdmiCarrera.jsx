@@ -15,7 +15,11 @@ const AdmiCarrera = () => {
         try {
             const carrerasSnapshot = await getDocs(collection(db, 'carreras'));
             const carrerasData = carrerasSnapshot.docs.map(doc => ({ id: doc.id, nombre: doc.data().carrera }));
-            setCarreras(carrerasData);
+
+            // Ordenar carreras alfabéticamente
+            const carrerasOrdenadas = carrerasData.sort((a, b) => a.nombre.localeCompare(b.nombre));
+
+            setCarreras(carrerasOrdenadas);
         } catch (error) {
             console.error("Error al cargar carreras:", error);
             Swal.fire("Error", "Hubo un error al cargar las carreras", "error");

@@ -15,7 +15,11 @@ const AdmiMunicipio = () => {
         try {
             const municipiosSnapshot = await getDocs(collection(db, 'municipios'));
             const municipiosData = municipiosSnapshot.docs.map(doc => ({ id: doc.id, nombre: doc.data().municipio }));
-            setMunicipios(municipiosData);
+
+              // Ordenar municipios alfabéticamente
+            const municipiosOrdenadas = municipiosData.sort((a, b) => a.nombre.localeCompare(b.nombre));
+
+            setMunicipios(municipiosOrdenadas);
         } catch (error) {
             console.error("Error al cargar los Municipios:", error);
             Swal.fire("Error", "Hubo un error al cargar los municipios", "error");
