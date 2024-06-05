@@ -1,19 +1,13 @@
 import React from 'react'
 import Navbar from '../components/Navbar'
-import ofertas from '../data/Ofertas';
 import OfertaLaboral from '../components/OfertaLaboral';
 import CarreraFiltro from '../components/CarreraFiltro'
-import Municipio from '../components/Municipio'
 import { NavLink } from 'react-router-dom'
-
-
 
 
 const OfferExploreStudent = () => {
 
-  
   // console.log(names)
-
   return (
     <>
       <header>
@@ -35,18 +29,10 @@ const OfferExploreStudent = () => {
 
           </div>
 
-          <div className='border-r-2 border-black/20'>
-            <Municipio />
-          </div>
-
         </div>
 
         <section className=' grid grid-cols-2 gap-3 mr-3'>
-          {ofertas.map( (oferta) => ( 
-                  <OfertaLaboral listStudent={oferta} key={oferta.id}/>
-                            
-                ))}
-
+          <OfertaLaboral/>
         </section>
 
       </main>

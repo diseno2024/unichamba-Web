@@ -13,7 +13,7 @@ const CarreraFiltro = () => {
         const carrerasData = carrerasSnapshot.docs.map(doc => doc.data().carrera); // Suponiendo que tienes un campo 'nombre' en tus documentos de carrera
         const carrerasOrdenadas = carrerasData.sort((a, b) => a.localeCompare(b)); // Orden alfabético
         setCarreras(carrerasOrdenadas);
-        setCarrerasMostradas(carrerasOrdenadas.slice(0, 5)); // Mostrar solo las primeras 5 carreras inicialmente
+        setCarrerasMostradas(carrerasOrdenadas.slice(0, 15)); // Mostrar solo las primeras 5 carreras inicialmente
         if (carrerasOrdenadas.length <= 5) {
             setMostrarBoton(false); // Ocultar el botón "Ver más" si hay menos de 5 carreras en total
         }
@@ -39,7 +39,7 @@ const CarreraFiltro = () => {
     };
 
     const reiniciarCarreras = () => {
-        setCarrerasMostradas(carreras.slice(0, 5)); // Mostrar las primeras 5 carreras nuevamente
+        setCarrerasMostradas(carreras.slice(0, 15)); // Mostrar las primeras 5 carreras nuevamente
         setMostrarBoton(true); // Mostrar el botón "Ver más"
         setCarreraSeleccionada(null); // Reiniciar la carrera seleccionada
     };

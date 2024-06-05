@@ -25,10 +25,10 @@ const studentsPublications = () => {
           <div className="">
             <CarreraFiltro />
           </div>
-
+{/* 
           <div className="">
             <Municipio />
-          </div>
+          </div> */}
 
           <div className="">
             <AreadeTrabajo />

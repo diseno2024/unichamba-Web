@@ -153,8 +153,6 @@ const handleGoogleSingOut = async() => {
                   <button className='relative text-white font-semibold flex items-center gap-4 bg-Malachite h-[55px] justify-between px-4 rounded-[8px]' onClick={handleGoogleSingOut}>
                     Cerrar Sesión
                   </button>
-
-
             }
 
 
@@ -192,10 +190,7 @@ const handleGoogleSingOut = async() => {
         <span className=' border-[1px] border-black/30 w-[1px] h-auto'></span>
 
         <section className='px-5 w-full flex flex-col pb-8'>
-
-          {Ofertas.map((oferta) => (
-            <OfertaLaboral listStudent={oferta} key={oferta.id}/>
-          ))}
+          <OfertaLaboral/>
           <NavLink to='/OfferExploreStudent' className='mt-12 h-14 w-52 bg-Malachite font-normal text-white rounded-lg flex justify-center items-center text-xl'>Ver más</NavLink>
 
         </section>
