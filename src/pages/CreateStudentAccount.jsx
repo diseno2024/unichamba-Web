@@ -1,43 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import NavGeneral from "../components/NavGeneral";
 import OrdenarCarreras from "../components/ordenCarreras";
-import { db } from "../data/firebase";
-import { collection, addDoc } from "firebase/firestore";
+import { db, storage } from "../data/firebase";
+import { collection, addDoc, getDocs } from "firebase/firestore";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
 import Swal from "sweetalert2";
 import { UserAuth } from "../context/AuthContext";
-const options = [
-  { value: "uno", label: "Panaderia" },
-  { value: "dos", label: "Musico" },
-  { value: "tres", label: "Asistente contable" },
-  { value: "cuatro", label: "Atencion al cliente" },
-  { value: "cinco", label: "Cajero" },
-  { value: "seis", label: "Secretaria" },
-  { value: "siete", label: "Mesero" },
-  { value: "ocho", label: "Recepcionista" },
-  { value: "nueve", label: "Vendedor de farmacia" },
-  { value: "diez", label: "Comerciante" },
-  { value: "once", label: "Albañileria" },
-  { value: "doce", label: "Cortar cafe" },
-  { value: "trece", label: "Pasteleria" },
-  { value: "catorce", label: "Cosmetologia" },
-  { value: "quince", label: "Sublimacion de tazas" },
-  { value: "dieciseis", label: "limpieza" },
-  { value: "diecisiete", label: "Carpintero" },
-  { value: "dieciocho", label: "Primeros Auxilios" },
-  { value: "diecinueve", label: "Agricultura" },
-  { value: "veinte", label: "Mantenimiento electrico" },
-  { value: "veinteuno", label: "Manicura" },
-  { value: "veintedos", label: "Gestion Administrativa" },
-  { value: "veintetres", label: "Pintor de casas" },
-  { value: "veintecuatro", label: "Manejo de inventario" },
-  { value: "veintecinco", label: "Florista" },
-  { value: "veinteseis", label: "Emprendimiento" },
-  { value: "veintesiete", label: "Mantenimiento de computadoras" },
-  { value: "veinteocho", label: "Cocina" },
-  { value: "veintenueve", label: "Bisuteria" },
-];
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+
+
 
 const animatedComponents = makeAnimated();
 
@@ -57,6 +29,7 @@ const CreateStudentAccount = () => {
     acercaDe: "",
     email: correoElectronico,
     fecRegistro: fechaRegistro,
+    imageUrl: "",
   };
 
   const isValidDate = (dateString) => {
@@ -72,6 +45,29 @@ const CreateStudentAccount = () => {
     return diffYears >= 18;
   };
   const [values, setValues] = useState(initialStateValues);
+  const [imageFile, setImageFile] = useState(null); // Estado para manejar el archivo de imagen
+  const [trabajosOptions, setTrabajosOptions] = useState([]);
+
+  useEffect(() => {
+    // Función para obtener los trabajos de Firestore
+    const fetchTrabajos = async () => {
+      try {
+        const trabajosCollection = collection(db, "trabajos");
+        const trabajosSnapshot = await getDocs(trabajosCollection);
+        const trabajosList = trabajosSnapshot.docs.map(doc => ({
+          value: doc.id,
+          label: doc.data().nombre,
+          icon: doc.data().icono
+        }));
+        trabajosList.sort((a, b) => a.label.localeCompare(b.label));
+        setTrabajosOptions(trabajosList);
+      } catch (error) {
+        console.error("Error obteniendo trabajos: ", error);
+      }
+    };
+
+    fetchTrabajos();
+  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -88,6 +84,10 @@ const CreateStudentAccount = () => {
     setValues({ ...values, [name]: value });
   };
 
+  const handleImageChange = (e) => {
+    setImageFile(e.target.files[0]);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(values); // values
@@ -95,7 +95,10 @@ const CreateStudentAccount = () => {
   };
 
   const handleTrabajosChange = (selectedOptions) => {
-    const trabajos = selectedOptions.map((option) => option.label);
+    const trabajos = selectedOptions.map(option => ({
+      nombre: option.label,
+      icono: option.icon // include icon in selected job
+    }));
     setValues({ ...values, trabajos: trabajos });
   };
 
@@ -105,9 +108,18 @@ const CreateStudentAccount = () => {
 
   const addOrEditLink = async (linkObject) => {
     try {
+      let imageUrl = "";
+      if (imageFile) {
+        const imageRef = ref(storage, `imagenesPerfil/${imageFile.name}`);
+        await uploadBytes(imageRef, imageFile);
+        imageUrl = await getDownloadURL(imageRef);
+      }
+
       await addDoc(collection(db, "estudiantes"), {
-        ...values,
+        ...linkObject,
+        imageUrl,
       });
+
       Swal.fire({
         icon: "success",
         title: "Registro con éxito",
@@ -118,8 +130,7 @@ const CreateStudentAccount = () => {
         }
       });
       setValues(initialStateValues);
-
-      // Redirigir a otra página después de mostrar la alerta
+      setImageFile(null);
     } catch (error) {
       console.log(error);
     }
@@ -155,7 +166,6 @@ const CreateStudentAccount = () => {
                   id="nombreInput"
                   className="rounded-lg border border-black p-3 w-80 mt-4 font-normal"
                   name="nombre"
-                  
                   pattern="^[A-Za-záéíóúÁÉÍÓÚ]+\s[A-Za-záéíóúÁÉÍÓÚ]+$"
                   title="Por favor introduce tus nombres adecuadamente"
                   onChange={handleInputChange}
@@ -187,6 +197,22 @@ const CreateStudentAccount = () => {
                 <OrdenarCarreras
                   onSelect={handleCarreraChange}
                 ></OrdenarCarreras>
+                <br />
+                <br />
+                <label htmlFor="imagenInput" className=" font-normal">
+                  Subir Imagen
+                </label>
+                <br></br>
+
+                <input
+                  type="file"
+                  id="imagenInput"
+                  className="rounded-lg border border-black p-3 w-80 mt-4 font-normal"
+                  name="imagen"
+                  onChange={handleImageChange}
+                  required
+                />
+                
               </div>
 
               <div className="ml-9">
@@ -266,9 +292,10 @@ const CreateStudentAccount = () => {
                   components={animatedComponents}
                   onChange={handleTrabajosChange}
                   isMulti
-                  options={options}
+                  options={trabajosOptions}
                   required
                   className="rounded-lg border border-black p-3 w-670 mt-4 font-light "
+                  
                 />
               </div>
               <br />
