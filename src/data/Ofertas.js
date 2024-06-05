@@ -8,7 +8,8 @@ const Ofertas= [
         "localidad": "Santa Ana - Candelaria la Frontera",
         "carrera": "Ingeniería Electrica",
         "descripcion": "Oportunidad de aprendizaje para jovones, que les sirva de conocimiento y le permita generar ingresos",
-        
+        "quienPublica": "calderon.peraza@ues.edu.sv"
+
     },
     {
         "id": 2,
@@ -16,7 +17,8 @@ const Ofertas= [
         "localidad":"Santa Ana - Metapan",
         "carrera": "Ingeniería Informática",
         "descripcion": "Oportunidad de aprendizaje para jovones, que les sirva de conocimiento y le permita generar ingresos",
-        
+        "quienPublica": "calderon.peraza@ues.edu.sv"
+
     },
 
     {
@@ -25,7 +27,7 @@ const Ofertas= [
         "localidad": "Santa Ana - Santa Ana",
         "carrera": "Licenciatura en Contabilidad",
         "descripcion": "Oportunidad de aprendizaje para jovones, que les sirva de conocimiento y le permita generar ingresos",
-        
+        "quienPublica": "calderon.peraza@ues.edu.sv"
     },
     {
         "id": 4,
@@ -33,7 +35,8 @@ const Ofertas= [
         "localidad": "Santa Ana - Santa Ana",
         "carrera": "Administaración de Empresas",
         "descripcion": "Oportunidad de aprendizaje para jovones, que les sirva de conocimiento y le permita generar ingresos",
-        
+        "quienPublica": "calderon.peraza@ues.edu.sv"
+
     },
     {
         "id": 5,
@@ -41,7 +44,8 @@ const Ofertas= [
         "localidad": "Santa Ana - Santa Rosa",
         "carrera": "Marketing",
         "descripcion": "Oportunidad de aprendizaje para jovones, que les sirva de conocimiento y le permita generar ingresos",
-        
+        "quienPublica": "calderon.peraza@ues.edu.sv"
+
     },
     {
         "id": 6,
@@ -49,7 +53,8 @@ const Ofertas= [
         "localidad": "Santa Ana - Chalchuapa",
         "carrera": "Medicina",
         "descripcion": "Oportunidad de aprendizaje para jovones, que les sirva de conocimiento y le permita generar ingresos",
-        
+        "quienPublica": "calderon.peraza@ues.edu.sv"
+
     },
 ]
 

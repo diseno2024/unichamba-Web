@@ -37,7 +37,7 @@ const TarjetaPublicacion = ({ listStudent }) => {
   
           </div>
       ) : (
-        <div className="py-4 border-b-2 flex flex-col justify-center ">
+        <div className="py-4 flex flex-col justify-center border-b-[1px] border-black/30 w-full">
 
             <div className="flex h-max">
 

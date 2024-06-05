@@ -8,27 +8,26 @@ import { UserAuth } from '../context/AuthContext';
 import { collection, getDocs } from "firebase/firestore";
 import { db } from '../data/firebase';
 import { NavLink, useNavigate } from 'react-router-dom';
+
 //import Swal from "sweetalert2";
 
 
 
-const Inicio = () => { 
+const Inicio = () => {
 
   const {googleSingIn, user, googleSingOut} = UserAuth();
-  //const result = /\..+@.*ues\.edu/gm.test(user.email); // expresion que valida si hay un punto y luego un @
-  //const cuentaExterna = /@g(oogle)?mail\.com/gm.test(user.email); // expresion que valida si el dominio del correo es gmail
-  //const estudiante = /@ues\.edu\.sv$/.test(user.email);
-  const cuentaEmpleado = /\..+@.*ues\.edu/gm.test(user.email);
-  const cuentaEstudiante = /^[a-zA-Z]{2}[0-9]{5}@.*ues\.edu/gm.test(user.email);
-  const cuentaExterna = /@g(oogle)?mail\.com/gm.test(user.email);
+  const result = /\..+@.*ues\.edu/gm.test(user.email); // expresion que valida si hay un punto y luego un @
+  const cuentaExterna = /@g(oogle)?mail\.com/gm.test(user.email); // expresion que valida si el dominio del correo es gmail
+  const emailIng = "ernesto.calderon@ues.edu.sv";
   const navigate = useNavigate();
-  //const cuentaIngeniero = 'ernesto.calderon@ues.edu.sv';
   let student = [];
   let administradores = [];
   let URLphoto = user.photoURL;
   const [permiso, setpermiso] = useState(false);
-const [login, setLogin] = useState(false)
-
+  const [permisoIng, setpermisoIng] = useState(false);
+  const [login, setLogin] = useState(false)
+  const [dataStd, setdataStd] = useState([])
+//  inicio de sesion
   const handleGoogleSingIn = async() => {
     try {
     await googleSingIn ()
@@ -37,6 +36,7 @@ const [login, setLogin] = useState(false)
     }
 }
 
+//  cierre de sesion 
 const handleGoogleSingOut = async() => {
   try {
   await googleSingOut ();
@@ -50,8 +50,10 @@ const handleGoogleSingOut = async() => {
   const fetchData = async () => {
     const studentsSnapshot = await getDocs(collection(db, 'estudiantes'));
     const studentsData = studentsSnapshot.docs.map(doc => doc.data().email);
+    const estudiantes = studentsSnapshot.docs.map(doc => doc.data());
+    setdataStd(estudiantes);
     student = studentsData; // emails de los estudiantes ya registrados 
-    
+
     // administradores 
     const adminSnapshot = await getDocs(collection(db, 'administradores'));
     const admins = adminSnapshot.docs.map( doc => doc.data().correo)
@@ -59,40 +61,28 @@ const handleGoogleSingOut = async() => {
     if(Object.keys(user).length !== 0){
       setLogin(true);
 
-      // if(user.email !== cuentaIngeniero){
-      //     if(!cuentaExterna){
-      //       if(administradores.includes(user.email)){
-      //         setpermiso(true);
-      //         navigate('/userAdmin')
-      //       }else{
-      //         if(!result){  
-      //           // no es empleado de la use
-      //             if(!administradores.includes(user.email)){
-      //               // no es administrador 
-      //               if(!student.includes(user.email)){
-      //                 // no tiene cuenta registrada 
-      //                       navigate('/createAccountStd')
-      //               }
-      //             } 
-      //           }
-      //       } 
-      //     }
-      // } else{
-      //   setpermiso(true);
-      //   navigate('/userAdmin')
-      // }
-
-      //validamos de primero si esta accediendo un administrador 
-      if(administradores.includes(user.email)){
-        setpermiso(true) // le damos permiso para vea el panel
-      }else{
         if(!cuentaExterna){
-          if(!student.includes(user.email)){
-            // que vaya a crear cuenta 
-            navigate('/createAccountStd')
-          }
+          console.log('cuenta externa gmail ', cuentaExterna)
+          if(administradores.includes(user.email)){
+            setpermiso(true);
+            if(administradores.includes(emailIng)){
+              setpermisoIng(true);
+            }
+            console.log(permiso)
+          }else{
+            if(!result){  
+              // no es empleado de la use
+                if(!administradores.includes(user.email)){
+                  // no es administrador 
+                  if(!student.includes(user.email)){
+                    // no tiene cuenta registrada 
+                          navigate('/createAccountStd')
+                  }
+                } 
+              }
+          } 
         }
-      }
+      //}
         
     }
 };
@@ -107,9 +97,8 @@ const handleGoogleSingOut = async() => {
   
   }, [user])
 
-
-
-
+  // console.log(user)
+// console.log(dataStd)
   return (
     <>  
       <header className='h-[405px] bg-Dark-Blue space-y-12 rounded-b-3xl relative'>
@@ -119,59 +108,58 @@ const handleGoogleSingOut = async() => {
           </div>
           {/* publicar oferta y auth con google  */}
           <div className='flex gap-5 items-center'>
-            <NavLink to='/createOffer'>
-                <button className='text-white font-semibold flex items-center gap-4 bg-Malachite h-[55px] px-5 rounded-[8px]'> 
-                Publicar Oferta 
-                <span className="material-symbols-outlined">work</span>
-                </button>
-            </NavLink>
 
-                { !login ?
-                  
-                  <button className='relative text-white font-semibold flex items-center gap-4 bg-Malachite h-[55px] justify-between pl-3 pr-[2px] rounded-[8px]' onClick={handleGoogleSingIn}>
+            {
+              !login ?
+
+              <button className='relative text-white font-semibold flex items-center gap-4 bg-Malachite h-[55px] justify-between pl-3 pr-[2px] rounded-[8px]' onClick={handleGoogleSingIn}>
                   Iniciar sesion con Google
                   <img src="/google 2.svg" alt="google-icon" className='bg-white py-[13px] px-[13px] rounded-lg' />
-                  </button>
-                  : cuentaExterna ? // cuenta externa o cuenta empleado
-                  // : result || cuentaExterna ?
-                  <button className='relative text-white font-semibold flex items-center gap-4 bg-Malachite h-[55px] justify-between pl-3 pr-[2px] rounded-[8px]' onClick={handleGoogleSingOut}>
-                    Cerrar Sesión
-                  </button>
-                  
-                  :permiso ?
-                    <div className='flex items-center gap-4'>
+              </button>
+
+              : permiso ? 
+                
+              <div className='flex items-center gap-4'>
                       <button className='relative text-white font-semibold flex items-center gap-4 bg-Malachite h-[55px] justify-between px-4 rounded-[8px]' onClick={handleGoogleSingOut}>
                         Cerrar Sesión
                       </button>
 
                       <NavLink to='/userAdmin' className= 'flex items-center'>
-                        <h1 className='text-white font-normal px-2 text-xl'>Admin</h1>6
+                        <h1 className='text-2xl font-normal text-white mr-3'>Admin</h1>
                         <div className='h-[55px] w-[55px] rounded-full'>
-                        {/* <span className="material-symbols-outlined text-white" style={{fontSize: '35px'}}>person</span> */}
                         <img src={URLphoto} alt="imagen-estudiante"  className='w-full h-full rounded-full'/> 
                         </div>
                       </NavLink>  
                       
                     </div>
-                    
-                      :
-                    <div className='flex items-center gap-4'>
-                        <button className='relative text-white font-semibold flex items-center gap-4 bg-Malachite h-[55px] justify-between px-4 rounded-[8px]' onClick={handleGoogleSingOut}>
-                          Cerrar Sesión
-                        </button>
 
-                        <NavLink to='/studentProfile' className= 'flex items-center'>
-                          {/* <h1 className='text-white font-normal px-2'></h1>6 */}
-                          <div className='h-[55px] w-[55px] rounded-full'>
-                          {/* <span className="material-symbols-outlined text-white" style={{fontSize: '35px'}}>person</span> */}
-                          <img src={URLphoto} alt="imagen-estudiante"  className='w-full h-full rounded-full'/> 
-                          </div>
-                        </NavLink>  
-                        
-                      </div>
-                }
+              : result && !permisoIng ?
+
+              <div>
+                <button className='relative text-white font-semibold flex items-center gap-4 bg-Malachite h-[55px] justify-between pl-3 pr-[2px] rounded-[8px]' onClick={handleGoogleSingIn}>
+                  Publicar Oferta
+                  <span class="material-symbols-outlined">work</span>
+                </button>
+
+                <div className='flex items-center gap-4'>
+                  <button className='relative text-white font-semibold flex items-center gap-4 bg-Malachite h-[55px] justify-between px-4 rounded-[8px]' onClick={handleGoogleSingOut}>
+                    Cerrar Sesión
+                  </button>
+                </div>
+              </div>
+
+              : 
+
+                  <button className='relative text-white font-semibold flex items-center gap-4 bg-Malachite h-[55px] justify-between px-4 rounded-[8px]' onClick={handleGoogleSingOut}>
+                    Cerrar Sesión
+                  </button>
+
+
+            }
+
 
           </div>
+
         </nav>
         <h1 className='text-white font-medium text-4xl w-[35%] relative left-[100px] text-center'>Te ayudamos a encontrar tu primer empleo</h1>
         
@@ -189,20 +177,21 @@ const handleGoogleSingOut = async() => {
         <img src="/minerva_sola_white.png" alt="minerva" className='w-[180px] h-[230px] absolute top-24 right-8' />
       </header>
 
-      <main className='h-auto justify-center pt-10 w-[95%] mx-auto grid grid-cols-2'>
+      <main className='h-auto pt-10 w-[95%] mx-auto flex'>
 
         {/* perfiles de estudiantes  */}
 
-        <section className='px-5 w-full flex flex-col items-end'>
-        {students.map((student) => (
+        <section className='px-5 w-full flex flex-col'>
+        {dataStd.map((student) => (
           <TarjetaPublicacion listStudent={student} key={student.id}/>
         ))}
         <NavLink to='/studentsPublications' className='mt-14 h-14 w-52 bg-Malachite font-normal text-white rounded-lg flex justify-center items-center text-xl'>Ver más</NavLink>
         </section>
 
         {/* ofertas laborales recientes */}
+        <span className=' border-[1px] border-black/30 w-[1px] h-auto'></span>
 
-        <section className='px-5 w-full border-l-2 flex flex-col items-end py-6'>
+        <section className='px-5 w-full flex flex-col pb-8'>
 
           {Ofertas.map((oferta) => (
             <OfertaLaboral listStudent={oferta} key={oferta.id}/>
@@ -212,6 +201,26 @@ const handleGoogleSingOut = async() => {
         </section>
         
       </main>
+
+      <footer className='w-full h-[400px] bg-Dark-Blue space-y-5 py-3'>
+
+        <div className='w-[95%] mx-auto h-max flex flex-col items-center text-white font-normal text-xl space-y-5'>
+          <h2>Descarga nuestra app en tu celular!</h2>
+          <img src="/google-play.cf5ae74d.svg" alt="logo-google-play" className='w-[150px] cursor-pointer' />
+          <h2 className='text-white font-normal text-xl'>copyright© 2024 Unichamba</h2>
+          <div className='w-full flex justify-center'>
+            <p className='cursor-pointer'>Términos y Condiciones</p>
+            <span className='px-3'> - </span>
+            <p className='cursor-pointer'>Política de Privacidad</p>
+          </div>
+          <h3 className='text-white font-normal text-xl'>Universidad Nacional de El Salvador</h3>
+
+        </div>
+
+          <div className='w-[95%] h-max mx-auto flex items-center justify-center'>
+            <img src="/minerva_sola_white.png" alt="" className='w-[100px] h-[130px]'/>
+          </div>
+      </footer>
     </>
   )
 }
