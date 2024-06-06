@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Navbar from '../components/Navbar'
 import OfertaLaboral from '../components/OfertaLaboral';
 import CarreraFiltro from '../components/CarreraFiltro'
@@ -6,7 +6,8 @@ import { NavLink } from 'react-router-dom'
 
 
 const OfferExploreStudent = () => {
-
+  /* La const esta aquí en lugar de CarreraFiltro para más comodidad */
+  const [carreraSeleccionada, setCarreraSeleccionada] = useState(null)
   // console.log(names)
   return (
     <>
@@ -25,14 +26,15 @@ const OfferExploreStudent = () => {
           </div>
 
           <div className='mt-5 border-r-2 border-black/20 '>
-            <CarreraFiltro />
-
+            {/* Aquí se le manda el carreraSeleccionada y setCarreraSeleccionada para poder modificar y usar la const */}
+            <CarreraFiltro carreraSeleccionada={carreraSeleccionada} setCarreraSeleccionada={setCarreraSeleccionada}/>
           </div>
 
         </div>
 
         <section className=' grid grid-cols-2 gap-3 mr-3'>
-          <OfertaLaboral/>
+          {/* Aquí solo se manda la carreraSelecionada para mostrar ofertas de esa carrera */}
+          <OfertaLaboral carreraSeleccionada={carreraSeleccionada}/>
         </section>
 
       </main>
