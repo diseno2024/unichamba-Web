@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
-
 import Navbar from "../components/Navbar";
 import CarreraFiltro from "../components/CarreraFiltro";
 import AreadeTrabajo from "../components/AreaTrabajo";
 import TarjetaPublicacion from "../components/TarjetaPublicacion";
 import { NavLink } from "react-router-dom";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../data/firebase";
 
 
@@ -20,28 +19,43 @@ const studentsPublications = () => {
 
   /* Se agrego para las props de los componentes */
   const [carreraSeleccionada, setCarreraSeleccionada] = useState(null)
+  const [trabajoSeleccionado, setTrabajoSeleccionado] = useState(null)
 
   const fetchData = async () => {
-    const studentsSnapshot = await getDocs(collection(db, 'estudiantes'));
-    const estudiantes = studentsSnapshot.docs.map(doc => doc.data());
-    // console.log(estudiantes)
-    setdataStd(estudiantes);
+    try {
+      const studentsSnapshot = await getDocs(collection(db, 'estudiantes'));
+      const estudiantes = studentsSnapshot.docs.map(doc => doc.data());
+      if ((carreraSeleccionada != null) && (trabajoSeleccionado != null)) {
+        setdataStd(query(estudiantes, where('carrera', '==', carreraSeleccionada), where(`${trabajo}.${trabajoSeleccionado}`, '==', true)));
+      } else if (carreraSeleccionada != null) {
+        setdataStd(query(estudiantes, where('carrera', '==', carreraSeleccionada)));
+        console.log(carreraSeleccionada)
+      } else if (trabajoSeleccionado != null) {
+        setdataStd(query(estudiantes, where(`${trabajo}.${trabajoSeleccionado}`, '==', true)));
+        console.log(trabajoSeleccionado)
+      } else {
+        setdataStd(estudiantes);
+        console.log(carreraSeleccionada, ' ', trabajoSeleccionado)
+      }
+
+    } catch (error) {
+      console.error("Error fetching documents: ", error);
+    }
+
+
   }
 
   useEffect(() => {
-    
     fetchData();
-  
     return () => {
       fetchData();
     }
-  }, [])
-  
+  }, [carreraSeleccionada, trabajoSeleccionado])
 
   return (
     <>
       <header>
-        <Navbar/>
+        <Navbar />
       </header>
 
       <main className=" w-[95%] mx-auto mt-28 flex">
@@ -50,11 +64,11 @@ const studentsPublications = () => {
 
           <div className="">
             {/* Se agregaron los props */}
-            <CarreraFiltro carreraSeleccionada={carreraSeleccionada} setCarreraSeleccionada={setCarreraSeleccionada}/>
+            <CarreraFiltro carreraSeleccionada={carreraSeleccionada} setCarreraSeleccionada={setCarreraSeleccionada} />
           </div>
 
           <div className="">
-            <AreadeTrabajo />
+            <AreadeTrabajo trabajoSeleccionado={trabajoSeleccionado} setTrabajoSeleccionado={setTrabajoSeleccionado} />
           </div>
 
         </section>
@@ -64,11 +78,11 @@ const studentsPublications = () => {
           </NavLink>
         </div>
         <section className="grid grid-cols-2 mx-auto gap-4">
-  {mostrarTarjetas &&
-    dataStd.map((student) => (
-      <TarjetaPublicacion listStudent={student} key={student.id} />
-    ))}
-</section>
+          {mostrarTarjetas &&
+            dataStd.map((student) => (
+              <TarjetaPublicacion listStudent={student} key={student.id} />
+            ))}
+        </section>
 
       </main>
     </>

@@ -1,99 +1,87 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { db } from '../data/firebase';
+import { collection, getDocs } from 'firebase/firestore';
 
-// ACLARO ESTA FORMA COMO ESTA LA MODIFICARE CUANDO SE TENGA QUE TRABAJAR CON LA BASE DE DATOS, ESTO ES PREVENTIVO
-// DE IGUAL FORMA VARIABLES Y COSAS ASI LAS CAMBIARE, AHORITA PARA VISUALIZAR COMO SE IRA VIENDO CON LA BASE DE DATOS
-// QUE SE CREARA EN FIREBASE
-
-const AreasDeTrabajo = () => {
-    const carrerasIniciales = [
-        'Finanzas corporativas',
-        'Marketing estratégico',
-        'Gestión de recursos humanos',
-        'Desarrollo de software',
-        'Seguridad informática',
-        'Ingeniería de sistemas',
-        'Psicología clínica',
-        'Psicología educativa',
-        'Psicología organizacional',
-        'Cirugía general',
-        'Pediatría',
-        'Cardiología',
-        'Derecho penal',
-        'Derecho civil',
-        'Derecho laboral',
-        // Agrega más áreas de trabajo aquí
-    ];
-
-    const [carreras, setCarreras] = useState(carrerasIniciales.slice(0, 5)); // Mostrar las primeras 5 carreras inicialmente
-    const [indiceMostrar, setIndiceMostrar] = useState(5);
+const AreadeTrabajo = ({ trabajoSeleccionado, setTrabajoSeleccionado }) => {
+    const [trabajos, setTrabajos] = useState([]);
+    const [trabajosMostrados, setTrabajosMostrados] = useState([]);
     const [mostrarBoton, setMostrarBoton] = useState(true);
-    const [carreraSeleccionada, setCarreraSeleccionada] = useState(null);
 
-    const seleccionarCarrera = (index) => {
-        setCarreraSeleccionada(index);
+    const fetchData = async () => {
+        try {
+            const trabajosSnapshot = await getDocs(collection(db, 'trabajos')); // 'trabajos' es el nombre de tu colección en Firestore
+            const trabajosData = trabajosSnapshot.docs.map(doc => doc.data().nombre); // Suponiendo que tienes un campo 'nombre' en tus documentos
+            const trabajosOrdenados = trabajosData.sort((a, b) => a.localeCompare(b)); // Orden alfabético
+            setTrabajos(trabajosOrdenados);
+            setTrabajosMostrados(trabajosOrdenados.slice(0, 10)); // Mostrar solo los primeros 10 trabajos inicialmente
+            if (trabajosOrdenados.length <= 10) {
+                setMostrarBoton(false); // Ocultar el botón "Ver más" si hay menos de 10 trabajos en total
+            }
+        } catch (error) {
+            console.error("Error fetching documents: ", error);
+        }
+
     };
 
-    const mostrarMasCarreras = () => {
-        const nuevasCarreras = carrerasIniciales.slice(indiceMostrar, indiceMostrar + 5); // Mostrar 5 carreras más
-        setCarreras([...carreras, ...nuevasCarreras]);
-        setIndiceMostrar(indiceMostrar + 5);
-        if (indiceMostrar + 5 >= carrerasIniciales.length) {
+    useEffect(() => {
+        fetchData();
+        return () => {
+            fetchData();
+        }
+    }, []);
+
+    const seleccionarTrabajo = (trabajo) => {
+        setTrabajoSeleccionado(trabajo);
+    };
+
+    const mostrarMasTrabajos = () => {
+        const nuevosTrabajosMostrados = trabajos.slice(trabajosMostrados.length, trabajosMostrados.length + 5); // Mostrar 5 trabajos más más
+        setTrabajosMostrados([...trabajosMostrados, ...nuevosTrabajosMostrados]);
+        if (trabajosMostrados.length + nuevosTrabajosMostrados.length >= trabajos.length) {
             setMostrarBoton(false); // Ocultar el botón "Ver más" cuando se han mostrado todas las carreras
         }
     };
 
-    const reiniciarCarreras = () => {
-        setCarreras(carrerasIniciales.slice(0, 5)); // Mostrar las primeras 5 carreras nuevamente
-        setIndiceMostrar(5);
+    const reiniciarTrabajos = () => {
+        setTrabajosMostrados(trabajos.slice(0, 10)); // Mostrar las primeras 15 carreras nuevamente
         setMostrarBoton(true); // Mostrar el botón "Ver más"
-        setCarreraSeleccionada(null); // Reiniciar la carrera seleccionada
+        setTrabajoSeleccionado(null); // Reiniciar la carrera seleccionada
     };
 
     return (
         <>
-            <div className='container pt-7 font-normal'>
-                <form className='form'>
-                    <h3 className='pb-3'>
-                    Areas de Trabajo
-                    </h3>
-                    {carreras.map((carrera, index) => (
+            <div className='container'>
+                <form className='form font-normal text-Dark-Blue text-sm '>
+                    <div className='flex flex-wrap justify-between pb-5 mt-2'>
+                        <h3 className='text-lg pb-1'>
+                            Trabajos
+                        </h3>
+                        <div className='flex justify-end mr-10'>
+                            <button type='button' className='btn btn-secondary mt-1 text-black' onClick={reiniciarTrabajos}><span class="material-symbols-outlined">
+                                mop
+                            </span></button>
+                        </div>
+                    </div>
+                    {trabajosMostrados.map((trabajo, index) => (
                         <div className='form-check' key={index}>
                             <input
                                 type='checkbox'
                                 className='form-check-input'
                                 id={`carrera-${index}`}
-                                checked={carreraSeleccionada === index}
-                                onChange={() => seleccionarCarrera(index)}
+                                checked={trabajoSeleccionado === trabajo}
+                                onChange={() => seleccionarTrabajo(trabajo)}
                             />
-                            <label className='form-check-label ms-2' htmlFor={`carrera-${index}`}>{carrera}</label>
+                            <label className='form-check-label ms-2' htmlFor={`carrera-${index}`}>{trabajo}</label>
                         </div>
                     ))}
                     {mostrarBoton && (
-                        <button type='button' className='btn btn-primary mt-3 text-Blue' onClick={mostrarMasCarreras}>Ver Más..</button>
-                    )}
-                    {!mostrarBoton && (
-                        <button type='button' className='btn btn-secondary mt-3  text-Blue' onClick={reiniciarCarreras}>Mostrar Menos...</button>
+                        <button type='button' className='btn btn-primary mt-4 text-black' onClick={mostrarMasTrabajos}>Ver Más..</button>
                     )}
                 </form>
+
             </div>
         </>
     );
 };
 
-export default AreasDeTrabajo;
-
-
-
-
-/**
- * 
- * const AreaTrabajo = () => {
-return(
-    <>
-        <button className='bg-Gris-claro w-[220px] py-[10px] flex justify-between gap-10 rounded-[5px] active:text-white duration-300 font-normal px-6' onClick={() => setIsOpen((prev) => !prev)}>
-            Area de trabajo
-            <span class="material-symbols-outlined">work</span>
-        </button>
-    </>
-)
-} */
+export default AreadeTrabajo;
