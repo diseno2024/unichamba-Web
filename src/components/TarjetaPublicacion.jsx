@@ -1,5 +1,7 @@
 import { useLocation } from "react-router-dom";
 
+
+
 const TarjetaPublicacion = ({ listStudent }) => {
   // const { estudiante, localidad, carrera, descripcion, FechaPublicacion } = listStudent;
   const location = useLocation();

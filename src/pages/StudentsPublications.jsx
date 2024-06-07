@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import React, { useState } from "react";
+
 import Navbar from "../components/Navbar";
 import CarreraFiltro from "../components/CarreraFiltro";
 import AreadeTrabajo from "../components/AreaTrabajo";
@@ -16,6 +16,7 @@ import { db } from "../data/firebase";
 const studentsPublications = () => {
 
   const [dataStd, setdataStd] = useState([])
+  const [mostrarTarjetas, setMostrarTarjetas] = useState(true);
 
   /* Se agrego para las props de los componentes */
   const [carreraSeleccionada, setCarreraSeleccionada] = useState(null)
@@ -63,12 +64,11 @@ const studentsPublications = () => {
           </NavLink>
         </div>
         <section className="grid grid-cols-2 mx-auto gap-4">
-
-        {dataStd.map((student) => (
-          <TarjetaPublicacion listStudent={student} key={student.id}/>
-        ))}
-
-        </section>
+  {mostrarTarjetas &&
+    dataStd.map((student) => (
+      <TarjetaPublicacion listStudent={student} key={student.id} />
+    ))}
+</section>
 
       </main>
     </>
