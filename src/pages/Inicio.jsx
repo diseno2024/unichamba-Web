@@ -26,7 +26,7 @@ const Inicio = () => {
   const [permiso, setpermiso] = useState(false);
   const [permisoIng, setpermisoIng] = useState(false);
   const [login, setLogin] = useState(false)
-  const [dataStd, setdataStd] = useState([])
+  const [dataStd, setdataStd] = useState([]);
 //  inicio de sesion
   const handleGoogleSingIn = async() => {
     try {
@@ -150,9 +150,21 @@ const handleGoogleSingOut = async() => {
 
               : 
 
-                  <button className='relative text-white font-semibold flex items-center gap-4 bg-Malachite h-[55px] justify-between px-4 rounded-[8px]' onClick={handleGoogleSingOut}>
-                    Cerrar Sesión
-                  </button>
+              <div className='flex space-x-5'>
+                
+                <button className='relative text-white font-semibold flex items-center gap-4 bg-Malachite h-[55px] justify-between px-4 rounded-[8px]' onClick={handleGoogleSingOut}>
+                  Cerrar Sesión
+                </button> 
+
+                <NavLink to='/studentProfile' className= 'flex items-center'>
+                  <h1 className='text-2xl font-normal text-white mr-3'>Perfil</h1>
+                  <div className='h-[55px] w-[55px] rounded-full'>
+                    <img src={URLphoto} alt="imagen-estudiante"  className='w-full h-full rounded-full'/> 
+                  </div>
+                </NavLink> 
+
+              </div>
+                  
             }
 
 
@@ -191,13 +203,15 @@ const handleGoogleSingOut = async() => {
 
         <section className='px-5 w-full flex flex-col pb-8'>
           <OfertaLaboral/>
+          <div className='flex justify-end'>
           <NavLink to='/OfferExploreStudent' className='mt-12 h-14 w-52 bg-Malachite font-normal text-white rounded-lg flex justify-center items-center text-xl'>Ver más</NavLink>
+          </div>
 
         </section>
         
       </main>
 
-      <footer className='w-full h-[400px] bg-Dark-Blue space-y-5 py-3'>
+      <footer className='w-full h-[425px] bg-Dark-Blue space-y-5 py-3 '>
 
         <div className='w-[95%] mx-auto h-max flex flex-col items-center text-white font-normal text-xl space-y-5'>
           <h2>Descarga nuestra app en tu celular!</h2>
@@ -206,15 +220,16 @@ const handleGoogleSingOut = async() => {
           <div className='w-full flex justify-center'>
             <p className='cursor-pointer'>Términos y Condiciones</p>
             <span className='px-3'> - </span>
-            <p className='cursor-pointer'>Política de Privacidad</p>
+            <a className='cursor-pointer' href='https://website-unichamba.netlify.app/policy'>Política de Privacidad</a>
           </div>
           <h3 className='text-white font-normal text-xl'>Universidad Nacional de El Salvador</h3>
 
         </div>
 
-          <div className='w-[95%] h-max mx-auto flex items-center justify-center'>
+          <div className='w-[95%] h-max mx-auto flex items-center justify-center '>
             <img src="/minerva_sola_white.png" alt="" className='w-[100px] h-[130px]'/>
           </div>
+
       </footer>
     </>
   )

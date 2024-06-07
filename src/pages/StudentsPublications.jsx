@@ -1,16 +1,38 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
-import students from "../data/students";
 import CarreraFiltro from "../components/CarreraFiltro";
-import Municipio from "../components/Municipio";
 import AreadeTrabajo from "../components/AreaTrabajo";
 import TarjetaPublicacion from "../components/TarjetaPublicacion";
 import { NavLink } from "react-router-dom";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../data/firebase";
+
+
+// KENDALL 
+
 
 
 const studentsPublications = () => {
 
+  const [dataStd, setdataStd] = useState([])
 
+
+  const fetchData = async () => {
+    const studentsSnapshot = await getDocs(collection(db, 'estudiantes'));
+    const estudiantes = studentsSnapshot.docs.map(doc => doc.data());
+    // console.log(estudiantes)
+    setdataStd(estudiantes);
+  }
+
+  useEffect(() => {
+    
+    fetchData();
+  
+    return () => {
+      fetchData();
+    }
+  }, [])
+  
 
   return (
     <>
@@ -25,10 +47,6 @@ const studentsPublications = () => {
           <div className="">
             <CarreraFiltro />
           </div>
-{/* 
-          <div className="">
-            <Municipio />
-          </div> */}
 
           <div className="">
             <AreadeTrabajo />
@@ -42,7 +60,7 @@ const studentsPublications = () => {
         </div>
         <section className="grid grid-cols-2 mx-auto gap-4">
 
-        {students.map((student) => (
+        {dataStd.map((student) => (
           <TarjetaPublicacion listStudent={student} key={student.id}/>
         ))}
 
