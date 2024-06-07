@@ -219,7 +219,7 @@ const handleTrabajoChange = (trabajo) => {
         <section className='px-5 w-full flex flex-col pb-8'>
           <OfertaLaboral/>
           <div className='flex justify-end'>
-          <OfertaLaboral carreraSeleccionada={null}/>{/* Ahora se necesita el prop carreraSeleccionada */}
+          {/* <OfertaLaboral carreraSeleccionada={null}/>Ahora se necesita el prop carreraSeleccionada */}
           <NavLink to='/OfferExploreStudent' className='mt-12 h-14 w-52 bg-Malachite font-normal text-white rounded-lg flex justify-center items-center text-xl'>Ver más</NavLink>
           </div>
 

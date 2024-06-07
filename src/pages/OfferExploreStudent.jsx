@@ -17,7 +17,18 @@ const OfferExploreStudent = () => {
 
       <main className='flex h-auto mt-[90px]  space-y-8 relative'>
         <div className='ml-2 mt-10 pl-4 py-2 mr-3 min-w-[300px]' >
-          <div>
+          
+          <div className=' border-r-2 border-black/20 '>
+            {/* Aquí se le manda el carreraSeleccionada y setCarreraSeleccionada para poder modificar y usar la const */}
+            <CarreraFiltro carreraSeleccionada={carreraSeleccionada} setCarreraSeleccionada={setCarreraSeleccionada}/>
+          </div>
+
+        </div>
+        
+        <div>
+
+
+          <div className='mt-4 mb-4'>
             <NavLink to="/inicio">
               <span class="material-symbols-outlined ">
                 arrow_back
@@ -25,17 +36,13 @@ const OfferExploreStudent = () => {
             </NavLink>
           </div>
 
-          <div className='mt-5 border-r-2 border-black/20 '>
-            {/* Aquí se le manda el carreraSeleccionada y setCarreraSeleccionada para poder modificar y usar la const */}
-            <CarreraFiltro carreraSeleccionada={carreraSeleccionada} setCarreraSeleccionada={setCarreraSeleccionada}/>
-          </div>
+          <section className=' grid grid-cols-2 gap-3 mr-3'>
+
+            {/* Aquí solo se manda la carreraSelecionada para mostrar ofertas de esa carrera */}
+            <OfertaLaboral carreraSeleccionada={carreraSeleccionada} />
+          </section>
 
         </div>
-
-        <section className=' grid grid-cols-2 gap-3 mr-3'>
-          {/* Aquí solo se manda la carreraSelecionada para mostrar ofertas de esa carrera */}
-          <OfertaLaboral carreraSeleccionada={carreraSeleccionada}/>
-        </section>
 
       </main>
     </>
