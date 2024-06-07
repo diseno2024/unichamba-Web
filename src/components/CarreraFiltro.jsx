@@ -2,10 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { db } from '../data/firebase';
 import { collection, getDocs } from 'firebase/firestore';
 
-const CarreraFiltro = () => {
+const CarreraFiltro = ({carreraSeleccionada, setCarreraSeleccionada}) => {
     const [carreras, setCarreras] = useState([]);
     const [carrerasMostradas, setCarrerasMostradas] = useState([]);
-    const [carreraSeleccionada, setCarreraSeleccionada] = useState(null);
     const [mostrarBoton, setMostrarBoton] = useState(true);
 
     const fetchData = async () => {
@@ -26,8 +25,8 @@ const CarreraFiltro = () => {
         }
     }, []);
 
-    const seleccionarCarrera = (index) => {
-        setCarreraSeleccionada(index);
+    const seleccionarCarrera = (carrera) => {
+        setCarreraSeleccionada(carrera);
     };
 
     const mostrarMasCarreras = () => {
@@ -63,8 +62,11 @@ const CarreraFiltro = () => {
                                 type='checkbox'
                                 className='form-check-input'
                                 id={`carrera-${index}`}
-                                checked={carreraSeleccionada === index}
-                                onChange={() => seleccionarCarrera(index)}
+                                checked={carreraSeleccionada === carrera}
+                                onChange={() => seleccionarCarrera(carrera)}
+                                /* checked={carreraSeleccionada === index}
+                                   onChange={() => seleccionarCarrera(index)} 
+                                   se cambio el index por carrera ya que ahí guardaba el número de carrera en lugar del nombre*/
                             />
                             <label className='form-check-label ms-2' htmlFor={`carrera-${index}`}>{carrera}</label>
                         </div>

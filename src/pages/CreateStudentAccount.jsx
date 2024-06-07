@@ -2,13 +2,13 @@ import React, { useState, useEffect } from "react";
 import NavGeneral from "../components/NavGeneral";
 import OrdenarCarreras from "../components/ordenCarreras";
 import { db, storage } from "../data/firebase";
-import { collection, addDoc, getDocs } from "firebase/firestore";
+import { collection, addDoc, getDocs, updateDoc, doc } from "firebase/firestore";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
 import Swal from "sweetalert2";
 import { UserAuth } from "../context/AuthContext";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-
+import Resizer from 'react-image-file-resizer';
 
 
 const animatedComponents = makeAnimated();
@@ -45,7 +45,7 @@ const CreateStudentAccount = () => {
     return diffYears >= 18;
   };
   const [values, setValues] = useState(initialStateValues);
-  const [imageFile, setImageFile] = useState(null); // Estado para manejar el archivo de imagen
+  const [imageFiles, setImageFiles] = useState([]); // Estado para manejar el archivo de imagen
   const [trabajosOptions, setTrabajosOptions] = useState([]);
 
   useEffect(() => {
@@ -85,7 +85,7 @@ const CreateStudentAccount = () => {
   };
 
   const handleImageChange = (e) => {
-    setImageFile(e.target.files[0]);
+    setImageFiles(Array.from(e.target.files));
   };
 
   const handleSubmit = (e) => {
@@ -105,36 +105,70 @@ const CreateStudentAccount = () => {
   const handleCarreraChange = (carrera) => {
     setValues({ ...values, carrera: carrera });
   };
-
-  const addOrEditLink = async (linkObject) => {
-    try {
-      let imageUrl = "";
-      if (imageFile) {
-        const imageRef = ref(storage, `imagenesPerfil/${imageFile.name}`);
-        await uploadBytes(imageRef, imageFile);
-        imageUrl = await getDownloadURL(imageRef);
+  const resizeFile = (file) =>
+    new Promise((resolve) => {
+      Resizer.imageFileResizer(
+        file,
+        130,
+        130,
+        "JPEG",
+        100,
+        0,
+        (uri) => {
+          resolve(uri);
+        },
+        "file"
+      );
+    });
+    const addOrEditLink = async (linkObject) => {
+      try {
+        // Crear el documento del estudiante en Firestore
+        const docRef = await addDoc(collection(db, "estudiantes"), {
+          ...linkObject,
+          imageUrl: "",  // Inicialmente vacío
+          thumbUrl: ""   // Inicialmente vacío
+        });
+        const docId = docRef.id;
+  
+        // Subir las imágenes y obtener sus URLs
+        const uploadImage = async (file) => {
+          const imageRef = ref(storage, `imagenesPerfil/${docId}/${file.name}`);
+          await uploadBytes(imageRef, file);
+          const fileUrl = await getDownloadURL(imageRef);
+  
+          const resizedImage = await resizeFile(file);
+          const thumbRef = ref(storage, `imagenesPerfil/${docId}/thumb_${file.name}`);
+          await uploadBytes(thumbRef, resizedImage);
+          const resizedImageUrl = await getDownloadURL(thumbRef);
+  
+          return { imageUrl: fileUrl, thumbUrl: resizedImageUrl };
+        };
+  
+        const results = await Promise.all(imageFiles.map(file => uploadImage(file)));
+        const imageUrls = results.map(result => result.imageUrl).join(", ");
+        const thumbUrls = results.map(result => result.thumbUrl).join(", ");
+  
+        // Actualizar el documento del estudiante con las URLs de las imágenes
+        await updateDoc(doc(db, "estudiantes", docId), {
+          imageUrl: imageUrls,
+          thumbUrl: thumbUrls,
+        });
+  
+        Swal.fire({
+          icon: "success",
+          title: "Registro con éxito",
+          text: "¡Estudiante registrado con éxito!",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            window.location.href = "/";
+          }
+        });
+        setValues(initialStateValues);
+        setImageFiles([]);
+      } catch (error) {
+        console.log(error);
       }
-
-      await addDoc(collection(db, "estudiantes"), {
-        ...linkObject,
-        imageUrl,
-      });
-
-      Swal.fire({
-        icon: "success",
-        title: "Registro con éxito",
-        text: "¡Estudiante registrado con éxito!",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          window.location.href = "/";
-        }
-      });
-      setValues(initialStateValues);
-      setImageFile(null);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+    };
 
   return (
     <>

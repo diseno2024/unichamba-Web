@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Navbar from "../components/Navbar";
 import CarreraFiltro from "../components/CarreraFiltro";
 import AreadeTrabajo from "../components/AreaTrabajo";
@@ -16,6 +17,8 @@ const studentsPublications = () => {
 
   const [dataStd, setdataStd] = useState([])
 
+  /* Se agrego para las props de los componentes */
+  const [carreraSeleccionada, setCarreraSeleccionada] = useState(null)
 
   const fetchData = async () => {
     const studentsSnapshot = await getDocs(collection(db, 'estudiantes'));
@@ -45,7 +48,8 @@ const studentsPublications = () => {
         <section className="px-5 h-max w-[20%] border-r-2">
 
           <div className="">
-            <CarreraFiltro />
+            {/* Se agregaron los props */}
+            <CarreraFiltro carreraSeleccionada={carreraSeleccionada} setCarreraSeleccionada={setCarreraSeleccionada}/>
           </div>
 
           <div className="">

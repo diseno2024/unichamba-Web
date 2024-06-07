@@ -8,6 +8,8 @@ import { UserAuth } from '../context/AuthContext';
 import { collection, getDocs } from "firebase/firestore";
 import { db } from '../data/firebase';
 import { NavLink, useNavigate } from 'react-router-dom';
+import OrdenarTrabajos from '../components/ListarTrabajos';
+import CarrerasInicio from '../components/ListarCarreras';
 
 //import Swal from "sweetalert2";
 
@@ -45,6 +47,14 @@ const handleGoogleSingOut = async() => {
   console.log(error)
   }
 }
+
+const handleCarreraChange = (carrera) => {
+  setValues({ ...values, carrera: carrera });
+};
+
+const handleTrabajoChange = (trabajo) => {
+  setValues({ ...values, trabajo: trabajo });
+};
 
 
   const fetchData = async () => {
@@ -174,15 +184,20 @@ const handleGoogleSingOut = async() => {
         <h1 className='text-white font-medium text-4xl w-[35%] relative left-[100px] text-center'>Te ayudamos a encontrar tu primer empleo</h1>
         
         {/* buscador */}
-        <div className='flex px-10'>
+        <div className="flex px-10">
           {/* inputs */}
-          <div className='bg-Space-cadet h-[55px] rounded-[10px] w-[950px] flex items-center justify-between px-5 relative'>
-                <input type="search" placeholder='Cargo o Puesto' className='bg-inherit placeholder:text-white placeholder:font-medium w-[400px]'/>
-                <span className='h-[86%] border-[1px] border-white/50 ml-2'></span>
-                <input type="search" placeholder='Municipio' className='bg-inherit placeholder:text-white placeholder:font-medium h-full w-[400px] pl-[15px]'/>
-                <span className="material-symbols-outlined text-white w-[40px] h-[40px] bg-Malachite text-3xl flex items-center justify-center rounded-lg absolute right-2">search</span>
+          <div className="bg-Space-cadet h-[55px] rounded-[10px] w-[950px] flex items-center justify-between px-5 relative">
+            <OrdenarTrabajos onSelect={handleTrabajoChange}></OrdenarTrabajos>
+            <span className="h-[86%] border-[1px] border-white/50 ml-2"></span>
+            <CarrerasInicio
+              onSelect={handleCarreraChange}
+            ></CarrerasInicio>{" "}
+            <span className="material-symbols-outlined text-white w-[40px] h-[40px] bg-Malachite text-3xl flex items-center justify-center rounded-lg absolute right-2">
+              search
+            </span>
           </div>
         </div>
+
 
         <img src="/minerva_sola_white.png" alt="minerva" className='w-[180px] h-[230px] absolute top-24 right-8' />
       </header>
@@ -204,6 +219,7 @@ const handleGoogleSingOut = async() => {
         <section className='px-5 w-full flex flex-col pb-8'>
           <OfertaLaboral/>
           <div className='flex justify-end'>
+          <OfertaLaboral carreraSeleccionada={null}/>{/* Ahora se necesita el prop carreraSeleccionada */}
           <NavLink to='/OfferExploreStudent' className='mt-12 h-14 w-52 bg-Malachite font-normal text-white rounded-lg flex justify-center items-center text-xl'>Ver más</NavLink>
           </div>
 
