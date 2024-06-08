@@ -34,8 +34,18 @@ const CreateOffer = () => {
     setQuienPublica(user.email);
   }, [user]);
 
+  /*selecciona muchas carreras
   const handleSelectChangeCarreras = (selectedOptions) => {
     setSelectedCarreras(selectedOptions);
+  };*/
+
+ //selecciona solo 3 carreras
+  const handleSelectChangeCarreras = (selectedOptions) => {
+    if (selectedOptions.length <= 3) {
+      setSelectedCarreras(selectedOptions);
+    } else {
+      Swal.fire("Límite alcanzado", "Solo puedes seleccionar hasta 3 carreras.", "warning");
+    }
   };
 
   const handleImageChange = (e) => {
@@ -61,62 +71,93 @@ const CreateOffer = () => {
       );
     });
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true); // Activar spinner de carga al inicio del envío del formulario
-    const data = {
-      quienPublica,
-      description,
-      carrera: selectedCarreras.map(carrera => carrera.label),
-      imagen: "",
-      imagenSmall:""
-    };
+    const handleSubmit = async (e) => {
+      e.preventDefault();
 
-    try {
-      const docRef = await addDoc(collection(db, 'anuncios'), data);
-      const docId = docRef.id;
-
-      if (imagen) {
-        // Subir la imagen original
-        const imageRef = ref(storage, `anuncios/${docId}/${imagen.name}`);
-        await uploadBytes(imageRef, imagen);
-        const imageUrl = await getDownloadURL(imageRef);
-
-        // Redimensionamos y subimos la imagen pequeña
-        const resizedImage = await resizeFile(imagen);
-        const smallImageRef = ref(storage, `anuncios/${docId}/small_${imagen.name}`);
-        await uploadBytes(smallImageRef, resizedImage);
-        const smallImageUrl = await getDownloadURL(smallImageRef);
-
-        // Actualizamos el documento con las URLs de las imágenes
-        await updateDoc(doc(db, 'anuncios', docId), { imagen: imageUrl, imagenSmall: smallImageUrl });
-      }
-
-      Swal.fire({
-        title: "Éxito",
-        text: "La oferta ha sido creada. ¿Deseas ir a la página de inicio o quedarte en la página de creación de la oferta?",
-        icon: "success",
-        showCancelButton: true,
-        confirmButtonText: "Ir a inicio",
-        cancelButtonText: "Quedarme",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          window.location.href = '/inicio';
-        } else {
-          setQuienPublica(user.email);
-          setDescription('');
-          setSelectedCarreras([]);
-          setImagen(null);
-          window.location.href = '/createOffer';
+       // Valida la longitud del texto
+  if (description.length < 50 || description.length > 500) {
+    Swal.fire("Error", "La descripción debe tener entre 50 y 500 caracteres.", "error");
+    return; // Detiene el envío del formulario
+  }
+      setLoading(true); // Activar spinner de carga al inicio del envío del formulario
+      const data = {
+        quienPublica,
+        description,
+        carrera: selectedCarreras.map(carrera => carrera.label),
+        imagen: "",
+        imagenSmall: ""
+      };
+    
+      try {
+        if (data.carrera == "") {
+          data.carrera = "Aplican todas las carreras";
         }
-      });
-    } catch (error) {
-      console.error("Error al crear la oferta:", error);
-      Swal.fire("Error", "Hubo un error al crear la oferta", "error");
-    } finally {
-      setLoading(false); // Desactivar spinner de carga después de completar la carga
-    }
-  };
+
+        //guarda los datos a la coleccion anuncios
+        const docRef = await addDoc(collection(db, 'anuncios'), data);
+        const docId = docRef.id; //se obtiene referencia del id
+    
+        const uploadImage = async (file) => {
+          const imageRef = ref(storage, `anuncios/${docId}/${file.name}`);
+          await uploadBytes(imageRef, file);
+          return await getDownloadURL(imageRef);
+        };
+    
+        const uploadResizedImage = async (file, resizedFile) => {
+          const smallImageRef = ref(storage, `anuncios/${docId}/small_${file.name}`);
+          await uploadBytes(smallImageRef, resizedFile);
+          return await getDownloadURL(smallImageRef);
+        };
+    
+        if (!imagen) {
+          // Usa la imagen predeterminada para subirla a firebase
+          const defaultImageUrl = "./CrearOfertaimg.png";
+          const response = await fetch(defaultImageUrl);
+          const blob = await response.blob();
+          const file = new File([blob], "CrearOfertaimg.png", { type: blob.type });
+    
+          // Sube la imagen original
+          const imageUrl = await uploadImage(file);
+          // Redimensionamos y subimos la imagen pequeña
+          const resizedImage = await resizeFile(file);
+          const smallImageUrl = await uploadResizedImage(file, resizedImage);
+          // Actualizamos el documento con las URL de las imágenes
+          await updateDoc(doc(db, 'anuncios', docId), { imagen: imageUrl, imagenSmall: smallImageUrl });
+        } else {
+          // Subela imagen original seleccionada con el input
+          const imageUrl = await uploadImage(imagen);
+          // Redimensionamos y subimos la imagen pequeña
+          const resizedImage = await resizeFile(imagen);
+          const smallImageUrl = await uploadResizedImage(imagen, resizedImage);
+          // Actualizamos el documento con las URLs de las imágenes
+          await updateDoc(doc(db, 'anuncios', docId), { imagen: imageUrl, imagenSmall: smallImageUrl });
+        }
+    
+        Swal.fire({
+          title: "Éxito",
+          text: "La oferta ha sido creada. ¿Deseas ir a la página de inicio o quedarte en la página de creación de la oferta?",
+          icon: "success",
+          showCancelButton: true,
+          confirmButtonText: "Ir a inicio",
+          cancelButtonText: "Quedarme",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            window.location.href = '/inicio';
+          } else {
+            setQuienPublica(user.email);
+            setDescription('');
+            setSelectedCarreras([]);
+            setImagen(null);
+            window.location.href = '/createOffer';
+          }
+        });
+      } catch (error) {
+        console.error("Error al crear la oferta:", error);
+        Swal.fire("Error", "Hubo un error al crear la oferta", "error");
+      } finally {
+        setLoading(false); // Desactivamos spinner de carga después de completar la carga
+      }
+    };
 
  
 
@@ -169,7 +210,7 @@ const CreateOffer = () => {
                         options={carrera.map(({ nombre, id }) => ({ value: id, label: nombre }))}
                         onChange={handleSelectChangeCarreras}
                         value={selectedCarreras}
-                        required
+                       
                       />
                     </div>
                     <div className="w-full lg:w-2/4 flex items-center">
@@ -181,7 +222,7 @@ const CreateOffer = () => {
                           name="imagen"
                           type="file"
                           onChange={handleImageChange}
-                          required
+                          
                         />
                       </div>
                      
@@ -202,6 +243,8 @@ const CreateOffer = () => {
                       required
                       value={description}
                       onChange={(e) => setDescription(e.target.value)}
+                      maxLength={500}
+                      minLength={50}
                     ></textarea>
                   </div>
                   <div className="flex justify-end pt-1">
