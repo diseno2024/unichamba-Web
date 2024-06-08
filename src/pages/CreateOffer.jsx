@@ -160,7 +160,26 @@ const CreateOffer = () => {
     };
 
  
-
+    const MostrarAyuda = () => {
+      Swal.fire({
+        title: '¿Necesitas ayuda?',
+        html: `
+          <div class="text-left">
+            <p><strong class="text-purple-400">Campo de quien publica:</strong> Se llena automáticamente.</p>
+            <p><strong class="text-purple-400">Campo de carreras:</strong> Si no se selecciona una, se da por entendido que es para todas las carreras.</p>
+            <p><strong class="text-purple-400">Campo de imagen:</strong> Es opcional.</p>
+            <p><strong class="text-purple-400">Descripcion:</strong> Es obligatorio.</p>
+          </div>
+        `,
+        icon: 'question',
+        confirmButtonText: 'Entendido',
+        customClass: {
+          popup: 'bg-gradient-to-r from-gray-800 via-gray-900 to-black text-white p-4 rounded-lg shadow-lg',
+          title: 'text-2xl font-bold mb-2',
+          htmlContainer: 'text-lg leading-relaxed'
+        }
+      });
+    };
   const animatedComponents = makeAnimated();
 
   return (
@@ -169,36 +188,42 @@ const CreateOffer = () => {
         <header className="fixed top-0 left-0 w-full z-50 bg-white shadow-md">
           <NavGeneral />
         </header>
-        <div className="bg-Tarjet px-8 h-auto w-auto pt-24">
-          <div className="flex flex-col lg:flex-row rounded-xl border border-gray-500 shadow-lg h-auto">
-            <div className="w-full lg:w-1/3 h-auto">
-              <section className="h-full">
-                <img
-                  src="./imagenOferta.png"
-                  alt="./public/ofertaimagen.png"
-                  className="w-full h-full object-cover rounded-xl"
-                />
-              </section>
+        <div className="bg-Tarjet px-8 w-auto pt-24">
+  <div className="flex flex-col lg:flex-row rounded-xl border border-gray-500 shadow-lg">
+    <div className="w-full lg:w-1/3">
+      <section className="h-full">
+        <img
+          src="./imagenOferta.png"
+          alt="./public/ofertaimagen.png"
+          className="w-full h-full object-cover rounded-xl"
+        />
+      </section>
+    </div>
+    <main className="w-[100%] mx-auto pl-4">
+      <section className="w-[95%] mx-auto">
+        <form onSubmit={handleSubmit} className="space-y-2">
+          <p className="pt-5 pl-2 font-roboto font-bold text-lg">Crea una oferta
+          <span className=" text-xs ml-60 pl-96 ">Para ayuda, haz clic aquí</span>
+           <span class="material-symbols-outlined cursor-pointer" 
+            onClick={MostrarAyuda}>help</span>
+       
+            </p>
+            
+          <div className="flex flex-col lg:flex-row p-2">
+            <div className="w-full lg:w-2/4">
+              <label className="block text-sm font-medium">Quien publica*</label>
+              <input
+                id="quienPublica"
+                name="quienPublica"
+                type="text"
+                className="transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300 mx-auto bg-Blanco-cremoso font-light rounded-lg border border-black p-2 w-96 mt-1 border-1 border-Dark-purple"
+                required
+                title="Por favor introduce solo letras."
+                value={quienPublica}
+                onChange={(e) => setQuienPublica(e.target.value)}
+                disabled
+              />
             </div>
-            <main className="w-[100%] mx-auto pl-4 h-[615px]">
-              <section className="w-[95%] mx-auto">
-                <form onSubmit={handleSubmit} className="h-[615px] space-y-2">
-                  <p className="pt-5 pl-6 font-roboto font-bold text-lg">Crea una oferta</p>
-                  <div className="flex flex-col lg:flex-row p-2">
-                    <div className="w-full lg:w-2/4">
-                      <label className="block text-sm font-medium">Quien publica*</label>
-                      <input
-                        id="quienPublica"
-                        name="quienPublica"
-                        type="text"
-                        className="transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300 mx-auto bg-Blanco-cremoso font-light rounded-lg border border-black p-2 w-96 mt-1 border-1 border-Dark-purple"
-                        required
-                        title="Por favor introduce solo letras."
-                        value={quienPublica}
-                        onChange={(e) => setQuienPublica(e.target.value)}
-                        disabled
-                      />
-                    </div>
                   </div>
                   <div className="flex flex-col lg:flex-row p-2">
                     <div className="w-full lg:w-2/4">
@@ -239,16 +264,17 @@ const CreateOffer = () => {
                       name="description"
                       rows="12"
                       className="lg:h-auto w-full h-auto border-2 border-Dark-purple bg-Blanco-cremoso p-2.5 text-sm text-gray-900 rounded-lg font-normal"
-                      placeholder="Escriba una breve descripción sobre el empleo"
+                  
                       required
                       value={description}
                       onChange={(e) => setDescription(e.target.value)}
                       maxLength={500}
                       minLength={50}
+                      placeholder="Puedes colocar la descripcion acerca de el empleo"
                     ></textarea>
                   </div>
                   <div className="flex justify-end pt-1">
-                    <button type="submit" className="transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300 text-white w-64 bg-Dark-purple hover:bg-Dark-Blue hover:text-white font-medium rounded-lg text-sm py-2.5">Crear Oferta</button>
+                    <button type="submit" className="mb-2 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300 text-white w-64 bg-Dark-purple hover:bg-Dark-Blue hover:text-white font-medium rounded-lg text-sm py-2.5">Crear Oferta</button>
                   </div>
                 </form>
               </section>
