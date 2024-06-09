@@ -35,13 +35,12 @@ const OfferExploreStudent = () => {
               </span>
             </NavLink>
           </div>
-
-          <section className=' grid grid-cols-2 gap-3 mr-3'>
-
-            {/* Aquí solo se manda la carreraSelecionada para mostrar ofertas de esa carrera */}
-            <OfertaLaboral carreraSeleccionada={carreraSeleccionada} />
-          </section>
-
+          <NavLink to='/DetailsOffer'>
+            <section className=' grid grid-cols-2 gap-3 mr-3'>
+              {/* Aquí solo se manda la carreraSelecionada para mostrar ofertas de esa carrera */}
+              <OfertaLaboral carreraSeleccionada={carreraSeleccionada} />
+            </section>
+          </NavLink>
         </div>
 
       </main>
