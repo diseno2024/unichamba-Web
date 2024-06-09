@@ -12,13 +12,14 @@ const OfertaLaboral = ({ carreraSeleccionada }) => {
         try {
             const querySnapshot = collection(db, "anuncios");
             /* const anuncios = []; */
+            console.log(carreraSeleccionada)
             if (carreraSeleccionada != null) {
                 /* Se cambio la manera de obtener los datos ya que no cambiaba al seleccionar la carrera al hacerlo de la manera comentada */
                 /* anunciosSeleccionados.forEach((doc) => {
                     anuncios.push(doc.data());
                 });
                 setOfertasLaborales(anuncios); */
-                const anunciosSeleccionados = query(querySnapshot, where('carrera', '==', carreraSeleccionada))
+                const anunciosSeleccionados = query(querySnapshot, where('carrera', 'array-contains', carreraSeleccionada))
                 await getDocs(anunciosSeleccionados)
                     .then((resp) => {
                         setOfertasLaborales(resp.docs.map((doc) => {

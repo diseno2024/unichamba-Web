@@ -22,22 +22,29 @@ const studentsPublications = () => {
   const [trabajoSeleccionado, setTrabajoSeleccionado] = useState(null)
 
   const fetchData = async () => {
+    console.log(trabajoSeleccionado, carreraSeleccionada)
+    let seleccionados = null
     try {
-      const studentsSnapshot = await getDocs(collection(db, 'estudiantes'));
-      const estudiantes = studentsSnapshot.docs.map(doc => doc.data());
+      /* De momento solo funciona el filtro de carreras el de trabjos falta arreglarlo */
+      const studentsSnapshot = collection(db, 'estudiantes');
       if ((carreraSeleccionada != null) && (trabajoSeleccionado != null)) {
-        setdataStd(query(estudiantes, where('carrera', '==', carreraSeleccionada), where(`${trabajo}.${trabajoSeleccionado}`, '==', true)));
+        seleccionados = query(studentsSnapshot, where('carrera', '==', carreraSeleccionada), where('trabajos', 'array-contains', { nombre: trabajoSeleccionado }));
       } else if (carreraSeleccionada != null) {
-        setdataStd(query(estudiantes, where('carrera', '==', carreraSeleccionada)));
-        console.log(carreraSeleccionada)
+        seleccionados = query(studentsSnapshot, where('carrera', '==', carreraSeleccionada));
       } else if (trabajoSeleccionado != null) {
-        setdataStd(query(estudiantes, where(`${trabajo}.${trabajoSeleccionado}`, '==', true)));
-        console.log(trabajoSeleccionado)
+        /* En el where lleva array-contains ya que los trabajos son un array, y la tercera parte del where es porque dentro del array hay maps*/
+        seleccionados = query(studentsSnapshot, where('trabajos', 'array-contains', { nombre: trabajoSeleccionado }));
       } else {
-        setdataStd(estudiantes);
-        console.log(carreraSeleccionada, ' ', trabajoSeleccionado)
+        seleccionados = studentsSnapshot
       }
-
+      /* Cambie la manera de obtener los datos para poder obtener el id. También la anterior forma me daba problemas */
+      await getDocs(seleccionados)
+        .then((resp) => {
+          setdataStd(resp.docs.map((doc) => {
+            return { ...doc.data(), id: doc.id}
+          }))
+        })
+      console.log(dataStd)
     } catch (error) {
       console.error("Error fetching documents: ", error);
     }
@@ -46,6 +53,7 @@ const studentsPublications = () => {
   }
 
   useEffect(() => {
+    setdataStd([])
     fetchData();
     return () => {
       fetchData();
