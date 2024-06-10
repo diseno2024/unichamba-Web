@@ -21,6 +21,9 @@ const studentsPublications = () => {
   const [carreraSeleccionada, setCarreraSeleccionada] = useState(null)
   const [trabajoSeleccionado, setTrabajoSeleccionado] = useState(null)
 
+  const [carreraSeleccionadaNav, setCarreraSeleccionadaNav] = useState(null);
+  const [trabajoSeleccionadoNav, setTrabajoSeleccionadoNav] = useState(null);
+
   const fetchData = async () => {
     console.log(trabajoSeleccionado, carreraSeleccionada)
     let seleccionados = null
@@ -37,6 +40,16 @@ const studentsPublications = () => {
       } else {
         seleccionados = studentsSnapshot
       }
+
+      if (carreraSeleccionadaNav) {
+        seleccionados = query(seleccionados, where("carrera", "==", carreraSeleccionadaNav));
+      }
+      
+      if (trabajoSeleccionadoNav!=null) {
+        seleccionados = query(studentsSnapshot, where('trabajos', 'array-contains', { icono: trabajoSeleccionado }));
+      }
+
+      
       /* Cambie la manera de obtener los datos para poder obtener el id. También la anterior forma me daba problemas */
       await getDocs(seleccionados)
         .then((resp) => {
@@ -58,12 +71,14 @@ const studentsPublications = () => {
     return () => {
       fetchData();
     }
-  }, [carreraSeleccionada, trabajoSeleccionado])
+  }, [carreraSeleccionada, trabajoSeleccionado, carreraSeleccionadaNav, trabajoSeleccionadoNav])
 
   return (
     <>
       <header>
-        <Navbar />
+        <Navbar  setCarreraSeleccionadaNav={setCarreraSeleccionadaNav}
+          setTrabajoSeleccionadoNav={setTrabajoSeleccionadoNav}
+/>
       </header>
 
       <main className=" w-[95%] mx-auto mt-28 flex">
@@ -86,10 +101,13 @@ const studentsPublications = () => {
           </NavLink>
         </div>
         <section className="grid grid-cols-2 mx-auto gap-4">
-          {mostrarTarjetas &&
-            dataStd.map((student) => (
+          {dataStd.length > 0 ? (
+            dataStd.map(student => (
               <TarjetaPublicacion listStudent={student} key={student.id} />
-            ))}
+            ))
+          ) : (
+            <p>No hay resultados para los filtros seleccionados.</p>
+          )}
         </section>
 
       </main>

@@ -17,7 +17,8 @@ const OrdenarTrabajos = ({ onSelect }) => {
         const trabajosSnapshot = await getDocs(trabajosCollection);
         const trabajosList = trabajosSnapshot.docs.map(doc => ({
           id: doc.id,
-          trabajo: doc.data().nombre
+          trabajo: doc.data().nombre,
+          icono: doc.data().icono // Incluir el campo icono
         }));
         
         // Ordenar los trabajos alfabéticamente por su nombre
@@ -35,7 +36,9 @@ const OrdenarTrabajos = ({ onSelect }) => {
   const handleSelectChange = (event) => {
     const trabajoSeleccionado = event.target.value;
     setSelectedTrabajo(trabajoSeleccionado);
-    onSelect(trabajoSeleccionado);
+    const trabajo = trabajos.find(t => t.trabajo === trabajoSeleccionado);
+    console.log(trabajo.icono);
+    onSelect(trabajo.icono); // Pasar el icono en lugar del nombre del trabajo
     setIsOpen(false);
   };
 
@@ -49,7 +52,7 @@ const OrdenarTrabajos = ({ onSelect }) => {
         required
       >
         <option value="" className="text-orange">Seleccione un trabajo</option>
-        {trabajos.map(({ trabajo, id }) => (
+        {trabajos.map(({ trabajo, id, icono }) => (
           <option value={trabajo} key={id}>
             {trabajo}
           </option>
