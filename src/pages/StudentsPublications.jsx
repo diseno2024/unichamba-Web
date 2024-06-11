@@ -41,20 +41,18 @@ const StudentsPublications = () => {
     try {
       let q = collection(db, "estudiantes");
 
-      let seleccionados = null;
-      if ((carreraSeleccionada != null) && (trabajoSeleccionado != null)) {
-        seleccionados = query(q, where('carrera', '==', carreraSeleccionada), where('trabajos', 'array-contains', { nombre: trabajoSeleccionado }));
-      } else if (carreraSeleccionada != null) {
-        seleccionados = query(q, where('carrera', '==', carreraSeleccionada));
-      } else if (trabajoSeleccionado != null) {
-        seleccionados = query(q, where('trabajos', 'array-contains', { nombre: trabajoSeleccionado }));
-      } else {
-        seleccionados = q;
+      if (carreraSeleccionada) {
+        q = query(q, where('carrera', '==', carreraSeleccionada));
       }
 
-      const seleccionadosSnapshot = await getDocs(seleccionados);
-      const estudiantesSeleccionados = seleccionadosSnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
+      const studentsSnapshot = await getDocs(q);
+      let estudiantesSeleccionados = studentsSnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
 
+      if (trabajoSeleccionado) {
+        estudiantesSeleccionados = estudiantesSeleccionados.filter(estudiante =>
+          estudiante.trabajos.some(trabajo => trabajo.nombre === trabajoSeleccionado)
+        );
+      }
       // Actualiza el estado nuevamente con los resultados de la segunda consulta si es necesario
       setDataStd(estudiantesSeleccionados);
 
