@@ -33,9 +33,9 @@ const Navbar = ({ setCarreraSeleccionadaNav, setTrabajoSeleccionadoNav }) => {
             <img src="/LOGO.svg" alt="LOGO UNICHAMBA AZUL" />
           </NavLink>
           <div className="bg-white border-[1px] border-Azul-Fuerte h-[50px] rounded-[15px] w-[750px] flex items-center justify-between px-5">
-            <OrdenarTrabajos onSelect={handleTrabajoChange} />
+            <OrdenarTrabajos onSelect={handleTrabajoChange}></OrdenarTrabajos>
             <span className="h-[88%] border-[1px] border-white/50 ml-2"></span>
-            <CarrerasInicio onSelect={handleCarreraChange} />
+            <CarrerasInicio onSelect={handleCarreraChange}></CarrerasInicio>
           </div>
           <div className="flex w-[200px] items-center justify-center">
             <NavLink to="/studentProfile">

@@ -36,9 +36,18 @@ const OrdenarTrabajos = ({ onSelect }) => {
   const handleSelectChange = (event) => {
     const trabajoSeleccionado = event.target.value;
     setSelectedTrabajo(trabajoSeleccionado);
-    const trabajo = trabajos.find(t => t.trabajo === trabajoSeleccionado);
-    console.log(trabajo.icono);
-    onSelect(trabajo.icono); // Pasar el icono en lugar del nombre del trabajo
+
+    if (trabajoSeleccionado === "") {
+      onSelect(null); // Pasar null para restablecer el filtro
+    } else {
+      const trabajo = trabajos.find(t => t.trabajo === trabajoSeleccionado);
+      if (trabajo && trabajo.icono) {
+        onSelect(trabajo.icono); // Pasar el icono en lugar del nombre del trabajo
+      } else {
+        onSelect(null); // En caso de error, restablecer el filtro
+      }
+    }
+
     setIsOpen(false);
   };
 
