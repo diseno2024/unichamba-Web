@@ -90,7 +90,7 @@ const CreateOffer = () => {
     
       try {
         if (data.carrera == "") {
-          data.carrera = "Aplican todas las carreras";
+          data.carrera = ["Aplican todas las carreras"];
         }
 
         //guarda los datos a la coleccion anuncios
