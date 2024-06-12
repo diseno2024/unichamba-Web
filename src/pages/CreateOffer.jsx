@@ -44,7 +44,7 @@ const CreateOffer = () => {
     if (selectedOptions.length <= 3) {
       setSelectedCarreras(selectedOptions);
     } else {
-      Swal.fire("Límite alcanzado", "Solo puedes seleccionar hasta 3 carreras.", "warning");
+      Swal.fire("Límite alcanzado", "Solo puedes seleccionar hasta 3 carreras ó Puedes dejarlo vacio que hace referencia a que pueden aplicar todas las carreras", "warning");
     }
   };
 
