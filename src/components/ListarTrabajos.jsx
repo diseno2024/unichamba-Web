@@ -53,20 +53,37 @@ const OrdenarTrabajos = ({ onSelect }) => {
 
   return (
     <>
+    {location.pathname === "/inicio" ? 
       <select
-        className="bg-inherit placeholder:text-white placeholder:font-medium w-[400px]"
+        className="bg-inherit text-white font-normal w-[400px] px-5 focus:outline-none"
         onClick={() => setIsOpen((prev) => !prev)}
         onChange={handleSelectChange}
         value={selectedTrabajo}
         required
       >
-        <option value="" className="text-orange">Seleccione un trabajo</option>
+        <option value="" >Seleccione un trabajo</option>
         {trabajos.map(({ trabajo, id, icono }) => (
-          <option value={trabajo} key={id}>
+          <option value={trabajo} key={id} className="bg-Space-cadet">
             {trabajo}
           </option>
         ))}
       </select>
+    :
+      <select
+      className="bg-inherit text-Dark-Blue font-normal w-[400px] px-5 focus:outline-none"
+      onClick={() => setIsOpen((prev) => !prev)}
+      onChange={handleSelectChange}
+      value={selectedTrabajo}
+      required
+    >
+      <option value="" >Seleccione un trabajo</option>
+      {trabajos.map(({ trabajo, id }) => (
+        <option value={trabajo} key={id} className="bg-Space-cadet">
+          {trabajo}
+        </option>
+      ))}
+    </select>
+  }
     </>
   );
 };

@@ -94,9 +94,9 @@ const StudentsPublications = () => {
             />
           </div>
         </section>
-        <div className="ml-2 px-3">
-          <NavLink to="/inicio">
-            <span className="material-symbols-outlined">arrow_back</span>
+        <div className=" ml-2 px-3">
+          <NavLink to='/inicio'>
+            <span class="material-symbols-outlined">arrow_back</span>
           </NavLink>
         </div>
         <section className="grid grid-cols-2 mx-auto gap-4">

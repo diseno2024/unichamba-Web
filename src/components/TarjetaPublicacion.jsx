@@ -5,10 +5,10 @@ import { useLocation } from "react-router-dom";
 const TarjetaPublicacion = ({ listStudent }) => {
   // const { estudiante, localidad, carrera, descripcion, FechaPublicacion } = listStudent;
   const location = useLocation();
-  const {nombre, carrera, acercaDe, trabajos} = listStudent;
+  const {nombre, carrera, acercaDe, trabajos, imageUrl} = listStudent;
 
 // carrera, nombre, acercaDe, trabajos
-console.log(trabajos)
+// console.log(thumbUrl)
   return (
     <>
       {/* foto del estudiante */}
@@ -18,7 +18,9 @@ console.log(trabajos)
           <div className="flex h-max">
 
             {/* imagen */}
-            <div className="w-[180px] h-[200px] bg-foto-estudiante rounded-r-[25px] bg-top bg-cover"></div>
+            <div className="w-[180px] h-[300px] rounded-r-[25px]">
+            <img src={imageUrl} alt="foto-perfil" className="rounded-r-[25px]"/>
+            </div>
 
             {/* informacion del estudiante */}
             <div className=" w-[65%] px-4">
@@ -32,30 +34,32 @@ console.log(trabajos)
 
           {/* trabajos que el estudiante puede realizar */}
           <div className="text-bg-icon flex gap-x-2 justify-end px-5">
-            {trabajos.map( trabajo => <span className="material-symbols-outlined" style={{fontSize:35}} key={trabajo}>{trabajo.icono}</span>)}
+            {trabajos.map( trabajo => <span className="material-symbols-outlined" style={{fontSize:35}} key={trabajo.nombre}>{trabajo.icono}</span>)}
           </div>
   
           </div>
       ) : (
-        <div className="py-4 flex flex-col justify-center border-b-[1px] border-black/30 w-full">
+        <div className="py-4 my-3 flex flex-col justify-center border-b-[1px] border-black/30 w-full h-[300px]">
 
             <div className="flex h-max space-x-5">
 
               {/* imagen */}
-              <div className="w-[170px] h-[200px] bg-foto-estudiante rounded-r-[25px] bg-top bg-cover"></div>
+              <div className="w-[170px] h-[250px] rounded-r-[25px] overflow-y-hidden py-2">
+              <img src={imageUrl} alt="foto-perfil" className="rounded-r-[25px]"/>
+              </div>
 
               {/* informacion del estudiante */}
               <div className=" w-[65%] px-4">
-                <h1 className="text-lg font-normal">{nombre}</h1>
-                <span className="text-sm font-light">{carrera}</span>
-                <p className="py-5 font-normal">{acercaDe}</p>
+                <h1 className="text-xl font-semibold tracking-wide">{nombre}</h1>
+                <span className="text-lg font-light">{carrera}</span>
+                <p className="py-5 font-normal h-[140px] overflow-hidden">{acercaDe}</p>
               </div>
 
             </div>
 
             {/* trabajos que el estudiante puede realizar */}
-            <div className="text-bg-icon flex gap-x-2 justify-end px-5">
-            {trabajos.map( trabajo => <span className="material-symbols-outlined" style={{fontSize:38}} key={trabajo}>{trabajo.icono}</span>)}
+            <div className="text-bg-icon flex gap-x-2 justify-end px-5 pb-4">
+            {trabajos.map( trabajo => <span className="material-symbols-outlined" style={{fontSize:38}} key={trabajo.nombre}>{trabajo.icono}</span>)}
             </div>
           </div>
 

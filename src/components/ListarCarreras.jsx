@@ -41,8 +41,27 @@ const CarrerasInicio = ({ onSelect }) => {
 
   return (
     <>
-      <select
-        className="bg-inherit placeholder:text-white placeholder:font-medium w-[400px]"
+    {location.pathname === "/inicio" ? 
+    
+    <select
+    className="bg-inherit font-normal text-white px-2 w-[400px] focus:outline-none"
+    onClick={() => setIsOpen((prev) => !prev)}
+    onChange={handleSelectChange}
+    value={selectedCarrera}
+    required
+  >
+    <option value="">Seleccione una carrera</option>
+    {carreras.map(({ carrera, id }) => (
+      <option value={carrera} key={id}>
+        {carrera}
+      </option>
+    ))}
+  </select>
+
+  :
+
+  <select
+        className="bg-inherit font-normal text-Dark-Blue px-2 w-[400px] focus:outline-none"
         onClick={() => setIsOpen((prev) => !prev)}
         onChange={handleSelectChange}
         value={selectedCarrera}
@@ -55,6 +74,9 @@ const CarrerasInicio = ({ onSelect }) => {
           </option>
         ))}
       </select>
+  
+  
+  }
       
     </>
   );

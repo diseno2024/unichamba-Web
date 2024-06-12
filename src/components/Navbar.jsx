@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import OrdenarTrabajos from "./ListarTrabajos";
 import CarrerasInicio from "./ListarCarreras";
+import { UserAuth } from "../context/AuthContext";
 
 const Navbar = ({ setCarreraSeleccionadaNav, setTrabajoSeleccionadoNav }) => {
   const location = useLocation();
@@ -14,20 +15,26 @@ const Navbar = ({ setCarreraSeleccionadaNav, setTrabajoSeleccionadoNav }) => {
     setTrabajoSeleccionadoNav(trabajo);
   };
 
+
+  // extraccion del nombre segun el inicio de sesion 
+  // const {user} = UserAuth();
+  // const nombreCompleto = user.displayName;
+  // const recorte = nombreCompleto.split( ' ' );
+  // const nombres = recorte[0] +" "+ recorte[1];
+
+  // console.log(nombres)
   return (
     <>
-      {location.pathname === "/studentProfile" ? (
-        <nav className="h-[90px] flex items-center justify-between px-10 bg-Dark-Blue shadow-md shadow-Gris-claro fixed top-0 w-full z-50">
+      { location.pathname === "/studentProfile" ?
+      
+      <nav className="h-[90px] flex items-center justify-between px-10 bg-Dark-Blue shadow-md shadow-Gris-claro fixed top-0 w-full z-50">
           <NavLink to="/inicio">
             <img src="/LOGO.svg" alt="LOGO UNICHAMBA AZUL" />
           </NavLink>
-          <div className="flex w-[200px] items-center justify-center">
-            <NavLink to="/studentProfile">
-              <h2 className="text-xl font-normal text-white">Usuario</h2>
-            </NavLink>
-          </div>
         </nav>
-      ) : (
+
+        : location.pathname === "/studentsPublications" ?
+
         <nav className="h-[90px] flex items-center justify-between px-10 bg-Dark-Blue shadow-md shadow-Gris-claro fixed top-0 w-full z-50">
           <NavLink to="/inicio">
             <img src="/LOGO.svg" alt="LOGO UNICHAMBA AZUL" />
@@ -39,11 +46,29 @@ const Navbar = ({ setCarreraSeleccionadaNav, setTrabajoSeleccionadoNav }) => {
           </div>
           <div className="flex w-[200px] items-center justify-center">
             <NavLink to="/studentProfile">
-              <h2 className="text-xl font-normal text-white">Usuario</h2>
+            <h2 className="text-xl font-normal text-white">usuario</h2>
             </NavLink>
           </div>
         </nav>
-      )}
+
+        :
+
+        <nav className="h-[90px] flex items-center justify-between px-10 bg-Dark-Blue shadow-md shadow-Gris-claro fixed top-0 w-full z-50">
+          <NavLink to="/inicio">
+            <img src="/LOGO.svg" alt="LOGO UNICHAMBA AZUL" />
+          </NavLink>
+          <div className="bg-white border-[1px] border-Azul-Fuerte h-[50px] rounded-[15px] w-[750px] flex items-center justify-center px-5">
+            {/* <OrdenarTrabajos onSelect={handleTrabajoChange}></OrdenarTrabajos> */}
+            <CarrerasInicio onSelect={handleCarreraChange}></CarrerasInicio>
+          </div>
+          <div className="flex w-[200px] items-center justify-center">
+            <NavLink to="/studentProfile">
+            <h2 className="text-xl font-normal text-white">usuario</h2>
+            </NavLink>
+          </div>
+        </nav>
+    
+      }
     </>
   );
 };
