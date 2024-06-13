@@ -18,7 +18,7 @@ return (
         <Route path='/' element={<Navigate to='/inicio' />}/>
         <Route path='/inicio' element={<Inicio/>} />
         <Route path='/createAccountStd' element={<CreateStudentAccount/>} />
-        <Route path='/detailsOffer' element={<DetailsOffer/>} />
+        <Route path='/anuncios/:idOferta' element={<DetailsOffer/>} />{/*Esto permite crear una pagina distinta para cada anuncio */}
         <Route path='/createOffer' element={<CreateOffer/>} />
         <Route path='studentsPublications' element={<StudentsPublications/>}/>{/** Perfiles de estudiante, vista empleador */}
         <Route path='/studentProfile' element={<StudentProfile/>}/>
