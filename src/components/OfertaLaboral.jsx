@@ -52,29 +52,59 @@ const OfertaLaboral = ({ carreraSeleccionada }) => {
 
     return (
         <>
-            {ofertasLaborales.map((oferta) => (
-                <div key={oferta.title} className={location.pathname === '/OfferExploreStudent' ? 'min-h-[225px] min-w-[200px] py-3 px-5 flex justify-between mb-6 border-b-[1px] border-black/40   hover:bg-Space-cadet/70 cursor-pointer' : ' min-h-[260px] py-3 px-3 flex justify-between mb-3 border-b-2 hover:bg-Malachite/10'}>
-                    <div className='flex items-center gap-7 relative'> {/* Añadir relative aquí */}
-                        <div className='min-h-[170px] min-w-[200px] flex items-center justify-start  '>
-                            <img src={oferta.imagenSmall} style={{ width: '200px', height: '170px' }} alt="imagen oferta" />
-                        </div>
-                        <div className='min-h-[200px] grid justify-items-end '>
-                            <div className="mb-5">
-                                <p className='text-md font-normal pt-3 text-Dark-Blue justify-items-stretch'>
-                                    {oferta.description.length > 110 ? `${oferta.description.slice(0, 110)}...` : oferta.description}
-                                </p>
-                                <p className='text-md font-normal pt-3 text-Dark-Blue '> <strong>Publicado por:</strong>  {oferta.quienPublica}</p>
-                                {/* Mover carrera a la esquina inferior derecha */}
-                            </div>
-                            <div className='absolute bottom-0 right-0 text-md min-w-[10px] text-Dark-Blue font-normal '>
-                                {oferta.carrera.slice(0, 1).map((carrera, index) => (
-                                    <span key={index} className="mx-1"> <strong>{carrera}</strong></span>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
+            {ofertasLaborales.length === 0 ? (
+                <div className="py-3 px-5 text-center text-Dark-Blue text-4xl">
+                    <p>No hay anuncios que mostrar.</p>
                 </div>
-            ))}
+            ) : (
+                ofertasLaborales.map((oferta) => (
+                    location.pathname === '/OfferExploreStudent' ? (
+                        <div key={oferta.title} className='min-h-[235px] min-w-[200px] py-3 px-5 flex justify-between mb-6 border-b-[1px] border-black/40 hover:bg-Malachite/15 cursor-pointer'>
+                            <div className='flex items-center gap-5 relative'>
+                                <div className='min-h-[170px] min-w-[190px] flex items-center justify-start'>
+                                    <img src={oferta.imagenSmall} style={{ width: '183px', height: '170px' }} alt="imagen oferta" />
+                                </div>
+                                <div className='min-h-[195px] grid justify-items-end'>
+                                    <div className="mb-5">
+                                        <p className='text-md font-normal pt-3 text-Dark-Blue justify-items-stretch text-justify'>
+                                            {oferta.description.length > 200 ? `${oferta.description.slice(0, 200)}...` : oferta.description}
+                                        </p>
+                                        <p className='text-md font-normal pt-3 text-Dark-Blue'> <strong>Publicado por:</strong> {oferta.quienPublica}</p>
+                                    </div>
+                                    <div className='absolute bottom-0 right-0 text-md min-w-[10px] text-Dark-Blue font-normal'>
+                                        {oferta.carrera.slice(0, 1).map((carrera, index) => (
+                                            <span key={index} className="mx-1"> <strong>{carrera}</strong></span>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    ) : (
+                        <div key={oferta.title} className='min-h-[300px] py-3 px-3 mt-3 flex justify-between mb-3 border-b-2 hover:bg-Malachite/15'>
+                            <div className='flex items-center gap-3 relative'>
+                                <div className='min-h-[250px] min-w-[190px] grid justify-items-start'>
+                                    <img src={oferta.imagenSmall} style={{ width: '183px', height: '200px' }} alt="imagen oferta" />
+                                </div>
+                                <div className='min-h-[275px] grid justify-items-end'>
+                                    <div className="mb-5">
+                                        <p className='text-md font-normal pt-3 text-Dark-Blue justify-items-stretch text-justify'>
+                                            {oferta.description.length > 200 ? `${oferta.description.slice(0, 200)}...` : oferta.description}
+                                        </p>
+                                        <p className='text-md font-normal pt-3 text-Dark-Blue'> <strong>Publicado por:</strong> {oferta.quienPublica}</p>
+                                    </div>
+                                    <div className='absolute bottom-0 right-0 text-md min-w-[10px] text-Dark-Blue font-normal'>
+                                        {oferta.carrera.slice(0, 1).map((carrera, index) => (
+                                            <span key={index} className="mx-1"> <strong>{carrera}</strong></span>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )
+                ))
+            )}
+
+
 
         </>
     );
