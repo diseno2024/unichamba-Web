@@ -5,9 +5,6 @@ import { db } from '../data/firebase'; // Ajusta esta ruta según la ubicación 
 
 const OfertaLaboral = ({ carrerasSeleccionadas }) => {
     const [ofertasLaborales, setOfertasLaborales] = useState([]);
-    const [carreraUno, setCarreraUno] = useState([])
-    const [carreraDos, setCarreraDos] = useState([])
-    const [carreraTres, setCarreraTres] = useState([])
     const location = useLocation();
 
     // Función para cargar las ofertas laborales desde Firestore
@@ -16,29 +13,17 @@ const OfertaLaboral = ({ carrerasSeleccionadas }) => {
             //Aquí traemos todos los anuncios desde firebase
             const q = collection(db, "anuncios");
             const avisosSnapshot = await getDocs(q);
-            let avisosSeleccionados = avisosSnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
-            
-            if (carrerasSeleccionadas[0]) {//aquí filtrammos los anuncios con la primer carrera 
-                setCarreraUno(avisosSeleccionados.filter(anuncios => anuncios.carrera.includes(carrerasSeleccionadas[0])))
-            }else{//Si la carrera no existe este borra los avisos de esa carrera
-                setCarreraUno([])
-            }
-            if (carrerasSeleccionadas[1]) {
-                setCarreraDos(avisosSeleccionados.filter(anuncios => anuncios.carrera.includes(carrerasSeleccionadas[1])))
-            }else{
-                setCarreraDos([])
-            }
-            if (carrerasSeleccionadas[2]) {
-                setCarreraTres(avisosSeleccionados.filter(anuncios => anuncios.carrera.includes(carrerasSeleccionadas[2])))
-            }else{
-                setCarreraTres([])
-            }
-            if (!carrerasSeleccionadas[0]){//si no hay ninguna carrera seleccionada manda todos los avisos
-                setOfertasLaborales(avisosSeleccionados)
-            }else{//si se seleccionaron carreras se mandan a ofertasLaborales
-                //primero creamos un nuevo arreglo con los avisos de cada carrera, pero filtrando que no hayan avisos repetidos
-                const newArray = Array.from(new Set([...carreraUno, ...carreraDos, ...carreraTres]))
-                setOfertasLaborales(newArray)
+            const avisos = avisosSnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
+
+            if (carrerasSeleccionadas[0]) {
+                //filtramos todos los avisos
+                const avisosFiltrados = avisos.filter(oferta =>
+                    carrerasSeleccionadas.some(carrera => oferta.carrera.includes(carrera))
+                );
+                setOfertasLaborales(avisosFiltrados);
+            } else {
+                // Si no hay carreras seleccionadas, mostrar todos los avisos
+                setOfertasLaborales(avisos);
             }
         
         } catch (error) {

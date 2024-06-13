@@ -32,13 +32,10 @@ const CarrerasFiltro = ({ carrerasSeleccionadas, setCarrerasSeleccionadas}) => {
             const nuevoArray = [...carrerasSeleccionadas]
             //luego se agrega la carrera en el nuevoArray
             nuevoArray[posicion] = carrera
-            setCarrerasSeleccionadas([...nuevoArray])
-            //con estos console.log veo que la carrera esta en nuevoArray pero no en carreras seleccionadas
-            console.log('nuevoArray:',nuevoArray)
-            console.log('carrerasSeleccionadas: ',carrerasSeleccionadas)
+            setCarrerasSeleccionadas(nuevoArray)
             setposicion(posicion + 1)//aumento la posicion
         }
-        if (posicion === 2){//cuando posicion es igual a 2 es cuando ya se seleccionaron 3 carreras y se reinicia
+        if (posicion === 2){//cuando posicion es igual a 2 es cuand o ya se seleccionaron 3 carreras y se reinicia
             setposicion(0)
         }
 
