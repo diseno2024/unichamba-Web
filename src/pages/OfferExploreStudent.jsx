@@ -1,13 +1,15 @@
 import React, { useState } from 'react'
 import Navbar from '../components/Navbar'
 import OfertaLaboral from '../components/OfertaLaboral';
-import CarreraFiltro from '../components/CarreraFiltro'
+import CarrerasFiltro from '../components/CarrerasFiltroOES'
 import { NavLink } from 'react-router-dom'
 
 
 const OfferExploreStudent = () => {
   /* La const esta aquí en lugar de CarreraFiltro para más comodidad */
-  const [carreraSeleccionada, setCarreraSeleccionada] = useState(null)
+  /* Se inicia con 3 nulls para facilitar el ingresar datos en CarrerasFiltroOES */
+  const [carrerasSeleccionadas, setCarrerasSeleccionadas] = useState([null,null,null])
+
   // console.log(names)
   return (
     <>
@@ -20,7 +22,9 @@ const OfferExploreStudent = () => {
           
           <div className=' border-r-2 border-black/20 '>
             {/* Aquí se le manda el carreraSeleccionada y setCarreraSeleccionada para poder modificar y usar la const */}
-            <CarreraFiltro carreraSeleccionada={carreraSeleccionada} setCarreraSeleccionada={setCarreraSeleccionada}/>
+            <CarrerasFiltro 
+              carrerasSeleccionadas={carrerasSeleccionadas} setCarrerasSeleccionadas={setCarrerasSeleccionadas}
+            /> 
           </div>
 
         </div>
@@ -38,7 +42,7 @@ const OfferExploreStudent = () => {
           <NavLink to='/DetailsOffer'>
             <section className=' grid grid-cols-2 gap-3 mr-3'>
               {/* Aquí solo se manda la carreraSelecionada para mostrar ofertas de esa carrera */}
-              <OfertaLaboral carreraSeleccionada={carreraSeleccionada} />
+              <OfertaLaboral carrerasSeleccionadas={carrerasSeleccionadas}/>
             </section>
           </NavLink>
         </div>

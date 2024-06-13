@@ -10,7 +10,6 @@ import { db } from '../data/firebase';
 import { NavLink, useNavigate } from 'react-router-dom';
 import OrdenarTrabajos from '../components/ListarTrabajos';
 import CarrerasInicio from '../components/ListarCarreras';
-import Navbar from '../components/Navbar';
 
 //import Swal from "sweetalert2";
 
@@ -73,6 +72,7 @@ const handleTrabajoChange = (trabajo) => {
       setLogin(true);
 
         if(!cuentaExterna){
+          console.log('cuenta externa gmail ', cuentaExterna)
           if(administradores.includes(user.email)){
             setpermiso(true);
             if(administradores.includes(emailIng)){
@@ -184,7 +184,8 @@ const handleTrabajoChange = (trabajo) => {
         <h1 className='text-white font-medium text-4xl w-[35%] relative left-[100px] text-center'>Te ayudamos a encontrar tu primer empleo</h1>
         
         {/* buscador */}
-        {/* <div className="flex px-10">
+        <div className="flex px-10">
+          {/* inputs */}
           <div className="bg-Space-cadet h-[55px] rounded-[10px] w-[950px] flex items-center justify-between px-5 relative">
             <OrdenarTrabajos onSelect={handleTrabajoChange}></OrdenarTrabajos>
             <span className="h-[86%] border-[1px] border-white/50 ml-2"></span>
@@ -195,7 +196,8 @@ const handleTrabajoChange = (trabajo) => {
               search
             </span>
           </div>
-        </div> */}
+        </div>
+
 
         <img src="/minerva_sola_white.png" alt="minerva" className='w-[180px] h-[230px] absolute top-24 right-8' />
       </header>
@@ -206,7 +208,7 @@ const handleTrabajoChange = (trabajo) => {
 
         <section className='px-5 w-full flex flex-col'>
         {dataStd.map((student) => (
-          <TarjetaPublicacion listStudent={student} key={student.nombre}/>
+          <TarjetaPublicacion listStudent={student} key={student.id}/>
         ))}
         <NavLink to='/studentsPublications' className='mt-14 h-14 w-52 bg-Malachite font-normal text-white rounded-lg flex justify-center items-center text-xl'>Ver más</NavLink>
         </section>
@@ -215,7 +217,7 @@ const handleTrabajoChange = (trabajo) => {
         <span className=' border-[1px] border-black/30 w-[1px] h-auto'></span>
 
         <section className='px-5 w-full flex flex-col pb-8'>
-          <OfertaLaboral/>
+          <OfertaLaboral carrerasSeleccionadas={[]}/>
           <div className='flex justify-end'>
           {/* <OfertaLaboral carreraSeleccionada={null}/>Ahora se necesita el prop carreraSeleccionada */}
           <NavLink to='/OfferExploreStudent' className='mt-12 h-14 w-52 bg-Malachite font-normal text-white rounded-lg flex justify-center items-center text-xl'>Ver más</NavLink>
