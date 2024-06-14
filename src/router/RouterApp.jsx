@@ -21,7 +21,7 @@ return (
         <Route path='/anuncios/:idOferta' element={<DetailsOffer/>} />{/*Esto permite crear una pagina distinta para cada anuncio */}
         <Route path='/createOffer' element={<CreateOffer/>} />
         <Route path='studentsPublications' element={<StudentsPublications/>}/>{/** Perfiles de estudiante, vista empleador */}
-        <Route path='/studentProfile' element={<StudentProfile/>}/>
+        <Route path='/studentProfile' element={ <Secure> <StudentProfile/> </Secure>}/>
         <Route path='/OfferExploreStudent' element={<OfferExploreStudent/>}/> {/** Ofertas del empleo */}
         <Route path='/userAdmin' element={ <Secure> <UserAdmin/> </Secure> }/>
 
