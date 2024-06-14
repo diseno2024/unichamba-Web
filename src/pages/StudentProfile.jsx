@@ -63,7 +63,9 @@ const StudentProfile = () => {
 
     {/* MAIN */}
     <main className=" mb-10 mt-24">
+
       {/* FOTO DE PERFIL Y PORTADA */}
+      <div className="realtive">
 
       <div className=" mt-2 mx-5 bg-portada-perfil bg-cover h-[250px]">
         <NavLink
@@ -76,42 +78,66 @@ const StudentProfile = () => {
               </span>
             </button>
           </NavLink>
-        <div className=" w-[200px] pt-[100px] ml-9 ">
-        <img src={estudiante.imageUrl} alt="" className=" rounded-full border-8"/>
+      </div>
+
+      <div className=" w-[200px]  h-[200px] ml-9 rounded-full overflow-hidden flex items-center absolute top-60 left-5 border-4">
+        <img src={estudiante.imageUrl} alt="" className=" "/>
+      </div>
+
+      <div className="absolute right-6 pt-5">
+        {
+          trabajos && trabajos.map(trabajo => (
+            <span class="material-symbols-outlined text-Dark-Blue text-5xl">
+              {trabajo.icono}
+            </span>
+          ))
+        }
+
         </div>
       </div>
 
       {/* INFORMACION */}
-      <div className=" grid grid-cols-custom gap-1">
-        <div className=" mt-28 ml-2">
-          <h2 className=" text-3xl font-normal flex justify-center">{estudiante.nombre}</h2>
-          <h1 className=" flex justify-center text-2xl text-Blue font-bold">{estudiante.apellido}</h1>
+      <div className="flex justify-between px-5 w-[97%] mx-auto relative mt-[85px]"> 
 
-          <div className=" mt-5">
+        <div className="w-[20%] py-5">
+
+            <h2 className="ml-5 text-3xl font-normal">{estudiante.nombre}</h2>
+            <h1 className="ml-[26px] text-2xl font-normal">{estudiante.apellido}</h1>
+
+          <div className=" mt-5 ">
           <span className=" ml-5 font-normal">Informacion personal</span>
           <ul className=" mt-5 ml-4">
-            <li><span class="material-symbols-outlined">call</span> <span className=" ml-2 font-normal">Telefono fijo</span></li>
-            <p className=" ml-9">{estudiante.telefono}</p>
+            <li className="flex items-center">
+              <span class="material-symbols-outlined">call</span>
+              <span className=" ml-2 font-normal">Telefono fijo</span>
+            </li>
+            <p className=" ml-9 mb-3 font-light">{estudiante.telefono}</p>
 
-            <li><span class="material-symbols-outlined">mail</span> <span className=" ml-2 font-normal">Email</span></li>
-            <p className=" ml-9">{estudiante.email}</p>
+            <li className="flex items-center">
+              <span class="material-symbols-outlined">mail</span>
+              <span className=" ml-2 font-normal">Email</span>
+            </li>
+              <p className=" ml-9 mb-3 font-light">{estudiante.email}</p>
 
-            <li><span class="material-symbols-outlined">apartment</span> <span className=" ml-2 font-normal">Educacion actual</span></li>
-            <p className=" ml-9">{estudiante.carrera}</p>
+            <li>
+              <span class="material-symbols-outlined">apartment</span>
+              <span className=" ml-2 font-normal">Educacion actual</span>
+            </li>
+              <p className=" ml-9 font-light">{estudiante.carrera}</p>
           </ul>
           </div>
         </div>
 
 
-        <div className=" mt-28">
+        <div className="w-[80%]">
           <h3 className=" ml-5 text-2xl font-normal">Acerca de</h3>
-          <div className=" w-[100%] ml-5 font-light">
+          <div className=" w-[100%] ml-5 font-light text-lg">
             <p>{estudiante.acercaDe}</p>
           </div>
           <div className="grid grid-cols-2 mt-10">
             <div className=" ml-5">
-              <h3 className=" text-2xl font-normal">Experiencias de trabajo</h3>
-              <ul className=" font-light">
+              <h3 className=" text-2xl font-normal">Experiencias en trabajos</h3>
+              <ul className=" font-light space-y-1 pt-2 text-lg">
               {
                   trabajos && trabajos.map(trabajo => (
                   <li key={trabajo.id}>{trabajo.nombre}</li>
@@ -121,22 +147,12 @@ const StudentProfile = () => {
             </div>
             <div className=" ml-5">
               <h3 className=" text-2xl font-normal">Curriculum</h3>
-              <label> Suba aqui su Curriculum </label>
-              <input type="file" id="archivo" onChange={validarCV}/>
+              <label className="font-light"> Suba aqui su Curriculum </label>
+              <input type="file" id="archivo" className="px-1" onChange={validarCV}/>
             </div>
           </div>
         </div>
 
-        <div className=" mr-2 mt-3 ml-4">
-        {
-          trabajos && trabajos.map(trabajo => (
-            <span class="material-symbols-outlined text-Blue text-5xl">
-              {trabajo.icono}
-            </span>
-          ))
-        }
-
-        </div>
       </div>
     </main>
     </>

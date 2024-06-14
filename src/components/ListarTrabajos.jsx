@@ -78,7 +78,7 @@ const OrdenarTrabajos = ({ onSelect }) => {
     >
       <option value="" >Seleccione un trabajo</option>
       {trabajos.map(({ trabajo, id }) => (
-        <option value={trabajo} key={id} className="bg-Space-cadet">
+        <option value={trabajo} key={id} className="bg-white">
           {trabajo}
         </option>
       ))}

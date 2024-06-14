@@ -36,10 +36,63 @@ const DetailsOffer = () => {
     return (
         <>
             <header>
-                <Navbar />
+                {/* <Navbar /> */}
+                <nav className="h-[90px] flex items-center justify-between px-10 bg-Dark-Blue shadow-md shadow-Gris-claro fixed top-0 w-full z-50">
+                    <NavLink to="/inicio">
+                        <img src="/LOGO.svg" alt="LOGO UNICHAMBA AZUL" />
+                    </NavLink>
+                </nav>
             </header>
-            <div>
-                {/* <img className='w-full h-[350px] opacity-30' src="/public/portadadetalle.png" alt="" />  */}
+
+            <main className='relative'>
+
+                <section className='mt-[100px] px-20'>
+                    <NavLink to="/OfferExploreStudent">
+                        <img className='px-42 w-[30px] pt-5' src='/public/bx-arrow-back.svg' alt="" />
+                    </NavLink> 
+                    <p className='font-[550] my-7 text-4xl text-blue-900'>Detalles del Trabajo:</p>
+                </section>
+
+                <section className='flex'>
+
+                    <div className='ml-20 mt-5 min-w-[400px] max-w-[700px]'>
+                        <div className='flex items-center'>
+                            <span><img src="/quienpublica.svg" alt="" /></span>
+                            <span className='text-2xl mx-2 font-[420]'>Publicado por: </span> 
+                        </div>
+                        <p className='mx-[29px] my-4 font-light text-lg'>
+                            {oferta.quienPublica}
+                        </p>
+                        <div className='flex items-center'>
+                            <span><img src="/icono-capsule.svg" alt="" /></span>
+                            <span className='text-2xl mx-2 font-[420]'>Descripcion del empleo</span>
+                        </div>
+                        <p className='mx-[29px] my-4 font-light text-lg'>{oferta.description}</p>
+
+                        <div className='flex items-center'>
+                            <span><img src="/carrera.svg" alt="" /></span>
+                            <span className='text-2xl mx-2 font-[420]'>Carreras Afines</span>
+                        </div>
+                        <p className='mx-[29px] my-4 font-light text-lg'>
+                            {oferta.carrera ? oferta.carrera.join(', ') : 'No especificado'}
+                        </p>
+
+                        <div className='px-5 pt-10'>
+                            <NavLink to="/OfferExploreStudent">
+                                <button className='text-white text-xl font-semibold flex items-center bg-Malachite h-[55px] w-[200px] justify-center rounded-[8px]'>Ver más Trabajos</button>
+                            </NavLink>
+                        </div>
+                    </div>
+
+                </section>
+
+                <div className='absolute top-16 right-20'>
+                    <img className='w-[500px] h-[550px]' src={oferta.imagen || "/imagenpredeterminadaempleo.svg"} alt="Imagen de la oferta" /> 
+                </div>
+
+
+            </main>
+            {/* <div>
                 <NavLink to="/OfferExploreStudent">
                     <img className='px-7 w-[90px] mt-10 pt-20' src='/public/bx-arrow-back.svg' alt="" />
                 </NavLink> 
@@ -51,190 +104,39 @@ const DetailsOffer = () => {
                 <div className='ml-20 mt-5 min-w-[400px] max-w-[700px]'>
                     <div className='flex items-center'>
                         <span><img src="/public/quienpublica.svg" alt="" /></span>
-                        <span className='text-2xl mx-2 font-[420]'>Publicado por: </span> {/** Cambia "Metapán-Santa Ana" a {oferta.ubicacion} */}
+                        <span className='text-2xl mx-2 font-[420]'>Publicado por: </span> 
                     </div>
                     <p className='mx-[29px] my-4 font-[300]'>
-                        {oferta.quienPublica} {/** Asegúrate de que "carreras" sea un array en tu documento */}
+                        {oferta.quienPublica}
                     </p>
                     <div className='flex items-center'>
-                        <span><img src="/public/icono-capsule.svg" alt="" /></span>
+                        <span><img src="/icono-capsule.svg" alt="" /></span>
                         <span className='text-2xl mx-2 font-[420]'>Descripcion del empleo</span>
                     </div>
-                    <p className='mx-[29px] my-4 font-[300]'>{oferta.description}</p> {/** Cambia la descripción estática a {oferta.descripcion} */}
+                    <p className='mx-[29px] my-4 font-[300]'>{oferta.description}</p>
 
                     <div className='flex items-center'>
-                        <span><img src="/public/carrera.svg" alt="" /></span>
+                        <span><img src="/carrera.svg" alt="" /></span>
                         <span className='text-2xl mx-2 font-[420]'>Carreras Afines</span>
                     </div>
                     <p className='mx-[29px] my-4 font-[300]'>
-                        {oferta.carrera ? oferta.carrera.join(', ') : 'No especificado'} {/** Asegúrate de que "carreras" sea un array en tu documento */}
+                        {oferta.carrera ? oferta.carrera.join(', ') : 'No especificado'}
                     </p>
 
                     
 
                 </div>
-                <div className='my-5 mx-5'>
-                    {/** Espacio para imagen img */}
-                    <img className='min-w-[450px] max-w-[550px]' src={oferta.imagen || "/public/imagenpredeterminadaempleo.svg"} alt="Imagen de la oferta" /> {/** Cambia la imagen a {oferta.imagen} */}
+                <div className='mx-5 border border-black'>
+                    <img className='min-w-[450px] max-w-[550px]' src={oferta.imagen || "/imagenpredeterminadaempleo.svg"} alt="Imagen de la oferta" /> 
                     <NavLink to="/OfferExploreStudent">
                         <div className='flex justify-center my-4'>
                             <button className='bg-Malachite py-2 font-[400] px-20 rounded-[10px] text-white'>Ver más Trabajos</button>
                         </div>
                     </NavLink>
-                    {/** Espacio para el botón */}
                 </div>
-            </main>
+            </main> */}
         </>
     );
 }
 
 export default DetailsOffer;
-
-
-
-
-
-
-
-
-
-// import React from 'react'
-// import dataPage from '../data/OfferData'
-// import Navbar from '../components/Navbar'
-// import { NavLink, useParams } from 'react-router-dom'
-
-
-
-// const [uno, dos, tres] = dataPage
-
-// const DetailsOffer = () => {
-//     const { idOferta } = useParams(); // Obtenemos el parámetro de la ruta
-
-//     // Aquí podrías usar idOferta para cargar datos específicos de la oferta
-//     console.log('ID de la oferta:', idOferta);
-//     return (
-//         <>
-//             <header>
-//                 <Navbar />
-//             </header>
-//             <div className='bg-black relative '>
-//                 <img className='w-full h-[450px] opacity-30' src="./public/portadadetalle.png" alt="" /> {/**imagen de fondo */}
-//                 <NavLink to="/OfferExploreStudent">
-//                 <img className='absolute top-20 z-50 px-7 pt-7 w-[100px]  h-[70px]' src='./public/arrow-back-blanco.png' alt="" />
-//                 </NavLink> {/**flecha */}
-//                 <div className='absolute top-[160px] z-50 w-[100%] h-[200px] px-[100px] py-6 text-white'>
-//                     <p className='font-[350] my-7 text-4xl'>Detalles del Trabajo:</p>
-//                     <p className='font-[400] my-7 text-6xl'>Auxiliar Contable</p>
-//                 </div>
-//             </div>      
-//             <main className='flex '>
-//                 <div className='ml-20 mt-5 min-w-[400px] max-w-[900px]'>
-//                     <div className='flex items-center'>
-//                         <span> <img src="./public/icono-capsule.svg" alt="" /> </span>
-//                         <span className='text-2xl mx-2 font-[420]'> Descripcion del empleo</span>
-//                     </div>
-//                     <p className='mx-[29px] my-4 font-[300]'>Estamos en busca de un profesional dedicado para asistir en labores contables clave. Esta persona será responsable de mantener la salud financiera de nuestra empresa, asegurando una gestión precisa y diligente de los registros contable.</p>
-
-//                     <div className='flex items-center'>
-//                         <span><img src="./public/icono-capsule.svg" alt="" /> </span>
-//                         <span className='text-2xl mx-2 font-[420]'>Carreras Afines</span>
-//                     </div>
-//                     <p className='mx-[29px] my-4  font-[300]'>
-//                        Lic. Ciencias de la Adminsitracion
-//                     </p>
-
-//                     <div className='flex items-center'>
-//                         <span> <img src="./public/icono-location.svg" alt="" /> </span>
-//                         <span className='mx-2 my-4  font-[420]'>Metapán-Santa Ana</span>
-//                     </div>
-//                 </div>
-//                 <div className='my-5 mx-5'>
-//                     {/**Espacio para imagen img */}
-//                     <img className='min-w-[200px] max-w-[375px]' src="./public/imagenpredeterminadaempleo.svg" alt="" />
-//                     <NavLink to="/OfferExploreStudent">
-//                     <div className='flex justify-center my-4'>
-//                         <button className='bg-Malachite py-2 font-[400] px-20 rounded-[10px] text-white'> Ver más Trabajos</button>
-//                     </div>
-//                     </NavLink>
-//                     {/**Espacio para el boton */}
-//                 </div>
-//             </main>
-//         </>
-//     )
-// }
-
-// export default DetailsOffer
-// import React from 'react'
-// import dataPage from '../data/OfferData'
-// import Navbar from '../components/Navbar'
-// import { NavLink, useParams } from 'react-router-dom'
-
-
-
-// const [uno, dos, tres] = dataPage
-
-// const DetailsOffer = () => {
-//     const { idOferta } = useParams(); // Obtenemos el parámetro de la ruta
-
-//     // Aquí podrías usar idOferta para cargar datos específicos de la oferta
-//     console.log('ID de la oferta:', idOferta);
-
-//     const fetchDetalleOferta =()=>{
-//         const querySnapshot = collection(db, "anuncios");
-//         const OfertaData = querySnapshot.docs.map(doc => doc.data());
-    
-//     }
-
-    
-//     return (
-//         <>
-//             <header>
-//                 <Navbar />
-//             </header>
-//             <div className='bg-black relative '>
-//                 <img className='w-full h-[450px] opacity-30' src="./public/portadadetalle.png" alt="" /> {/**imagen de fondo */}
-//                 <NavLink to="/OfferExploreStudent">
-//                 <img className='absolute top-20 z-50 px-7 pt-7 w-[100px]  h-[70px]' src='./public/arrow-back-blanco.png' alt="" />
-//                 </NavLink> {/**flecha */}
-//                 <div className='absolute top-[160px] z-50 w-[100%] h-[200px] px-[100px] py-6 text-white'>
-//                     <p className='font-[350] my-7 text-4xl'>Detalles del Trabajo:</p>
-//                     <p className='font-[400] my-7 text-6xl'>Auxiliar Contable</p>
-//                 </div>
-//             </div>      
-//             <main className='flex '>
-//                 <div className='ml-20 mt-5 min-w-[400px] max-w-[900px]'>
-//                     <div className='flex items-center'>
-//                         <span> <img src="./public/icono-capsule.svg" alt="" /> </span>
-//                         <span className='text-2xl mx-2 font-[420]'> Descripcion del empleo</span>
-//                     </div>
-//                     <p className='mx-[29px] my-4 font-[300]'>Estamos en busca de un profesional dedicado para asistir en labores contables clave. Esta persona será responsable de mantener la salud financiera de nuestra empresa, asegurando una gestión precisa y diligente de los registros contable.</p>
-
-//                     <div className='flex items-center'>
-//                         <span><img src="./public/icono-capsule.svg" alt="" /> </span>
-//                         <span className='text-2xl mx-2 font-[420]'>Carreras Afines</span>
-//                     </div>
-//                     <p className='mx-[29px] my-4  font-[300]'>
-//                        Lic. Ciencias de la Adminsitracion
-//                     </p>
-
-//                     <div className='flex items-center'>
-//                         <span> <img src="./public/icono-location.svg" alt="" /> </span>
-//                         <span className='mx-2 my-4  font-[420]'>Metapán-Santa Ana</span>
-//                     </div>
-//                 </div>
-//                 <div className='my-5 mx-5'>
-//                     {/**Espacio para imagen img */}
-//                     <img className='min-w-[200px] max-w-[375px]' src="./public/imagenpredeterminadaempleo.svg" alt="" />
-//                     <NavLink to="/OfferExploreStudent">
-//                     <div className='flex justify-center my-4'>
-//                         <button className='bg-Malachite py-2 font-[400] px-20 rounded-[10px] text-white'> Ver más Trabajos</button>
-//                     </div>
-//                     </NavLink>
-//                     {/**Espacio para el boton */}
-//                 </div>
-//             </main>
-//         </>
-//     )
-// }
-
-// export default DetailsOffer

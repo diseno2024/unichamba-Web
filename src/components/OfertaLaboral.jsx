@@ -75,7 +75,7 @@ const OfertaLaboral = ({ carrerasSeleccionadas }) => {
                                 </div>
                                 <div className='min-h-[275px] grid justify-items-end'>
                                     <div className="mb-5">
-                                        <p className='text-md font-normal pt-3 text-Dark-Blue justify-items-stretch text-justify'>
+                                        <p className='text-md font-normal pt-3 text-Dark-Blue justify-items-stretch'>
                                             {oferta.description.length > 200 ? `${oferta.description.slice(0, 200)}...` : oferta.description}
                                         </p>
                                         <p className='text-md font-normal pt-3 text-Dark-Blue'> <strong>Publicado por:</strong> {oferta.quienPublica}</p>

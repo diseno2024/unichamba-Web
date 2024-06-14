@@ -29,6 +29,8 @@ const Inicio = () => {
   const [permisoIng, setpermisoIng] = useState(false);
   const [login, setLogin] = useState(false)
   const [dataStd, setdataStd] = useState([]);
+  const [nombres, setnombres] = useState([]);
+
 //  inicio de sesion
   const handleGoogleSingIn = async() => {
     try {
@@ -63,6 +65,12 @@ const handleTrabajoChange = (trabajo) => {
     const estudiantes = studentsSnapshot.docs.map(doc => doc.data());
     setdataStd(estudiantes);
     student = studentsData; // emails de los estudiantes ya registrados 
+
+    estudiantes.filter( perfil => {
+      if(perfil.email === user.email){
+        setnombres(perfil)
+      }
+    })
 
     // administradores 
     const adminSnapshot = await getDocs(collection(db, 'administradores'));
@@ -167,7 +175,7 @@ const handleTrabajoChange = (trabajo) => {
                 </button> 
 
                 <NavLink to='/studentProfile' className= 'flex items-center'>
-                  <h1 className='text-2xl font-normal text-white mr-3'>Perfil</h1>
+                  <h1 className='text-2xl font-normal text-white mr-3'>{nombres.nombre}</h1>
                   <div className='h-[55px] w-[55px] rounded-full'>
                     <img src={URLphoto} alt="imagen-estudiante"  className='w-full h-full rounded-full'/> 
                   </div>
@@ -181,23 +189,7 @@ const handleTrabajoChange = (trabajo) => {
           </div>
 
         </nav>
-        <h1 className='text-white font-medium text-4xl w-[35%] relative left-[100px] text-center'>Te ayudamos a encontrar tu primer empleo</h1>
-        
-        {/* buscador */}
-        <div className="flex px-10">
-          {/* inputs */}
-          <div className="bg-Space-cadet h-[55px] rounded-[10px] w-[950px] flex items-center justify-between px-5 relative">
-            <OrdenarTrabajos onSelect={handleTrabajoChange}></OrdenarTrabajos>
-            <span className="h-[86%] border-[1px] border-white/50 ml-2"></span>
-            <CarrerasInicio
-              onSelect={handleCarreraChange}
-            ></CarrerasInicio>{" "}
-            <span className="material-symbols-outlined text-white w-[40px] h-[40px] bg-Malachite text-3xl flex items-center justify-center rounded-lg absolute right-2">
-              search
-            </span>
-          </div>
-        </div>
-
+        <h1 className='text-white font-medium text-4xl w-[45%] relative left-[150px] text-center top-16'>Te ayudamos a encontrar tu primer empleo</h1>
 
         <img src="/minerva_sola_white.png" alt="minerva" className='w-[180px] h-[230px] absolute top-24 right-8' />
       </header>

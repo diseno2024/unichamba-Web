@@ -49,10 +49,10 @@ const TarjetaPublicacion = ({ listStudent }) => {
               </div>
 
               {/* informacion del estudiante */}
-              <div className=" w-[65%] px-4">
+              <div className=" w-[65%] px-4 py-5">
                 <h1 className="text-xl font-semibold tracking-wide">{nombre}</h1>
                 <span className="text-lg font-light">{carrera}</span>
-                <p className="py-5 font-normal h-[140px] overflow-hidden text-justify">{acercaDe}</p>
+                <p className="py-5 font-normal h-[140px] overflow-hidden">{acercaDe}</p>
               </div>
 
             </div>
