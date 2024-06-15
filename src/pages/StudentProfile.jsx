@@ -1,34 +1,40 @@
 import Perfiles from "../components/PerfilEstudiante";
 import Navbar from "../components/Navbar";
 import { data } from "../data/ProfileStudentData";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { collection, doc, getDocs} from 'firebase/firestore';
 import { db } from '../data/firebase';
 import { UserAuth } from "../context/AuthContext";
 import TrabajosUserAdmin from "../components/TrabajosUserAdmin";
 
-const {nivelesEducacion, lugaresEducacion, nombre, ciudad, municipio, contacto, email, EducacionActual} = data[0];
-
 // Este es la paginación de Elias  
 
 const StudentProfile = () => {
-  const [estudiante, setEstudiante] = useState([])
+  const location = useLocation();
+  const {idPerfil} = useParams();
+  const [estudiante, setEstudiante] = useState([]);
   const {user} = UserAuth();
-  let student = []
+  let student = [];
   
   const fetchData = async () => {
     const studentsSnapshot = await getDocs(collection(db, 'estudiantes'));
-    const estudiantes = studentsSnapshot.docs.map(doc => doc.data());
+    const estudiantes = studentsSnapshot.docs.map(doc => ({...doc.data(), id: doc.id}));
+    const perfilSeleccionado = estudiantes.find(estudiante => estudiante.id === idPerfil)
     student = estudiantes;
-    student.map(perfil => {
-      if (perfil.email === user.email) {
-        setEstudiante(perfil)
-      }
-    })
+
+    if (location.pathname === "/studentProfile") {
+      student.map(perfil => {
+        if (perfil.email === user.email) {
+          setEstudiante(perfil)
+        }
+      }) 
+    }else{
+      setEstudiante(perfilSeleccionado)
     }
-    const {trabajos} = estudiante
-    console.log(trabajos)
+    }
+    
+    const {trabajos} = estudiante;
 
 
 

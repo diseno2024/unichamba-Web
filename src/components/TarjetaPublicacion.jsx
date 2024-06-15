@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 
 
 
@@ -13,7 +13,7 @@ const TarjetaPublicacion = ({ listStudent }) => {
     <>
       {/* foto del estudiante */}
       {location.pathname === "/studentsPublications" ? (
-        <div className="w-[525px] px-3 h-max py-10 border-b-2 flex flex-col justify-center  hover:bg-Space-cadet/15">
+        <NavLink key={listStudent.id} to={`/studentProfile/${listStudent.id}`} className="w-[525px] px-3 h-max py-10 border-b-2 flex flex-col justify-center  hover:bg-Space-cadet/15">
 
           <div className="flex h-max">
 
@@ -37,10 +37,9 @@ const TarjetaPublicacion = ({ listStudent }) => {
             {trabajos.map( trabajo => <span className="material-symbols-outlined" style={{fontSize:35}} key={trabajo.nombre}>{trabajo.icono}</span>)}
           </div>
   
-          </div>
+          </NavLink>
       ) : (
-        <div className="py-4 my-3 flex flex-col justify-center border-b-[1px] border-black/30 w-full h-[300px]  hover:bg-Space-cadet/15">
-
+        <NavLink key={listStudent.id} to={`/studentProfile/${listStudent.id}`} className="py-4 my-3 flex flex-col justify-center border-b-[1px] border-black/30 w-full h-[300px]  hover:bg-Space-cadet/15">
             <div className="flex h-max space-x-5">
 
               {/* imagen */}
@@ -61,7 +60,7 @@ const TarjetaPublicacion = ({ listStudent }) => {
             <div className="text-bg-icon flex gap-x-2 justify-end px-5 pb-4">
             {trabajos.map( trabajo => <span className="material-symbols-outlined" style={{fontSize:38}} key={trabajo.nombre}>{trabajo.icono}</span>)}
             </div>
-          </div>
+        </NavLink>
 
 
           
