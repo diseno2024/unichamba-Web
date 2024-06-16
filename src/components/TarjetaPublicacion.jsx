@@ -5,7 +5,7 @@ import { NavLink, useLocation } from "react-router-dom";
 const TarjetaPublicacion = ({ listStudent }) => {
   // const { estudiante, localidad, carrera, descripcion, FechaPublicacion } = listStudent;
   const location = useLocation();
-  const {nombre, carrera, acercaDe, trabajos, imageUrl} = listStudent;
+  const {nombre, carrera, acercaDe, trabajos, imageUrl, id} = listStudent;
 
 // carrera, nombre, acercaDe, trabajos
 // console.log(thumbUrl)
@@ -13,7 +13,7 @@ const TarjetaPublicacion = ({ listStudent }) => {
     <>
       {/* foto del estudiante */}
       {location.pathname === "/studentsPublications" ? (
-        <NavLink key={listStudent.id} to={`/studentProfile/${listStudent.id}`} className="w-[525px] px-3 h-max py-10 border-b-2 flex flex-col justify-center  hover:bg-Space-cadet/15">
+        <NavLink key={id} to={`/studentProfile/${id}`} className="w-[525px] px-3 h-max py-10 border-b-2 flex flex-col justify-center  hover:bg-Space-cadet/15">
 
           <div className="flex h-max">
 
@@ -39,7 +39,7 @@ const TarjetaPublicacion = ({ listStudent }) => {
   
           </NavLink>
       ) : (
-        <NavLink key={listStudent.id} to={`/studentProfile/${listStudent.id}`} className="py-4 my-3 flex flex-col justify-center border-b-[1px] border-black/30 w-full h-[300px]  hover:bg-Space-cadet/15">
+        <NavLink key={id} to={`/studentProfile/${id}`} className="py-4 my-3 flex flex-col justify-center border-b-[1px] border-black/30 w-full h-[300px]  hover:bg-Space-cadet/15">
             <div className="flex h-max space-x-5">
 
               {/* imagen */}

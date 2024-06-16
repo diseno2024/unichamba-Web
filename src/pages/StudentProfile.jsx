@@ -1,12 +1,10 @@
-import Perfiles from "../components/PerfilEstudiante";
-import Navbar from "../components/Navbar";
-import { data } from "../data/ProfileStudentData";
 import { NavLink, useLocation, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { collection, doc, getDocs} from 'firebase/firestore';
-import { db } from '../data/firebase';
+import { addDoc, collection, doc, getDocs, updateDoc} from 'firebase/firestore';
+import { db, storage } from '../data/firebase';
 import { UserAuth } from "../context/AuthContext";
-import TrabajosUserAdmin from "../components/TrabajosUserAdmin";
+import Swal from "sweetalert2";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 // Este es la paginación de Elias  
 
@@ -14,7 +12,10 @@ const StudentProfile = () => {
   const location = useLocation();
   const {idPerfil} = useParams();
   const [estudiante, setEstudiante] = useState([]);
+  const [pdf, setPdf] = useState(null)
   const {user} = UserAuth();
+  const initialStateValues = {pdfUrl: ""}
+  const [value, setValue] = useState(initialStateValues)
   let student = [];
   
   const fetchData = async () => {
@@ -33,21 +34,61 @@ const StudentProfile = () => {
       setEstudiante(perfilSeleccionado)
     }
     }
-    
+
     const {trabajos} = estudiante;
 
 
 
-  const validarCV = () => {
+  const handlePDFChange = (e) => {
     let archivo = document.getElementById('archivo');
     let archivoRuta = archivo.value;
     let extPermitidas = /(.pdf)$/i;
 
     if (!extPermitidas.exec(archivoRuta)) {
-      alert('Debes seleccionar un PDF ')
+      Swal.fire({
+        title: "Error",
+        icon: "error",
+        text: "Asegúrate de subir un PDF"
+      })
       archivo.value = '';
       return false
+    } else {
+      setPdf(e.target.files[0])
     }
+  }
+
+  const addOrEdit = async (link) => {
+    try {
+      const docId = estudiante.id;
+
+      const uploadPdf = async (file) => {
+        const pdfRef = ref(storage, `cvPerfil/${docId}/${file.name}`);
+        await uploadBytes(pdfRef, file);
+        const fileUrl = await getDownloadURL(pdfRef);
+        return fileUrl;
+      };
+
+      const url = await uploadPdf(pdf)
+
+      await updateDoc(doc(db, "estudiantes", docId), {pdfUrl: url});
+      let archivo = document.getElementById('archivo');
+      archivo.value = "";
+
+      Swal.fire({
+        title: "PDF agregado",
+        icon: "success",
+        text: "El PDF se agrego correctamente"
+      })
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(value)
+    console.log(pdf)
+    addOrEdit(value)
   }
 
   useEffect(() => {
@@ -63,7 +104,11 @@ const StudentProfile = () => {
     <>
     {/* HEADER */}
     <header>
-      <Navbar/>
+      <nav className="h-[90px] flex items-center justify-between px-10 bg-Dark-Blue shadow-md shadow-Gris-claro fixed top-0 w-full z-50">
+          <NavLink to="/inicio">
+            <img src="/LOGO.svg" alt="LOGO UNICHAMBA AZUL" />
+          </NavLink>
+      </nav>
     </header>
 
 
@@ -153,8 +198,15 @@ const StudentProfile = () => {
             </div>
             <div className=" ml-5">
               <h3 className=" text-2xl font-normal">Curriculum</h3>
-              <label className="font-light"> Suba aqui su Curriculum </label>
-              <input type="file" id="archivo" className="px-1" onChange={validarCV}/>
+              <form onSubmit={handleSubmit}>
+                <label className="font-light"> Suba aqui su Curriculum </label>
+                <input type="file" id="archivo" className="px-1" onChange={handlePDFChange}/>
+                <button className=" bg-Rich-black text-white font-normal p-2 rounded-lg block mt-3">Enviar</button>
+              </form>
+              <div >
+                <a href={estudiante.pdfUrl} target="_blank" className=" font-bold mt-2 block">Curriculum</a>
+              </div>
+              
             </div>
           </div>
         </div>

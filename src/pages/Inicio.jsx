@@ -47,7 +47,7 @@ const Inicio = () => {
   const fetchData = async () => {
     const studentsSnapshot = await getDocs(collection(db, "estudiantes"));
     const studentsData = studentsSnapshot.docs.map((doc) => doc.data().email);
-    const estudiantes = studentsSnapshot.docs.map((doc) => doc.data());
+    const estudiantes = studentsSnapshot.docs.map((doc) => ({...doc.data(), id: doc.id}));
     setdataStd(estudiantes);
     student = studentsData; // emails de los estudiantes ya registrados
 
