@@ -198,15 +198,29 @@ const StudentProfile = () => {
             </div>
             <div className=" ml-5">
               <h3 className=" text-2xl font-normal">Curriculum</h3>
-              <form onSubmit={handleSubmit}>
-                <label className="font-light"> Suba aqui su Curriculum </label>
-                <input type="file" id="archivo" className="px-1" onChange={handlePDFChange}/>
-                <button className=" bg-Rich-black text-white font-normal p-2 rounded-lg block mt-3">Enviar</button>
-              </form>
-              <div >
-                <a href={estudiante.pdfUrl} target="_blank" className=" font-bold mt-2 block">Curriculum</a>
-              </div>
-              
+              {location.pathname === "/studentProfile" ? (
+                    <div>
+                      <form onSubmit={handleSubmit}>
+                        <label className="font-light">Suba aqui su Curriculum</label>
+                        <input type="file" id="archivo" className="px-1" onChange={handlePDFChange} />
+                        <button className="bg-Rich-black text-white font-normal p-2 rounded-lg block mt-3">
+                          Enviar
+                        </button>
+                      </form>
+                      <div>
+                        <a href={estudiante.pdfUrl} target="_blank" className="font-bold mt-2 block">
+                          Curriculum
+                        </a>
+                      </div>
+                    </div>
+                  ) : (
+                    <div>
+                      <a href={estudiante.pdfUrl} target="_blank" className="font-bold mt-2 block">
+                        Curriculum
+                      </a>
+                    </div>
+                  )
+                }
             </div>
           </div>
         </div>
