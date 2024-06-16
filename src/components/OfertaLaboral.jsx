@@ -1,42 +1,46 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from '../data/firebase'; // Ajusta esta ruta según la ubicación de tu archivo de Firebase
 
-const OfertaLaboral = ({ carrerasSeleccionadas }) => {
-    const [ofertasLaborales, setOfertasLaborales] = useState([]);
-    const location = useLocation();
+const OfertaLaboral = ({ carrerasSeleccionadas, carreraSeleccionadaNav }) => {
+  const [ofertasLaborales, setOfertasLaborales] = useState([]);
+  const location = useLocation();
 
-    // Función para cargar las ofertas laborales desde Firestore
-    const fetchOfertasLaborales = async () => {
-        try {
-            //Aquí traemos todos los anuncios desde firebase
-            const q = collection(db, "anuncios");
-            const avisosSnapshot = await getDocs(q);
-            const avisos = avisosSnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
+  // Función para cargar las ofertas laborales desde Firestore
+  const fetchOfertasLaborales = async () => {
+    try {
+      // Aquí traemos todos los anuncios desde Firebase
+      let q = collection(db, "anuncios");
+      const avisosSnapshot = await getDocs(q);
+      let avisos = avisosSnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
 
-            if (carrerasSeleccionadas[0]) {
-                //filtramos todos los avisos
-                const avisosFiltrados = avisos.filter(oferta =>
-                    carrerasSeleccionadas.some(carrera => oferta.carrera.includes(carrera))
-                );
-                setOfertasLaborales(avisosFiltrados);
-            } else {
-                // Si no hay carreras seleccionadas, mostrar todos los avisos
-                setOfertasLaborales(avisos);
-            }
-        
-        } catch (error) {
-            console.error("Error fetching documents: ", error);
-        }
-    };
+      // Filtrar por carrera seleccionada desde el NavBar
+      if (carreraSeleccionadaNav) {
+        q = query(q, where("carrera", "array-contains", carreraSeleccionadaNav));
+        const filteredSnapshot = await getDocs(q);
+        avisos = filteredSnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
+      }
 
-    useEffect(() => {
-        fetchOfertasLaborales();
-        return () => {
-            fetchOfertasLaborales()
-        }
-    }, [carrerasSeleccionadas]);
+      // Filtrar adicionalmente por carreras seleccionadas (si las hay)
+      if (carrerasSeleccionadas[0]) {
+        const avisosFiltrados = avisos.filter(oferta =>
+          carrerasSeleccionadas.some(carrera => oferta.carrera.includes(carrera))
+        );
+        setOfertasLaborales(avisosFiltrados);
+      } else {
+        // Si no hay carreras seleccionadas, mostrar todos los avisos filtrados por carreraNav
+        setOfertasLaborales(avisos);
+      }
+
+    } catch (error) {
+      console.error("Error fetching documents: ", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchOfertasLaborales();
+  }, [carrerasSeleccionadas, carreraSeleccionadaNav]);
 
     return (
         <>
