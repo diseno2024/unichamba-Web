@@ -85,7 +85,21 @@ const CreateStudentAccount = () => {
   };
 
   const handleImageChange = (e) => {
-    setImageFiles(Array.from(e.target.files));
+    const file = e.target.files[0];
+    if (file) {
+      // Validar la extensión del archivo utilizando una expresión regular
+      const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
+      if (!allowedExtensions.test(file.name)) {
+        Swal.fire({
+          icon: "error",
+          title: "Formato no válido",
+          text: "Por favor, sube una imagen en formato png, jpg o jpeg.",
+        });
+        e.target.value = null; // Limpiar el campo de archivo
+      } else {
+        setImageFiles([file]);
+      }
+    }
   };
 
   const handleSubmit = (e) => {
@@ -244,6 +258,7 @@ const CreateStudentAccount = () => {
                   className="rounded-lg border border-black p-3 w-80 mt-4 font-normal"
                   name="imagen"
                   onChange={handleImageChange}
+                  title="Las fotos deben subirse en formato png, jpg, jpeg"
                   required
                 />
                 
@@ -301,6 +316,12 @@ const CreateStudentAccount = () => {
                   required
                   value={values.fechaNacimiento}
                 />
+                <br /><br />
+                <br />
+                <br />
+                <h6 className="text-sm text-gray-500 mt-3 ml-3 font-normal">
+                    La imagen debe estar en formato .png .jpg .jpeg
+                  </h6>
               </div>
 
               {/* imagen svg */}
