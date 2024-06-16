@@ -5,6 +5,8 @@ import { db, storage } from '../data/firebase';
 import { UserAuth } from "../context/AuthContext";
 import Swal from "sweetalert2";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import WhatsAppButton from "../components/WhatsAppButton";
+
 
 // Este es la paginación de Elias  
 
@@ -176,6 +178,7 @@ const StudentProfile = () => {
             </li>
               <p className=" ml-9 font-light">{estudiante.carrera}</p>
           </ul>
+          <WhatsAppButton phoneNumber={estudiante.whatsapp}/>
           </div>
         </div>
 
