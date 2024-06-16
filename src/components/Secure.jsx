@@ -3,6 +3,8 @@ import { UserAuth } from '../context/AuthContext'
 import { useNavigate } from 'react-router-dom';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../data/firebase';
+import Swal from 'sweetalert2';
+
 
 const Secure = ({children}) => {
     const {user} = UserAuth();
@@ -25,9 +27,11 @@ const Secure = ({children}) => {
     
         if(!user){
             navigate('/inicio')
-
-        }else if(!result){
-            navigate('/inicio')
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Debes iniciar sesión!",
+            });
         }
     };
 

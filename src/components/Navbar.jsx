@@ -74,7 +74,7 @@ const Navbar = ({ setCarreraSeleccionadaNav, setTrabajoSeleccionadoNav }) => {
           </div>
           <div className="flex w-[200px] items-center justify-center">
             <NavLink to="/studentProfile">
-            <h2 className="text-xl font-normal text-white">{nombres.nombre}</h2>
+            { !user ? <h2 className="text-xl font-normal text-Dark-Blue">{nombres.nombre}</h2> : <h2 className="text-xl font-normal text-white">{nombres.nombre}</h2>}
             </NavLink>
           </div>
         </nav>
@@ -86,12 +86,11 @@ const Navbar = ({ setCarreraSeleccionadaNav, setTrabajoSeleccionadoNav }) => {
             <img src="/LOGO.svg" alt="LOGO UNICHAMBA AZUL" />
           </NavLink>
           <div className="bg-white border-[1px] border-Azul-Fuerte h-[50px] rounded-[15px] w-[750px] flex items-center justify-center px-5">
-            {/* <OrdenarTrabajos onSelect={handleTrabajoChange}></OrdenarTrabajos> */}
             <CarrerasInicio onSelect={handleCarreraChange}></CarrerasInicio>
           </div>
           <div className="flex w-[200px] items-center justify-center">
             <NavLink to="/studentProfile">
-            <h2 className="text-xl font-normal text-white">{nombres.nombre}</h2>
+            { !user ? <h2 className="text-xl font-normal text-Dark-Blue">{nombres.nombre}</h2> : <h2 className="text-xl font-normal text-white">{nombres.nombre}</h2>}
             </NavLink>
           </div>
         </nav>

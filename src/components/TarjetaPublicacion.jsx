@@ -26,7 +26,7 @@ const TarjetaPublicacion = ({ listStudent }) => {
             <div className=" w-[65%] px-4">
               <h1 className="text-lg font-normal px-2">{nombre}</h1>
               <span className="text-sm font-light px-2 text-black/75">{carrera}</span>
-              <p className="py-2 font-normal w-full h-[130px] px-2 overflow-hidden text-justify">{acercaDe}</p>
+              <p className="py-2 font-normal w-full h-[130px] px-2 overflow-hidden">{acercaDe}</p>
               
             </div>
 
