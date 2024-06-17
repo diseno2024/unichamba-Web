@@ -31,6 +31,7 @@ const CreateStudentAccount = () => {
     email: correoElectronico,
     fecRegistro: fechaRegistro,
     imageUrl: "",
+    pdfUrl:""
   };
 
   const isValidDate = (dateString) => {
@@ -48,7 +49,7 @@ const CreateStudentAccount = () => {
   const [values, setValues] = useState(initialStateValues);
   const [imageFiles, setImageFiles] = useState([]); // Estado para manejar el archivo de imagen
   const [trabajosOptions, setTrabajosOptions] = useState([]);
-  
+  const [pdf, setPdf] = useState(null);
 
   useEffect(() => {
     // Función para obtener los trabajos de Firestore
@@ -103,6 +104,23 @@ const CreateStudentAccount = () => {
       }
     }
   };
+
+  const handlePDFChange = (e) => {
+    const archivo = e.target.files[0]; // obtener el archivo seleccionado
+    const extPermitidas = /(.pdf)$/i; // expresión regular para validar la extensión .pdf
+  
+    if (!extPermitidas.exec(archivo.name)) {
+      Swal.fire({
+        title: "Error",
+        icon: "error",
+        text: "Asegúrate de subir el archivo en formato .pdf"
+      });
+      e.target.value = ''; // resetear el valor del input
+      return false;
+    } else {
+      setPdf(archivo); // almacenar el archivo PDF
+    }
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -162,34 +180,42 @@ const CreateStudentAccount = () => {
         const docRef = await addDoc(collection(db, "estudiantes"), {
           ...linkObject,
           imageUrl: "",  // Inicialmente vacío
-          thumbUrl: ""   // Inicialmente vacío
+          thumbUrl: "",  // Inicialmente vacío
+          pdfUrl: ""     // Inicialmente vacío
         });
         const docId = docRef.id;
-  
-        // Subir las imágenes y obtener sus URLs
+    
+        // Función para subir imágenes
         const uploadImage = async (file) => {
           const imageRef = ref(storage, `imagenesPerfil/${docId}/${file.name}`);
           await uploadBytes(imageRef, file);
           const fileUrl = await getDownloadURL(imageRef);
-  
+    
           const resizedImage = await resizeFile(file);
           const thumbRef = ref(storage, `imagenesPerfil/${docId}/thumb_${file.name}`);
           await uploadBytes(thumbRef, resizedImage);
           const resizedImageUrl = await getDownloadURL(thumbRef);
-  
+    
           return { imageUrl: fileUrl, thumbUrl: resizedImageUrl };
         };
-  
+    
+        // Subir las imágenes
         const results = await Promise.all(imageFiles.map(file => uploadImage(file)));
         const imageUrls = results.map(result => result.imageUrl).join(", ");
         const thumbUrls = results.map(result => result.thumbUrl).join(", ");
-  
-        // Actualizar el documento del estudiante con las URLs de las imágenes
+    
+        // Subir el PDF
+        const pdfRef = ref(storage, `curriculumRegistro/${docId}/${pdf.name}`);
+        await uploadBytes(pdfRef, pdf);
+        const pdfUrl = await getDownloadURL(pdfRef);
+    
+        // Actualizar el documento del estudiante con las URLs de las imágenes y del PDF
         await updateDoc(doc(db, "estudiantes", docId), {
           imageUrl: imageUrls,
           thumbUrl: thumbUrls,
+          pdfUrl: pdfUrl,
         });
-  
+    
         Swal.fire({
           icon: "success",
           title: "Registro con éxito",
@@ -201,12 +227,14 @@ const CreateStudentAccount = () => {
         });
         setValues(initialStateValues);
         setImageFiles([]);
+        setPdf(null); // Restablecer el estado del PDF
       } catch (error) {
         console.log(error);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
     };
+    
 
   return (
     <>
@@ -285,6 +313,9 @@ const CreateStudentAccount = () => {
                   title="Las fotos deben subirse en formato png, jpg, jpeg"
                   required
                 />
+                 <h6 className="text-sm text-gray-500 mt-2 ml-1 font-normal">
+                    La imagen debe estar en formato .png .jpg .jpeg
+                  </h6>
                 
               </div>
 
@@ -341,11 +372,27 @@ const CreateStudentAccount = () => {
                   value={values.fechaNacimiento}
                 />
                 <br /><br />
-                <br />
-                <br />
-                <h6 className="text-sm text-gray-500 mt-3 ml-3 font-normal">
-                    La imagen debe estar en formato .png .jpg .jpeg
+                
+                
+                <label htmlFor="imagenCV" className=" font-normal">
+                  Subir Curriculum
+                </label>
+                <br></br>
+
+                <input
+                  type="file"
+                  id="imagenCV"
+                  className="rounded-lg border border-black p-3 w-80 mt-4 font-normal"
+                  name="curriculum"
+                  onChange={handlePDFChange}
+                  title="El archivom debe estar en formato PDF"
+                 required
+              
+                />
+                 <h6 className="text-sm text-gray-500 mt-2 ml-1 font-normal">
+                    El archivo debe estar en formato .pdf
                   </h6>
+               
               </div>
 
               {/* imagen svg */}
