@@ -120,7 +120,7 @@ const StudentProfile = () => {
       {/* FOTO DE PERFIL Y PORTADA */}
       <div className="realtive">
 
-      <div className=" mt-2 mx-5 bg-portada-perfil bg-cover h-[250px]">
+      <div className=" mt-2 mx-5 bg-portada bg-cover h-[290px]">
         <NavLink
             to="/"
             className="h-[50px] w-[80px] px-5 border-[1px]  border-transparent rounded-lg placeholder:text-white focus:outline-none mr-3 flex  text-white"

@@ -47,6 +47,7 @@ const CreateStudentAccount = () => {
   const [values, setValues] = useState(initialStateValues);
   const [imageFiles, setImageFiles] = useState([]); // Estado para manejar el archivo de imagen
   const [trabajosOptions, setTrabajosOptions] = useState([]);
+  
 
   useEffect(() => {
     // Función para obtener los trabajos de Firestore
@@ -118,6 +119,25 @@ const CreateStudentAccount = () => {
 
   const handleCarreraChange = (carrera) => {
     setValues({ ...values, carrera: carrera });
+  };
+
+ 
+    const [isChecked, setIsChecked] = useState(false);
+  
+    const handleCheckboxChange = (e) => {
+      const checked = e.target.checked;
+      setIsChecked(checked);
+      if (checked) {
+        MostrarAyuda();
+      }
+    } 
+  
+  const MostrarAyuda = () => {
+    Swal.fire({
+      icon: "info",
+      title: "Terminos y condiciones",
+      text: "Aceptar nuestros términos y condiciones implica que usted acepta todas las normas y políticas que rigen el uso de nuestro servicio. Esto incluye cómo recopilamos y utilizamos sus datos personales, las reglas sobre el contenido que puede publicar, y sus responsabilidades al utilizar nuestra plataforma. Aceptar estos términos es necesario para garantizar una experiencia segura y justa para todos los usuarios.",
+    });
   };
   const resizeFile = (file) =>
     new Promise((resolve) => {
@@ -327,7 +347,7 @@ const CreateStudentAccount = () => {
               {/* imagen svg */}
               <div className="pl-[150px] absolute right-20 top-16">
                 <img
-                  src="./public/Computer login-rafiki 1.png"
+                  src="/Computer login-rafiki 1.png"
                   alt=""
                   width="400px"
                   height="500px"
@@ -382,13 +402,15 @@ const CreateStudentAccount = () => {
                 <div className="flex my-5">
                   <input
                     type="checkbox"
+                    onChange={handleCheckboxChange}
                     name=""
                     id=""
                     className="mt-3 checked:bg-Blanco-cremoso"
                     required
                   />
                   <h6 className="text-sm text-gray-500 mt-3 ml-3 font-normal">
-                    Acepto los terminos y condiciones de unichamba
+                    <a href="https://website-unichamba.netlify.app/policy">Acepto los terminos y condiciones de unichamba</a>
+                    
                   </h6>
                 </div>
                 <button className="bg-Dark-Blue text-white px-4 py-4 rounded-lg w-80 mr-11 font-normal">

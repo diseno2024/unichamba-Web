@@ -13,6 +13,7 @@ const Navbar = ({ setCarreraSeleccionadaNav, setTrabajoSeleccionadoNav }) => {
   
   const handleCarreraChange = (carrera) => {
     setCarreraSeleccionadaNav(carrera);
+    console.log(carrera)
    
   };
 
@@ -98,6 +99,7 @@ const Navbar = ({ setCarreraSeleccionadaNav, setTrabajoSeleccionadoNav }) => {
         </nav>
 
       }
+      
     </>
   );
 };
