@@ -14,6 +14,8 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import WhatsAppButton from "../components/WhatsAppButton";
 import EditarPerfil from "../components/EditarPerfil";
 import withReactContent from "sweetalert2-react-content";
+import Select from "react-select";
+import makeAnimated from "react-select/animated";
 
 // Este es la paginación de Elias
 
@@ -24,11 +26,15 @@ const StudentProfile = () => {
   const [pdf, setPdf] = useState(null);
   const { user } = UserAuth();
   const initialStateValues = { pdfUrl: "" };
+  const [trabajosOptions, setTrabajosOptions] = useState([])
   const [value, setValue] = useState(initialStateValues);
+  let trabajosInicial = { trabajos: []}
+  const [nuevosTrabajos, setnuevosTrabajos] = useState(trabajosInicial)
   const [image, setImage] = useState(null);
   let student = [];
-  const [showUploadControls, setShowUploadControls] = useState(false);
   const MySwal = withReactContent(Swal);
+  const animatedComponents = makeAnimated();
+
   const fetchData = async () => {
     const studentsSnapshot = await getDocs(collection(db, "estudiantes"));
     const estudiantes = studentsSnapshot.docs.map((doc) => ({
@@ -50,6 +56,19 @@ const StudentProfile = () => {
       setEstudiante(perfilSeleccionado);
     }
   };
+
+  const fetchTrabajos = async () => {
+    const trabajosCollection = collection(db, "trabajos");
+        const trabajosSnapshot = await getDocs(trabajosCollection);
+        const trabajosList = trabajosSnapshot.docs.map(doc => ({
+          value: doc.id,
+          label: doc.data().nombre,
+          icon: doc.data().icono
+        }));
+        trabajosList.sort((a, b) => a.label.localeCompare(b.label));
+        setTrabajosOptions(trabajosList);
+        console.log(trabajosOptions)
+  }
 
   const actualizarFoto = () => {
     MySwal.fire({
@@ -129,6 +148,44 @@ const StudentProfile = () => {
     console.log(pdf);
     addOrEdit(value);
   };
+
+  const handleTrabajosChange = (selectedOptions) => {
+    const trabajos = selectedOptions.map(option => ({
+      icono: option.icon,
+      nombre: option.label
+    }));
+    trabajosInicial = trabajos
+    console.log(trabajosInicial)
+  }
+
+  const trabajosSubmit = async (e) => {
+    await updateDoc(doc(db, "estudiantes", estudiante.id), {trabajos: trabajosInicial})
+    fetchData(  )
+  }
+
+  const editarTrabajos = () => {
+    MySwal.fire({
+      title: "Actualizar trabajos",
+      html: (
+        <div className="flex flex-col space-y-2">
+          {/* Input para seleccionar imagen */}
+          <Select
+            closeMenuOnSelect={false}
+            components={animatedComponents}
+            onChange={handleTrabajosChange}
+            isMulti
+            options={trabajosOptions}
+            required
+            className="rounded-lg border border-black p-3 w-100 h-16  mt-4 font-light"
+          />
+          <button onClick={trabajosSubmit} className=" pt-24 ">Enviar</button>
+        </div>
+      ),
+      showConfirmButton: false,
+      showCancelButton: true,
+    })
+  }
+
   const handleImageChange = async (e) => {
     const selectedImage = e.target.files[0];
 
@@ -162,10 +219,10 @@ const StudentProfile = () => {
       });
     }
   };
-
   
   useEffect(() => {
     fetchData();
+    fetchTrabajos();
   }, [location.pathname, user.email, idPerfil]);
 
   return (
@@ -207,15 +264,16 @@ const StudentProfile = () => {
           </div>
         </div>
         <div className="absolute top-30 left-35">
-          <br /><br /><br />
-           <span
-          className="material-symbols-outlined justify-end opacity-0 hover:opacity-100 top-0 right-0 transition-opacity duration-200"
-          onClick={actualizarFoto}
-        >
-          edit
-        </span>
+          <br />
+          <br />
+          <br />
+          <span
+            className="material-symbols-outlined justify-end opacity-0 hover:opacity-100 top-0 right-0 transition-opacity duration-200"
+            onClick={actualizarFoto}
+          >
+            edit
+          </span>
           {/* Input para seleccionar imagen */}
-          
         </div>
 
         {/* INFORMACION */}
@@ -299,6 +357,14 @@ const StudentProfile = () => {
               <div className=" ml-5">
                 <h3 className=" text-2xl font-normal">
                   Experiencias en trabajos
+                  {location.pathname === "/studentProfile" ? (
+                    <span
+                      className="material-symbols-outlined justify-end opacity-0 hover:opacity-100 top-0 right-0 transition-opacity duration-200"
+                      onClick={editarTrabajos}
+                    >
+                      edit
+                    </span>
+                  ) : null}
                 </h3>
                 <ul className=" font-light space-y-1 pt-2 text-lg">
                   {trabajos &&
@@ -351,7 +417,6 @@ const StudentProfile = () => {
           </div>
         </div>
       </main>
-     
     </>
   );
 };
