@@ -193,15 +193,65 @@ const StudentProfile = () => {
   };
   
 
-  const trabajosSubmit = async (e) => {
-    await updateDoc(doc(db, "estudiantes", estudiante.id), {trabajos: trabajosInicial})
-    fetchData(  )
-  }
+  // Asegúrate de que SweetAlert2 esté cargado en tu proyecto
+// Puedes incluirlo en el HTML de tu proyecto como se mencionó anteriormente
 
-  const carrerasSubmit = async (e) => {
-    await updateDoc(doc(db, "estudiantes", estudiante.id), {carrera: carreraActualizada.carrera})
-    fetchData(  )
-  }
+const trabajosSubmit = async (e) => {
+    e.preventDefault(); // Evitar el comportamiento por defecto del formulario
+
+    try {
+        // Actualiza el documento en Firestore
+        await updateDoc(doc(db, "estudiantes", estudiante.id), { trabajos: trabajosInicial });
+
+        // Llama a fetchData() para actualizar los datos
+        await fetchData();
+
+        // Muestra la alerta de éxito
+        Swal.fire({
+            title: 'Éxito',
+            text: 'Trabajos actualizados con éxito',
+            icon: 'success',
+            confirmButtonText: 'Aceptar'
+        });
+    } catch (error) {
+        // Maneja el error en caso de que la actualización falle
+        Swal.fire({
+            title: 'Error',
+            text: 'Ocurrió un error al actualizar los trabajos',
+            icon: 'error',
+            confirmButtonText: 'Aceptar'
+        });
+    }
+};
+
+
+ const carrerasSubmit = async (e) => {
+    e.preventDefault(); // Evitar el comportamiento por defecto del formulario
+
+    try {
+        // Actualiza el documento en Firestore
+        await updateDoc(doc(db, "estudiantes", estudiante.id), { carrera: carreraActualizada.carrera });
+
+        // Llama a fetchData() para actualizar los datos
+        await fetchData();
+
+        // Muestra la alerta de éxito
+        Swal.fire({
+            title: 'Éxito',
+            text: 'Carrera actualizada con éxito',
+            icon: 'success',
+            confirmButtonText: 'Aceptar'
+        });
+    } catch (error) {
+        // Maneja el error en caso de que la actualización falle
+        Swal.fire({
+            title: 'Error',
+            text: 'Ocurrió un error al actualizar la carrera',
+            icon: 'error',
+            confirmButtonText: 'Aceptar'
+        });
+    }
+};
 
   const editarTrabajos = () => {
     MySwal.fire({
