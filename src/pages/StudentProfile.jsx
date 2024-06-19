@@ -32,7 +32,7 @@ const StudentProfile = () => {
   const [value, setValue] = useState(initialStateValues);
   let trabajosInicial = { trabajos: []}
   let carreraActualizada={}
-  
+  let setCarreraActualizada=null
   const [nuevosTrabajos, setnuevosTrabajos] = useState(trabajosInicial)
   
   
@@ -313,12 +313,13 @@ const trabajosSubmit = async (e) => {
  
 
   const editarCarrera = () => {
-   
+    // Guarda el valor inicial del select antes de abrir el modal
+    const valorInicial = carreraActualizada;
+  
     MySwal.fire({
       title: "Actualizar carrera",
       html: (
         <div className="flex flex-col space-y-2">
-          {/* Input para seleccionar imagen */}
           <Select
             closeMenuOnSelect={false}
             components={animatedComponents}
@@ -326,15 +327,21 @@ const trabajosSubmit = async (e) => {
             isMulti={false}
             options={carrerasList}
             required
-            className="rounded-lg border border-black p-3 w-100 h-16  mt-4 font-light"
-          />
-          <button onClick={carrerasSubmit} className=" pt-24 ">Enviar</button>
+            className="rounded-lg border border-black p-3 w-100 h-16 mt-4 font-light"
+              />
+          <button onClick={carrerasSubmit} className="pt-24">Enviar</button>
         </div>
       ),
       showConfirmButton: false,
       showCancelButton: true,
-    })
+    }).then((result) => {
+      if (result.dismiss === Swal.DismissReason.cancel) {
+        // Si se cancela, restablece el valor del select al inicial
+       carreraActualizada={}
+      }
+    });
   };
+  
   
   useEffect(() => {
     fetchData();
@@ -368,7 +375,7 @@ const trabajosSubmit = async (e) => {
             </NavLink>
           </div>
           <div className=" w-[200px]  h-[200px] ml-9 rounded-full overflow-hidden flex items-center absolute top-60 left-5 border-4">
-            <img src={estudiante.imageUrl} alt="" className=" " />
+            <img src={estudiante.imageUrl} alt="" className=" "  onClick={actualizarFoto}/>
           </div>
 
           <div className="absolute right-6 pt-5">
@@ -380,18 +387,7 @@ const trabajosSubmit = async (e) => {
               ))}
           </div>
         </div>
-        <div className="absolute top-30 left-35">
-          <br />
-          <br />
-          <br />
-          <span
-            className="material-symbols-outlined justify-end opacity-0 hover:opacity-100 top-0 right-0 transition-opacity duration-200"
-            onClick={actualizarFoto}
-          >
-            edit
-          </span>
-          {/* Input para seleccionar imagen */}
-        </div>
+       
 
         {/* INFORMACION */}
         <div className="flex justify-between px-5 w-[97%] mx-auto relative mt-[85px]">
@@ -511,7 +507,7 @@ const trabajosSubmit = async (e) => {
                     </form>
                     <div>
                       <a
-                        href={estudiante.pdfUrl}
+                        href={estudiante.hojadevida}
                         target="_blank"
                         className="font-bold mt-2 block"
                       >

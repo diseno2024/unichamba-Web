@@ -31,7 +31,7 @@ const CreateStudentAccount = () => {
     email: correoElectronico,
     fecRegistro: fechaRegistro,
     imageUrl: "",
-    pdfUrl:""
+    hojadevida:"",
   };
 
   const isValidDate = (dateString) => {
@@ -181,7 +181,7 @@ const CreateStudentAccount = () => {
           ...linkObject,
           imageUrl: "",  // Inicialmente vacío
           thumbUrl: "",  // Inicialmente vacío
-          pdfUrl: ""     // Inicialmente vacío
+          hojadevida: ""     // Inicialmente vacío
         });
         const docId = docRef.id;
     
@@ -205,7 +205,7 @@ const CreateStudentAccount = () => {
         const thumbUrls = results.map(result => result.thumbUrl).join(", ");
     
         // Subir el PDF
-        const pdfRef = ref(storage, `curriculumRegistro/${docId}/${pdf.name}`);
+        const pdfRef = ref(storage, `cvPerfil/${docId}/${pdf.name}`);
         await uploadBytes(pdfRef, pdf);
         const pdfUrl = await getDownloadURL(pdfRef);
     
@@ -213,7 +213,7 @@ const CreateStudentAccount = () => {
         await updateDoc(doc(db, "estudiantes", docId), {
           imageUrl: imageUrls,
           thumbUrl: thumbUrls,
-          pdfUrl: pdfUrl,
+          hojadevida: pdfUrl,
         });
     
         Swal.fire({
