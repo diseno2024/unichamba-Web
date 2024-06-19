@@ -24,10 +24,6 @@ const EditarPerfil = ({ titulo, referencia, estudiante}) => {
       await updateDoc(doc(db, "estudiantes", id), {
         email: dato,
       });
-    } else if (referencia === "carrera") {
-      await updateDoc(doc(db, "estudiantes", id), {
-        carrera: dato,
-      });
     } else if (referencia === "acercaDe") {
       await updateDoc(doc(db, "estudiantes", id), {
         acercaDe: dato,

@@ -17,6 +17,7 @@ import withReactContent from "sweetalert2-react-content";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
 
+
 // Este es la paginación de Elias
 
 const StudentProfile = () => {
@@ -27,13 +28,19 @@ const StudentProfile = () => {
   const { user } = UserAuth();
   const initialStateValues = { pdfUrl: "" };
   const [trabajosOptions, setTrabajosOptions] = useState([])
+ 
   const [value, setValue] = useState(initialStateValues);
   let trabajosInicial = { trabajos: []}
+  let carreraActualizada={}
+  
   const [nuevosTrabajos, setnuevosTrabajos] = useState(trabajosInicial)
+  
+  
   const [image, setImage] = useState(null);
   let student = [];
   const MySwal = withReactContent(Swal);
   const animatedComponents = makeAnimated();
+  const [carrerasList, setCarrerasOptions] = useState([]);
 
   const fetchData = async () => {
     const studentsSnapshot = await getDocs(collection(db, "estudiantes"));
@@ -69,6 +76,24 @@ const StudentProfile = () => {
         setTrabajosOptions(trabajosList);
         console.log(trabajosOptions)
   }
+
+  const fetchCarreras = async () => {
+    try {
+      const carrerasCollection = collection(db, 'carreras');
+      const carrerasSnapshot = await getDocs(carrerasCollection);
+      const carrerasList = carrerasSnapshot.docs.map(doc => ({
+        value: doc.id,
+        label: doc.data().carrera,
+        // Puedes agregar más propiedades según sea necesario
+      }));
+      carrerasList.sort((a, b) => a.label.localeCompare(b.label));
+      setCarrerasOptions(carrerasList);
+      console.log(carrerasList); // Para verificar en la consola
+    } catch (error) {
+      console.error('Error al obtener carreras:', error);
+      // Manejo de errores aquí
+    }
+  };
 
   const actualizarFoto = () => {
     MySwal.fire({
@@ -158,8 +183,23 @@ const StudentProfile = () => {
     console.log(trabajosInicial)
   }
 
+  const handleCarreraChange = (e) => {
+    const carreras = {
+      carrera: e.label
+    };
+    carreraActualizada=carreras
+    
+    console.log(carreraActualizada);
+  };
+  
+
   const trabajosSubmit = async (e) => {
     await updateDoc(doc(db, "estudiantes", estudiante.id), {trabajos: trabajosInicial})
+    fetchData(  )
+  }
+
+  const carrerasSubmit = async (e) => {
+    await updateDoc(doc(db, "estudiantes", estudiante.id), {carrera: carreraActualizada.carrera})
     fetchData(  )
   }
 
@@ -219,10 +259,37 @@ const StudentProfile = () => {
       });
     }
   };
+
+ 
+
+  const editarCarrera = () => {
+   
+    MySwal.fire({
+      title: "Actualizar carrera",
+      html: (
+        <div className="flex flex-col space-y-2">
+          {/* Input para seleccionar imagen */}
+          <Select
+            closeMenuOnSelect={false}
+            components={animatedComponents}
+            onChange={handleCarreraChange}
+            isMulti={false}
+            options={carrerasList}
+            required
+            className="rounded-lg border border-black p-3 w-100 h-16  mt-4 font-light"
+          />
+          <button onClick={carrerasSubmit} className=" pt-24 ">Enviar</button>
+        </div>
+      ),
+      showConfirmButton: false,
+      showCancelButton: true,
+    })
+  };
   
   useEffect(() => {
     fetchData();
     fetchTrabajos();
+    fetchCarreras();
   }, [location.pathname, user.email, idPerfil]);
 
   return (
@@ -328,11 +395,12 @@ const StudentProfile = () => {
                   <span class="material-symbols-outlined">apartment</span>
                   <span className=" ml-2 font-normal">
                     Educacion actual
-                    <EditarPerfil
-                      titulo={"carrera"}
-                      referencia={"carrera"}
-                      estudiante={estudiante}
-                    />
+                    <span
+          className="material-symbols-outlined justify-end opacity-0 hover:opacity-100 top-0 right-0 transition-opacity duration-200"
+          onClick={editarCarrera}
+        >
+          edit
+        </span>
                   </span>
                 </li>
                 <p className=" ml-9 font-light">{estudiante.carrera}</p>
