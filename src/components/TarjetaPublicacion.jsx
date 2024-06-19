@@ -34,7 +34,7 @@ const TarjetaPublicacion = ({ listStudent }) => {
 
           {/* trabajos que el estudiante puede realizar */}
           <div className="text-bg-icon flex gap-x-2 justify-end px-5">
-            {trabajos.map( trabajo => <span className="material-symbols-outlined" style={{fontSize:35}} key={trabajo.nombre}>{trabajo.icono}</span>)}
+            {trabajos && trabajos.map( trabajo => <span className="material-symbols-outlined" style={{fontSize:35}} key={trabajo.nombre}>{trabajo.icono}</span>)}
           </div>
   
           </NavLink>
@@ -58,7 +58,7 @@ const TarjetaPublicacion = ({ listStudent }) => {
 
             {/* trabajos que el estudiante puede realizar */}
             <div className="text-bg-icon flex gap-x-2 justify-end px-5 pb-4">
-            {trabajos.map( trabajo => <span className="material-symbols-outlined" style={{fontSize:38}} key={trabajo.nombre}>{trabajo.icono}</span>)}
+            {trabajos && trabajos.map( trabajo => <span className="material-symbols-outlined" style={{fontSize:38}} key={trabajo.nombre}>{trabajo.icono}</span>)}
             </div>
         </NavLink>
 

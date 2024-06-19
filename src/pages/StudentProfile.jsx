@@ -10,7 +10,7 @@ import {
 import { db, storage } from "../data/firebase";
 import { UserAuth } from "../context/AuthContext";
 import Swal from "sweetalert2";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
 import WhatsAppButton from "../components/WhatsAppButton";
 import EditarPerfil from "../components/EditarPerfil";
 import withReactContent from "sweetalert2-react-content";
@@ -26,11 +26,11 @@ const StudentProfile = () => {
   const [estudiante, setEstudiante] = useState([]);
   const [pdf, setPdf] = useState(null);
   const { user } = UserAuth();
-  const initialStateValues = { pdfUrl: "" };
+  const initialStateValues = { hojadevida: "" };
   const [trabajosOptions, setTrabajosOptions] = useState([])
  
   const [value, setValue] = useState(initialStateValues);
-  let trabajosInicial = { trabajos: []}
+  let trabajosInicial = []
   let carreraActualizada={}
   let setCarreraActualizada=null
   const [nuevosTrabajos, setnuevosTrabajos] = useState(trabajosInicial)
@@ -38,6 +38,7 @@ const StudentProfile = () => {
   
   const [image, setImage] = useState(null);
   let student = [];
+  let nombrePdf = "";
   const MySwal = withReactContent(Swal);
   const animatedComponents = makeAnimated();
   const [carrerasList, setCarrerasOptions] = useState([]);
@@ -74,7 +75,6 @@ const StudentProfile = () => {
         }));
         trabajosList.sort((a, b) => a.label.localeCompare(b.label));
         setTrabajosOptions(trabajosList);
-        console.log(trabajosOptions)
   }
 
   const fetchCarreras = async () => {
@@ -88,7 +88,6 @@ const StudentProfile = () => {
       }));
       carrerasList.sort((a, b) => a.label.localeCompare(b.label));
       setCarrerasOptions(carrerasList);
-      console.log(carrerasList); // Para verificar en la consola
     } catch (error) {
       console.error('Error al obtener carreras:', error);
       // Manejo de errores aquí
@@ -146,6 +145,7 @@ const StudentProfile = () => {
       const docId = estudiante.id;
 
       const uploadPdf = async (file) => {
+        nombrePdf = file.name;
         const pdfRef = ref(storage, `cvPerfil/${docId}/${file.name}`);
         await uploadBytes(pdfRef, file);
         const fileUrl = await getDownloadURL(pdfRef);
@@ -154,7 +154,8 @@ const StudentProfile = () => {
 
       const url = await uploadPdf(pdf);
 
-      await updateDoc(doc(db, "estudiantes", docId), { pdfUrl: url });
+      await updateDoc(doc(db, "estudiantes", docId), { hojadevida: url });
+      await updateDoc(doc(db, "estudiantes", docId), { pdfNombre: nombrePdf });
       document.getElementById("archivo").value = "";
 
       Swal.fire({
@@ -162,6 +163,29 @@ const StudentProfile = () => {
         icon: "success",
         text: "El PDF se agregó correctamente",
       });
+      fetchData();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const deletePdf = async () => {
+    try {
+      const docId = estudiante.id;
+      const docNombre = estudiante.pdfNombre;
+
+      const pdfRef = ref(storage, `cvPerfil/${docId}/${docNombre}`);
+
+      await deleteObject(pdfRef);
+
+      await updateDoc(doc(db, "estudiantes", docId), { hojadevida: "" });
+      await updateDoc(doc(db, "estudiantes", docId), { pdfNombre: "" });
+      Swal.fire({
+        title: "PDF eliminado",
+        icon: "success",
+        text: "El PDF se elimino correctamente",
+      });
+      fetchData();
     } catch (error) {
       console.log(error);
     }
@@ -201,6 +225,7 @@ const trabajosSubmit = async (e) => {
 
     try {
         // Actualiza el documento en Firestore
+        console.log(trabajosInicial)
         await updateDoc(doc(db, "estudiantes", estudiante.id), { trabajos: trabajosInicial });
 
         // Llama a fetchData() para actualizar los datos
@@ -221,6 +246,7 @@ const trabajosSubmit = async (e) => {
             icon: 'error',
             confirmButtonText: 'Aceptar'
         });
+        console.log(first)
     }
 };
 
@@ -256,8 +282,12 @@ const trabajosSubmit = async (e) => {
   const editarTrabajos = () => {
     MySwal.fire({
       title: "Actualizar trabajos",
+      customClass: {
+        container: 'my-custom-modal'
+      },
       html: (
-        <div className="flex flex-col space-y-2">
+        <form onSubmit={trabajosSubmit}>
+          <div className="flex flex-col space-y-24">
           {/* Input para seleccionar imagen */}
           <Select
             closeMenuOnSelect={false}
@@ -268,12 +298,18 @@ const trabajosSubmit = async (e) => {
             required
             className="rounded-lg border border-black p-3 w-100 h-16  mt-4 font-light"
           />
-          <button onClick={trabajosSubmit} className=" pt-24 ">Enviar</button>
+          <button className=" pt-24">Enviar</button>
         </div>
+        </form>
       ),
       showConfirmButton: false,
       showCancelButton: true,
-    })
+    }).then((result) => {
+      if (result.dismiss === Swal.DismissReason.cancel) {
+        // Si se cancela, restablece el valor del select al inicial
+       trabajosInicial= []
+      }
+    });
   }
 
   const handleImageChange = async (e) => {
@@ -318,8 +354,11 @@ const trabajosSubmit = async (e) => {
   
     MySwal.fire({
       title: "Actualizar carrera",
+      customClass: {
+        container: 'my-custom-modal'
+      },
       html: (
-        <div className="flex flex-col space-y-2">
+        <div className="flex flex-col space-y-20">
           <Select
             closeMenuOnSelect={false}
             components={animatedComponents}
@@ -375,7 +414,12 @@ const trabajosSubmit = async (e) => {
             </NavLink>
           </div>
           <div className=" w-[200px]  h-[200px] ml-9 rounded-full overflow-hidden flex items-center absolute top-60 left-5 border-4">
-            <img src={estudiante.imageUrl} alt="" className=" "  onClick={actualizarFoto}/>
+            <img
+              src={estudiante.imageUrl}
+              alt=""
+              className=" "
+              onClick={actualizarFoto}
+            />
           </div>
 
           <div className="absolute right-6 pt-5">
@@ -387,7 +431,6 @@ const trabajosSubmit = async (e) => {
               ))}
           </div>
         </div>
-       
 
         {/* INFORMACION */}
         <div className="flex justify-between px-5 w-[97%] mx-auto relative mt-[85px]">
@@ -442,11 +485,11 @@ const trabajosSubmit = async (e) => {
                   <span className=" ml-2 font-normal">
                     Educacion actual
                     <span
-          className="material-symbols-outlined justify-end opacity-0 hover:opacity-100 top-0 right-0 transition-opacity duration-200"
-          onClick={editarCarrera}
-        >
-          edit
-        </span>
+                      className="material-symbols-outlined justify-end opacity-0 hover:opacity-100 top-0 right-0 transition-opacity duration-200"
+                      onClick={editarCarrera}
+                    >
+                      edit
+                    </span>
                   </span>
                 </li>
                 <p className=" ml-9 font-light">{estudiante.carrera}</p>
@@ -492,9 +535,6 @@ const trabajosSubmit = async (e) => {
                 {location.pathname === "/studentProfile" ? (
                   <div>
                     <form onSubmit={handleSubmit}>
-                      <label className="font-light">
-                        Suba aqui su Curriculum
-                      </label>
                       <input
                         type="file"
                         id="archivo"
@@ -502,28 +542,40 @@ const trabajosSubmit = async (e) => {
                         onChange={handlePDFChange}
                       />
                       <button className="bg-Rich-black text-white font-normal p-2 rounded-lg block mt-3">
-                        Enviar
+                        Subir un archivo nuevo
                       </button>
                     </form>
                     <div>
+                      {estudiante.hojadevida ? (
+                        <>
+                          <a
+                            href={estudiante.hojadevida}
+                            target="_blank"
+                            className="font-bold mt-5 pl-2 block"
+                          >
+                            Ver Curriculum
+                          </a>
+                          <button
+                            className=" bg-red-600 text-white font-normal p-2 rounded-lg block mt-3"
+                            onClick={deletePdf}
+                          >
+                            Eliminar archivo
+                          </button>
+                        </>
+                      ) : null}
+                    </div>
+                  </div>
+                ) : (
+                  <div>
+                    {estudiante.hojadevida ? (
                       <a
                         href={estudiante.hojadevida}
                         target="_blank"
                         className="font-bold mt-2 block"
                       >
-                        Curriculum
+                        Ver Curriculum
                       </a>
-                    </div>
-                  </div>
-                ) : (
-                  <div>
-                    <a
-                      href={estudiante.pdfUrl}
-                      target="_blank"
-                      className="font-bold mt-2 block"
-                    >
-                      Curriculum
-                    </a>
+                    ) : null}
                   </div>
                 )}
               </div>

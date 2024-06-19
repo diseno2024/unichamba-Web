@@ -85,7 +85,7 @@ const EditarPerfil = ({ titulo, referencia, estudiante }) => {
     <>
       {location.pathname === "/studentProfile" ? (
         <span
-          className="material-symbols-outlined justify-end opacity-0 hover:opacity-100 top-0 right-0 transition-opacity duration-200"
+          className="material-symbols-outlined justify-end opacity-45 top-0 right-0"
           onClick={editarNombres}
         >
           edit

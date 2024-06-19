@@ -73,4 +73,7 @@
     font-style: italic;
   }
 
-  
+  .my-custom-modal .swal2-popup {
+    height: 80vh !important; 
+    max-height: none !important;
+  }

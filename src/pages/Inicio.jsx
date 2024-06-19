@@ -139,11 +139,11 @@ const Inicio = () => {
                   </h1>
                   <div className="h-[55px] w-[55px] rounded-full">
                     <img
-                      src={URLphoto}
+                      src={nombres.thumbUrl}
                       alt="imagen-estudiante"
                       className="w-full h-full rounded-full"
-                    />
-                  </div>
+                      style={{objectFit:"cover"}}
+                    /></div>
                 </NavLink>
               </div>
 
@@ -214,92 +214,6 @@ const Inicio = () => {
                 />
               </button>
             }
-            { /* !login ? 
-              <button
-                className="relative text-white font-semibold flex items-center gap-4 bg-Malachite h-[55px] justify-between pl-3 pr-[2px] rounded-[8px]"
-                onClick={handleGoogleSingIn}
-              >
-                Iniciar sesion con Google
-                <img
-                  src="/google 2.svg"
-                  alt="google-icon"
-                  className="bg-white py-[13px] px-[13px] rounded-lg"
-                />
-              </button>
-              : permiso ? 
-              <div className="flex items-center gap-4">
-                <button
-                  className="relative text-white font-semibold flex items-center gap-4 bg-Malachite h-[55px] justify-between px-4 rounded-[8px]"
-                  onClick={handleGoogleSingOut}
-                >
-                  Cerrar Sesión
-                </button>
-
-                <NavLink to="/userAdmin" className="flex items-center">
-                  <h1 className="text-2xl font-normal text-white mr-3">
-                    Admin
-                  </h1>
-                  <div className="h-[55px] w-[55px] rounded-full">
-                    <img
-                      src={URLphoto}
-                      alt="imagen-estudiante"
-                      className="w-full h-full rounded-full"
-                    />
-                  </div>
-                </NavLink>
-              </div>
-              : result && !permisoIng ? 
-              <div>
-                <button
-                  className="relative text-white font-semibold flex items-center gap-4 bg-Malachite h-[55px] justify-between pl-3 pr-[2px] rounded-[8px]"
-                  onClick={handleGoogleSingIn}
-                >
-                  Publicar Oferta
-                  <span className="material-symbols-outlined">work</span>
-                </button>
-
-                <div className="flex items-center gap-4">
-                  <button
-                    className="relative text-white font-semibold flex items-center gap-4 bg-Malachite h-[55px] justify-between px-4 rounded-[8px]"
-                    onClick={handleGoogleSingOut}
-                  >
-                    Cerrar Sesión
-                  </button>
-                </div>
-              </div>
-              : cuentaUes ? 
-              <div className="flex items-center gap-4">
-                <button
-                  className="relative text-white font-semibold flex items-center gap-4 bg-Malachite h-[55px] justify-between px-4 rounded-[8px]"
-                  onClick={handleGoogleSingOut}
-                >
-                  Cerrar Sesión
-                </button>
-
-                <NavLink to="/studentProfile" className="flex items-center">
-                  <h1 className="text-2xl font-normal text-white mr-3">
-                    usuario
-                  </h1>
-                  <div className="h-[55px] w-[55px] rounded-full">
-                    <img
-                      src={URLphoto}
-                      alt="imagen-estudiante"
-                      className="w-full h-full rounded-full"
-                    />
-                  </div>
-                </NavLink>
-              </div>
-              : 
-              
-              <div className="flex space-x-5">
-                <button
-                  className="relative text-white font-semibold flex items-center gap-4 bg-Malachite h-[55px] justify-between px-4 rounded-[8px]"
-                  onClick={handleGoogleSingOut}
-                >
-                  Cerrar Sesión
-                </button>
-              </div>
-            */}
           </div>
         </nav>
         <h1 className="text-white font-medium text-4xl w-[45%] relative left-[150px] text-center top-16">
@@ -316,7 +230,7 @@ const Inicio = () => {
       <main className="h-auto pt-10 w-[95%] mx-auto flex">
         {/* perfiles de estudiantes  */}
 
-        <section className="px-5 w-full flex flex-col">
+        <section className="px-5 w-full flex flex-col pb-8">
           {dataStd.map((student) => (
             <TarjetaPublicacion listStudent={student} key={student.email} />
           ))}
