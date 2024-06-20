@@ -1,4 +1,4 @@
-import { NavLink, useLocation, useParams } from "react-router-dom";
+import { NavLink, Navigate, useLocation, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import {
   addDoc,
@@ -28,7 +28,7 @@ const StudentProfile = () => {
   const { user } = UserAuth();
   const initialpdf = { hojadevida: "" };
   const [trabajosOptions, setTrabajosOptions] = useState([])
-
+  const navigate = useNavigate();
   let nombreActualizado = {};
   let apellidoActualizado = {};
   let telefonoActualizado = {};
@@ -38,7 +38,6 @@ const StudentProfile = () => {
   const [value, setValue] = useState(initialpdf);
   let trabajosInicial = []
   let carreraActualizada={}
-  let setCarreraActualizada=null
   
   const [image, setImage] = useState(null);
   let student = [];
@@ -64,8 +63,11 @@ const StudentProfile = () => {
           setEstudiante(perfil);
         }
       });
+    } else if (perfilSeleccionado.email === user.email){
+      setEstudiante(perfilSeleccionado)
+      navigate("/studentProfile")
     } else {
-      setEstudiante(perfilSeleccionado);
+      setEstudiante(perfilSeleccionado)
     }
   };
 
