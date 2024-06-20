@@ -24,13 +24,11 @@ const OfferExploreStudent = () => {
 
         if (carreraSeleccionadaNav) {
           q = query(q, where("carrera", "array-contains", carreraSeleccionadaNav));
-          console.log("Carrera seleccionada:", carreraSeleccionadaNav);
         }
 
         const avisosSnapshot = await getDocs(q);
         const anuncios = avisosSnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
 
-        console.log("Datos obtenidos de Firestore:", anuncios);
         setDataStd(anuncios);
       } catch (error) {
         console.error("Error fetching documents: ", error);

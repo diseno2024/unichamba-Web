@@ -70,7 +70,6 @@ const Inicio = () => {
           if (administradores.includes(emailIng)) {
             setpermisoIng(true);
           }
-          console.log(permiso);
         } else {
           if (!result) {
             // no es empleado de la use
@@ -197,7 +196,6 @@ const Inicio = () => {
                     onClick={handleGoogleSingOut}
                   >
                     Cerrar Sesión
-                  {console.log("me registre de nuevo")}
               </button>
 
               :

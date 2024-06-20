@@ -17,9 +17,6 @@ const AdministradoresUserAdmin = () => {
       })
   }
 
-  // useEffect(() => {
-  //   return fetchAdministradores
-  // }, [])
 
   useEffect(() => {
     fetchAdministradores();

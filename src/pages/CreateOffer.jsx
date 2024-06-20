@@ -194,7 +194,7 @@ const CreateOffer = () => {
       <section className="h-full">
         <img
           src="./imagenOferta.png"
-          alt="./public/ofertaimagen.png"
+          alt="/ofertaimagen.png"
           className="w-full h-full object-cover rounded-xl"
         />
       </section>
@@ -204,7 +204,7 @@ const CreateOffer = () => {
         <form onSubmit={handleSubmit} className="space-y-2">
           <p className="pt-5 pl-2 font-roboto font-bold text-lg">Crea una oferta
           <span className=" text-xs ml-60 pl-96 ">Para ayuda, haz clic aquí</span>
-           <span class="material-symbols-outlined cursor-pointer" 
+           <span className="material-symbols-outlined cursor-pointer" 
             onClick={MostrarAyuda}>help</span>
        
             </p>
@@ -235,7 +235,6 @@ const CreateOffer = () => {
                         options={carrera.map(({ nombre, id }) => ({ value: id, label: nombre }))}
                         onChange={handleSelectChangeCarreras}
                         value={selectedCarreras}
-                       
                       />
                     </div>
                     <div className="w-full lg:w-2/4 flex items-center">

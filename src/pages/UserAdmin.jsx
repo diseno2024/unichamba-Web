@@ -23,12 +23,6 @@ const UserAdmin = () => {
 
 
     const fullName = user.displayName; 
-    // const expresionRegular = /\\w+/g;
-    // const palabras = fullName.match(expresionRegular);
-    // const palabrasSeparadas = fullName.split(" ");
-
-    // const names = palabrasSeparadas[0] +' ' + palabrasSeparadas[1];
-    // const photo = user.photoURL;
     
 
     return (
@@ -44,7 +38,6 @@ const UserAdmin = () => {
                             <span class="material-symbols-outlined text-[70px]">
                                 person
                             </span>
-                            {/* <img src={photo} alt="" className='w-full h-full rounded-full'/> */}
                         </div>
                         <h1 className='font-roboto font-medium text-2xl pt-[20px] text-center'>PANEL ADMINISTRATIVO</h1>
                     </div>

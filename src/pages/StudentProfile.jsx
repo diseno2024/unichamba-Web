@@ -1,4 +1,4 @@
-import { NavLink, Navigate, useLocation, useNavigate, useParams } from "react-router-dom";
+import { NavLink, useLocation, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import {
   addDoc,
@@ -15,7 +15,6 @@ import WhatsAppButton from "../components/WhatsAppButton";
 import withReactContent from "sweetalert2-react-content";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
-import OrdenarCarreras from "../components/ordenCarreras";
 
 
 // Este es la paginación de Elias
@@ -200,8 +199,6 @@ const StudentProfile = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(value);
-    console.log(pdf);
     addOrEdit(value);
   };
 
@@ -310,7 +307,6 @@ const StudentProfile = () => {
     };
     carreraActualizada=carreras
     
-    console.log(carreraActualizada);
   };
 
   const editarPerfil = () => {
@@ -447,7 +443,6 @@ const StudentProfile = () => {
 
       setImage(null); // Limpiar la imagen seleccionada después de subirla
     } catch (error) {
-      console.error("Error al subir la imagen:", error);
       Swal.fire({
         title: "Error",
         icon: "error",
@@ -521,14 +516,14 @@ const StudentProfile = () => {
 
         {/* INFORMACION */}
         <div className="flex justify-between w-[97%] mx-auto relative mt-[55px]">
-          <div className="w-[20%] py-5 flex flex-col items-center">
+          <div className="w-[20%] py-5 flex flex-col items-center ">
             <h2 className="text-3xl font-normal">{estudiante.nombre}</h2>
             <h1 className="text-2xl font-normal">{estudiante.apellido}</h1>
             <div className="w-full flex justify-center">
               {" "}
               <WhatsAppButton phoneNumber={estudiante.whatsapp} />{" "}
             </div>
-            <div className=" mt-5">
+            <div className=" mt-5 px-10 flex flex-col items-center">
               <span className="font-normal">Informacion personal</span>
               <ul className=" mt-5">
                 <li className="flex items-center">

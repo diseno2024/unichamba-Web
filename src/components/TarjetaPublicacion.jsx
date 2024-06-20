@@ -3,22 +3,21 @@ import { NavLink, useLocation } from "react-router-dom";
 
 
 const TarjetaPublicacion = ({ listStudent }) => {
-  // const { estudiante, localidad, carrera, descripcion, FechaPublicacion } = listStudent;
   const location = useLocation();
   const {nombre, carrera, acercaDe, trabajos, imageUrl, id} = listStudent;
 
-// carrera, nombre, acercaDe, trabajos
-// console.log(thumbUrl)
+  const primerosCinco = trabajos.slice(0, 5);
+
   return (
     <>
       {/* foto del estudiante */}
       {location.pathname === "/studentsPublications" ? (
         <NavLink key={id} to={`/studentProfile/${id}`} className="w-[525px] px-3 h-max py-10 border-b-2 flex flex-col justify-center  hover:bg-Space-cadet/15">
 
-          <div className="flex h-max">
+          <div className="flex h-[250px] ">
 
             {/* imagen */}
-            <div className="w-[180px] h-[300px] rounded-r-[25px]">
+            <div className="w-[180px] max-h-[250px] rounded-r-[25px] overflow-hidden">
             <img src={imageUrl} alt="foto-perfil" className="rounded-r-[25px]"/>
             </div>
 
@@ -33,8 +32,10 @@ const TarjetaPublicacion = ({ listStudent }) => {
           </div>
 
           {/* trabajos que el estudiante puede realizar */}
-          <div className="text-bg-icon flex gap-x-2 justify-end px-5">
-            {trabajos && trabajos.map( trabajo => <span className="material-symbols-outlined" style={{fontSize:35}} key={trabajo.nombre}>{trabajo.icono}</span>)}
+          <div className="text-bg-icon flex gap-x-2 justify-end px-5 ">
+            {primerosCinco.map( trabajo => 
+              <span className="material-symbols-outlined" style={{fontSize:35}} key={trabajo.nombre}>{trabajo.icono}</span>
+            )}
           </div>
   
           </NavLink>
@@ -58,7 +59,9 @@ const TarjetaPublicacion = ({ listStudent }) => {
 
             {/* trabajos que el estudiante puede realizar */}
             <div className="text-bg-icon flex gap-x-2 justify-end px-5 pb-4">
-            {trabajos && trabajos.map( trabajo => <span className="material-symbols-outlined" style={{fontSize:38}} key={trabajo.nombre}>{trabajo.icono}</span>)}
+            {primerosCinco.map( trabajo => 
+              <span className="material-symbols-outlined" style={{fontSize:35}} key={trabajo.nombre}>{trabajo.icono}</span>
+            )}
             </div>
         </NavLink>
 

@@ -46,9 +46,9 @@ const DetailsOffer = () => {
 
             <main className='relative'>
 
-                <section className='mt-[100px] px-20'>
+                <section className='mt-[110px] px-20'>
                     <NavLink to="/OfferExploreStudent">
-                        <img className='px-42 w-[30px] pt-5' src='/public/bx-arrow-back.svg' alt="" />
+                    <span class="material-symbols-outlined">arrow_back</span>
                     </NavLink> 
                     <p className='font-[550] my-7 text-4xl text-blue-900'>Detalles del Trabajo:</p>
                 </section>
@@ -57,20 +57,21 @@ const DetailsOffer = () => {
 
                     <div className='ml-20 mt-5 min-w-[400px] max-w-[700px]'>
                         <div className='flex items-center'>
-                            <span><img src="/quienpublica.svg" alt="" /></span>
+                        <span class="material-symbols-outlined">person</span>
                             <span className='text-2xl mx-2 font-[420]'>Publicado por: </span> 
                         </div>
                         <p className='mx-[29px] my-4 font-light text-lg'>
                             {oferta.quienPublica}
                         </p>
                         <div className='flex items-center'>
-                            <span><img src="/icono-capsule.svg" alt="" /></span>
+                        <span class="material-symbols-outlined">pill</span>
+
                             <span className='text-2xl mx-2 font-[420]'>Descripcion del empleo</span>
                         </div>
                         <p className='mx-[29px] my-4 font-light text-lg'>{oferta.description}</p>
 
                         <div className='flex items-center'>
-                            <span><img src="/carrera.svg" alt="" /></span>
+                        <span class="material-symbols-outlined">school</span>
                             <span className='text-2xl mx-2 font-[420]'>Carreras Afines</span>
                         </div>
                         <p className='mx-[29px] my-4 font-light text-lg'>
@@ -92,49 +93,6 @@ const DetailsOffer = () => {
 
 
             </main>
-            {/* <div>
-                <NavLink to="/OfferExploreStudent">
-                    <img className='px-7 w-[90px] mt-10 pt-20' src='/public/bx-arrow-back.svg' alt="" />
-                </NavLink> 
-                <div className=' px-[100px] py-6 text-blue-900'>
-                    <p className='font-[550] my-7 text-4xl'>Detalles del Trabajo:</p>
-                </div>
-            </div>      
-            <main className='flex'>
-                <div className='ml-20 mt-5 min-w-[400px] max-w-[700px]'>
-                    <div className='flex items-center'>
-                        <span><img src="/public/quienpublica.svg" alt="" /></span>
-                        <span className='text-2xl mx-2 font-[420]'>Publicado por: </span> 
-                    </div>
-                    <p className='mx-[29px] my-4 font-[300]'>
-                        {oferta.quienPublica}
-                    </p>
-                    <div className='flex items-center'>
-                        <span><img src="/icono-capsule.svg" alt="" /></span>
-                        <span className='text-2xl mx-2 font-[420]'>Descripcion del empleo</span>
-                    </div>
-                    <p className='mx-[29px] my-4 font-[300]'>{oferta.description}</p>
-
-                    <div className='flex items-center'>
-                        <span><img src="/carrera.svg" alt="" /></span>
-                        <span className='text-2xl mx-2 font-[420]'>Carreras Afines</span>
-                    </div>
-                    <p className='mx-[29px] my-4 font-[300]'>
-                        {oferta.carrera ? oferta.carrera.join(', ') : 'No especificado'}
-                    </p>
-
-                    
-
-                </div>
-                <div className='mx-5 border border-black'>
-                    <img className='min-w-[450px] max-w-[550px]' src={oferta.imagen || "/imagenpredeterminadaempleo.svg"} alt="Imagen de la oferta" /> 
-                    <NavLink to="/OfferExploreStudent">
-                        <div className='flex justify-center my-4'>
-                            <button className='bg-Malachite py-2 font-[400] px-20 rounded-[10px] text-white'>Ver más Trabajos</button>
-                        </div>
-                    </NavLink>
-                </div>
-            </main> */}
         </>
     );
 }

@@ -16,9 +16,6 @@ const DocNumber = ({ name }) => {
             })
     }
 
-    // useEffect(() => {
-    //     return getDoc
-    // }, [])
     
     useEffect(() => {
         getDoc();

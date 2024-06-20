@@ -123,12 +123,12 @@ const TrabajosUserAdmin = () => {
                         </div>
                         { <div className=" flex justify-center items-center ">
                             <button onClick={ () => modalEliminarTrabajo(trabajo.quienPublica)} className=" bg-black rounded-lg p-1">
-                            <span class="material-symbols-outlined text-3xl text-white">
+                            <span className="material-symbols-outlined text-3xl text-white">
                                 list_alt_add
                             </span>
                             </button>
                             <button onClick={ () => modalEditarTrabajo(trabajo.id)} className=" bg-green-700 rounded-lg p-1 ml-5">
-                            <span class="material-symbols-outlined text-3xl text-white">
+                            <span className="material-symbols-outlined text-3xl text-white">
                                 edit
                             </span>
                             </button>

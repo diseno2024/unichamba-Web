@@ -18,14 +18,8 @@ export const AuthContextProvider = ({children}) => {
     const googleSingOut = async () => {
         const auth = getAuth();
         const responseLogout = await signOut(auth);
-        console.log(responseLogout);
     }
 
-    // const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-    //             if(currentUser != null){
-    //                 setUser(currentUser);
-    //             }
-    // })
 
     useEffect(() => {
         const auth = getAuth();

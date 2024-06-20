@@ -124,7 +124,6 @@ const CreateStudentAccount = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(values); // values
     addOrEditLink(values);
   };
 
