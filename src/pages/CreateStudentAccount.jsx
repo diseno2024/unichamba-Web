@@ -32,6 +32,7 @@ const CreateStudentAccount = () => {
     fecRegistro: fechaRegistro,
     imageUrl: "",
     hojadevida:"",
+    pdfNombre:""
   };
 
   const isValidDate = (dateString) => {
@@ -124,6 +125,7 @@ const CreateStudentAccount = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log(values); // values
     addOrEditLink(values);
   };
 
@@ -174,13 +176,15 @@ const CreateStudentAccount = () => {
     });
     const addOrEditLink = async (linkObject) => {
       setLoading(true);
+      let pdfNombre = ''; // Inicializar la variable pdfNombre
       try {
         // Crear el documento del estudiante en Firestore
         const docRef = await addDoc(collection(db, "estudiantes"), {
           ...linkObject,
           imageUrl: "",  // Inicialmente vacío
           thumbUrl: "",  // Inicialmente vacío
-          hojadevida: ""     // Inicialmente vacío
+          hojadevida: "",    // Inicialmente vacío
+          pdfNombre: ""
         });
         const docId = docRef.id;
     
@@ -204,7 +208,8 @@ const CreateStudentAccount = () => {
         const thumbUrls = results.map(result => result.thumbUrl).join(", ");
     
         // Subir el PDF
-        const pdfRef = ref(storage, `cvPerfil/${docId}/${pdf.name}`);
+        pdfNombre = pdf.name;
+        const pdfRef = ref(storage, `cvPerfil/${docId}/${pdfNombre}`);
         await uploadBytes(pdfRef, pdf);
         const pdfUrl = await getDownloadURL(pdfRef);
     
@@ -213,6 +218,7 @@ const CreateStudentAccount = () => {
           imageUrl: imageUrls,
           thumbUrl: thumbUrls,
           hojadevida: pdfUrl,
+          pdfNombre: pdfNombre
         });
     
         Swal.fire({
