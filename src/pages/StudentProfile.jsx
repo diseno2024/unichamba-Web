@@ -12,7 +12,6 @@ import { UserAuth } from "../context/AuthContext";
 import Swal from "sweetalert2";
 import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
 import WhatsAppButton from "../components/WhatsAppButton";
-import EditarPerfil from "../components/EditarPerfil";
 import withReactContent from "sweetalert2-react-content";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
@@ -30,21 +29,16 @@ const StudentProfile = () => {
   const initialpdf = { hojadevida: "" };
   const [trabajosOptions, setTrabajosOptions] = useState([])
 
-  const valoresIniciales = {
-    nombre: "",
-    apellido: "",
-    telefono: "",
-    whatsapp: "",
-    acercaDe: "",
-  }
+  let nombreActualizado = {};
+  let apellidoActualizado = {};
+  let telefonoActualizado = {};
+  let whatsappActualizado = {};
+  let acercaDeActualizado = {};
 
-  const [valores, setValores] = useState(valoresIniciales)
   const [value, setValue] = useState(initialpdf);
   let trabajosInicial = []
   let carreraActualizada={}
   let setCarreraActualizada=null
-  const [nuevosTrabajos, setnuevosTrabajos] = useState(trabajosInicial)
-  
   
   const [image, setImage] = useState(null);
   let student = [];
@@ -150,6 +144,7 @@ const StudentProfile = () => {
       setPdf(e.target.files[0]);
     }
   };
+
   const addOrEdit = async (link) => {
     try {
       const docId = estudiante.id;
@@ -208,55 +203,104 @@ const StudentProfile = () => {
     addOrEdit(value);
   };
 
+  // CAPTURA LOS INPUTS PARA EDITAR
+  const handleNombreChange = (e) => {
+    const name = {
+      nombre: e.target.value
+    } 
+
+    nombreActualizado = name
+  };
+
+  const handleApellidoChange = (e) => {
+    const lastName = {
+      apellido: e.target.value
+    } 
+
+    apellidoActualizado = lastName
+  };
+
+  const handleTelefonoChange = (e) => {
+    const phone = {
+      telefono: e.target.value
+    } 
+
+    telefonoActualizado = phone
+  };
+
+  const handleWhatsappChange = (e) => {
+    const whats = {
+      whatsapp: e.target.value
+    } 
+
+    whatsappActualizado = whats
+  };
+
+  const handleAcercaDeChange = (e) => {
+    const descripcion = {
+      acercaDe: e.target.value
+    } 
+
+    acercaDeActualizado = descripcion
+  };
+
+  // SUBMIT PARA SUBIR EDICION
   const editSubmit = async (e) => {
     e.preventDefault()
-    if (valoresIniciales.nombre != "") {
-      await updateDoc(doc(db, "estudiantes", estudiante.id), { nombre: valoresIniciales.nombre }); 
+    const isEmpty = (obj) => Object.keys(obj).length === 0;
+
+    if (!isEmpty(nombreActualizado)) {
+      await updateDoc(doc(db, "estudiantes", estudiante.id), { nombre: nombreActualizado.nombre });
+      nombreActualizado = {}
     }
 
-    if (valores.apellido != "") {
-      await updateDoc(doc(db, "estudiantes", estudiante.id), { apellido: valores.apellido }); 
+    if (!isEmpty(apellidoActualizado)) {
+      await updateDoc(doc(db, "estudiantes", estudiante.id), { apellido: apellidoActualizado.apellido }); 
+      apellidoActualizado = {} 
     }
 
-    if (valores.telefono != "") {
-      await updateDoc(doc(db, "estudiantes", estudiante.id), { telefono: valores.telefono }); 
+    if (!isEmpty(telefonoActualizado)) {
+      await updateDoc(doc(db, "estudiantes", estudiante.id), { telefono: telefonoActualizado.telefono }); 
+      telefonoActualizado = {} 
     }
 
-    if (valores.whatsapp != "") {
-      await updateDoc(doc(db, "estudiantes", estudiante.id), { whatsapp: valores.whatsapp }); 
+    if (!isEmpty(whatsappActualizado)) {
+      await updateDoc(doc(db, "estudiantes", estudiante.id), { whatsapp: whatsappActualizado.whatsapp }); 
+      whatsappActualizado = {} 
     }
 
-    if (valores.acercaDe != "") {
-      await updateDoc(doc(db, "estudiantes", estudiante.id), { acercaDe: valores.acercaDe }); 
+    if (!isEmpty(acercaDeActualizado)) {
+      await updateDoc(doc(db, "estudiantes", estudiante.id), { acercaDe: acercaDeActualizado.acercaDe }); 
+      acercaDeActualizado = {} 
     }
+
+    if (!isEmpty(carreraActualizada)) {
+      await updateDoc(doc(db, "estudiantes", estudiante.id), { carrera: carreraActualizada.carrera })
+      carreraActualizada = {} 
+    }
+    
+    if (trabajosInicial.length > 0) {
+      await updateDoc(doc(db, "estudiantes", estudiante.id), { trabajos: trabajosInicial })
+      trabajosInicial = [] 
+    }
+    
+
+    Swal.fire({
+      title: "Edicion exitosa",
+      icon: "success",
+      text: "Los cambios se aplicaron correctamente"
+    })
+    fetchData()
 
   }
-
+  
   const handleTrabajosChange = (selectedOptions) => {
     const trabajos = selectedOptions.map(option => ({
       icono: option.icon,
       nombre: option.label
     }));
     trabajosInicial = trabajos
-    console.log(trabajosInicial)
   }
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    if (name === "fechaNacimiento") {
-      if (!isValidDate(value)) {
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: "Necesitas ser mayor de edad para crear una cuenta, por favor ingresa una fecha correcta",
-        });
-        return;
-      }
-    }
-    setValores({ ...valores, [name]: value });
-  }
-
-  console.log(valores)
 
   const handleCarreraChange = (e) => {
     const carreras = {
@@ -266,71 +310,8 @@ const StudentProfile = () => {
     
     console.log(carreraActualizada);
   };
-  
 
-  // Asegúrate de que SweetAlert2 esté cargado en tu proyecto
-// Puedes incluirlo en el HTML de tu proyecto como se mencionó anteriormente
-
-const trabajosSubmit = async (e) => {
-    e.preventDefault(); // Evitar el comportamiento por defecto del formulario
-
-    try {
-        // Actualiza el documento en Firestore
-        console.log(trabajosInicial)
-        await updateDoc(doc(db, "estudiantes", estudiante.id), { trabajos: trabajosInicial });
-
-        // Llama a fetchData() para actualizar los datos
-        await fetchData();
-
-        // Muestra la alerta de éxito
-        Swal.fire({
-            title: 'Éxito',
-            text: 'Trabajos actualizados con éxito',
-            icon: 'success',
-            confirmButtonText: 'Aceptar'
-        });
-    } catch (error) {
-        // Maneja el error en caso de que la actualización falle
-        Swal.fire({
-            title: 'Error',
-            text: 'Ocurrió un error al actualizar los trabajos',
-            icon: 'error',
-            confirmButtonText: 'Aceptar'
-        });
-        console.log(first)
-    }
-};
-
-
- const carrerasSubmit = async (e) => {
-    e.preventDefault(); // Evitar el comportamiento por defecto del formulario
-
-    try {
-        // Actualiza el documento en Firestore
-        await updateDoc(doc(db, "estudiantes", estudiante.id), { carrera: carreraActualizada.carrera });
-
-        // Llama a fetchData() para actualizar los datos
-        await fetchData();
-
-        // Muestra la alerta de éxito
-        Swal.fire({
-            title: 'Éxito',
-            text: 'Carrera actualizada con éxito',
-            icon: 'success',
-            confirmButtonText: 'Aceptar'
-        });
-    } catch (error) {
-        // Maneja el error en caso de que la actualización falle
-        Swal.fire({
-            title: 'Error',
-            text: 'Ocurrió un error al actualizar la carrera',
-            icon: 'error',
-            confirmButtonText: 'Aceptar'
-        });
-    }
-};
-
-  const editarTrabajos = () => {
+  const editarPerfil = () => {
     MySwal.fire({
       title: "Editar Perfil",
       customClass: {
@@ -349,7 +330,8 @@ const trabajosSubmit = async (e) => {
                 id="nombreInput"
                 className="rounded-lg border border-black font-normal py-4 w-[600px] px-5"
                 name="nombre"
-                onChange={handleInputChange}
+                onChange={handleNombreChange}
+                pattern="^[A-Za-záéíóúÁÉÍÓÚ]+\s[A-Za-záéíóúÁÉÍÓÚ]+$"
               />
 
               <input
@@ -358,7 +340,7 @@ const trabajosSubmit = async (e) => {
                 id="apellidoInput"
                 className="rounded-lg border border-black font-normal py-4 w-[600px] px-5"
                 name="apellido"
-                onChange={handleInputChange}
+                onChange={handleApellidoChange}
                 pattern="^[A-Za-záéíóúÁÉÍÓÚ]+\s[A-Za-záéíóúÁÉÍÓÚ]+$"
               />
 
@@ -369,7 +351,7 @@ const trabajosSubmit = async (e) => {
                 className="rounded-lg border border-black font-normal py-4 w-[600px] px-5"
                 name="telefono"
                 pattern="[0-9]{8}"
-                onChange={handleInputChange}
+                onChange={handleTelefonoChange}
               />
             </div>
 
@@ -380,7 +362,7 @@ const trabajosSubmit = async (e) => {
                 id="whatsappInput"
                 className="rounded-lg border border-black font-normal py-4 w-[600px] px-5"
                 name="whatsapp"
-                onChange={handleInputChange}
+                onChange={handleWhatsappChange}
                 pattern="[0-9]{8}"
               />
 
@@ -414,7 +396,7 @@ const trabajosSubmit = async (e) => {
                 id=""
                 cols="79"
                 rows="4"
-                onChange={handleInputChange}
+                onChange={handleAcercaDeChange}
                 maxLength={500}
                 className="rounded-lg border border-black  mt-4 font-light w-[1250px] py-5 px-3 h-[180px]"
               />
@@ -428,6 +410,12 @@ const trabajosSubmit = async (e) => {
       if (result.dismiss === Swal.DismissReason.cancel) {
         // Si se cancela, restablece el valor del select al inicial
         trabajosInicial = [];
+        nombreActualizado = {};
+        apellidoActualizado = {};
+        telefonoActualizado = {};
+        whatsappActualizado = {};
+        acercaDeActualizado = {};
+        carreraActualizada = {};
       }
     });
   }
@@ -465,41 +453,6 @@ const trabajosSubmit = async (e) => {
       });
     }
   };
-
- 
-
-  const editarCarrera = () => {
-    // Guarda el valor inicial del select antes de abrir el modal
-    const valorInicial = carreraActualizada;
-  
-    MySwal.fire({
-      title: "Actualizar carrera",
-      customClass: {
-        container: 'my-custom-modal'
-      },
-      html: (
-        <div className="flex flex-col space-y-20">
-          <Select
-            closeMenuOnSelect={false}
-            components={animatedComponents}
-            onChange={handleCarreraChange}
-            isMulti={false}
-            options={carrerasList}
-            required
-            className="rounded-lg border border-black p-3 w-100 h-16 mt-4 font-light"
-              />
-          <button onClick={carrerasSubmit} className="pt-24">Enviar</button>
-        </div>
-      ),
-      showConfirmButton: false,
-      showCancelButton: true,
-    }).then((result) => {
-      if (result.dismiss === Swal.DismissReason.cancel) {
-        // Si se cancela, restablece el valor del select al inicial
-        carreraActualizada={}
-      }
-    });
-  };
   
   
   useEffect(() => {
@@ -532,22 +485,27 @@ const trabajosSubmit = async (e) => {
                 <span class="material-symbols-outlined">arrow_back</span>
               </button>
             </NavLink>
-            <button className="mx-4 py-2 px-6 text-Space-cadet rounded-lg font-normal bg-Navbar absolute  bottom-5 right-1" onClick={editarTrabajos}>
+            {location.pathname === "/studentProfile" ? (
+              <button
+                className="mx-4 py-2 px-6 text-Space-cadet rounded-lg font-normal bg-Navbar absolute  bottom-5 right-1"
+                onClick={editarPerfil}
+              >
                 Editar perfil
-            </button>
+              </button>
+            ) : null}
           </div>
           <div className=" w-[200px]  h-[200px] ml-12 rounded-full overflow-hidden flex items-center absolute top-60 left-5 border-4">
-            <img
-              src={estudiante.imageUrl}
-              alt=""
-              className=" "
-              
-            />
-            
+            <img src={estudiante.imageUrl} alt="" className=" " />
           </div>
 
-          <span className="material-symbols-outlined cursor-pointer text-4xl pt-3 absolute left-60 z-50" onClick={actualizarFoto} >add_a_photo</span>
-
+          {location.pathname === "/studentProfile" ? (
+            <span
+              className="material-symbols-outlined cursor-pointer text-4xl pt-3 absolute left-60 z-50"
+              onClick={actualizarFoto}
+            >
+              add_a_photo
+            </span>
+          ) : null}
 
           <div className="absolute right-6 pt-7 flex">
             {trabajos &&
@@ -556,75 +514,36 @@ const trabajosSubmit = async (e) => {
                   {trabajo.icono}
                 </span>
               ))}
-              
-              
           </div>
-
         </div>
 
         {/* INFORMACION */}
-
-
         <div className="flex justify-between w-[97%] mx-auto relative mt-[55px]">
-
           <div className="w-[20%] py-5 flex flex-col items-center">
-            <h2 className="text-3xl font-normal">
-              {estudiante.nombre}
-              {/* <EditarPerfil
-                titulo={"nombre"}
-                referencia={"nombre"}
-                estudiante={estudiante}
-              /> */}
-            </h2>
-            <h1 className="text-2xl font-normal">
-              {estudiante.apellido}
-              {/* <EditarPerfil
-                titulo={"apellido"}
-                referencia={"apellido"}
-                estudiante={estudiante}
-              /> */}
-            </h1>
-            <div className="w-full flex justify-center"> <WhatsAppButton phoneNumber={estudiante.whatsapp} /> </div>
+            <h2 className="text-3xl font-normal">{estudiante.nombre}</h2>
+            <h1 className="text-2xl font-normal">{estudiante.apellido}</h1>
+            <div className="w-full flex justify-center">
+              {" "}
+              <WhatsAppButton phoneNumber={estudiante.whatsapp} />{" "}
+            </div>
             <div className=" mt-5">
               <span className="font-normal">Informacion personal</span>
               <ul className=" mt-5">
                 <li className="flex items-center">
                   <span class="material-symbols-outlined">call</span>
-                  <span className=" ml-2 font-normal">
-                    Telefono fijo
-                    {/* <EditarPerfil
-                      titulo={"telefono"}
-                      referencia={"telefono"}
-                      estudiante={estudiante}
-                    /> */}
-                  </span>
+                  <span className=" ml-2 font-normal">Telefono fijo</span>
                 </li>
                 <p className=" ml-9 mb-3 font-light">{estudiante.telefono}</p>
 
                 <li className="flex items-center">
                   <span class="material-symbols-outlined">mail</span>
-                  <span className=" ml-2 font-normal">
-                    Email
-                    {/* <EditarPerfil
-                      titulo={"email"}
-                      referencia={"email"}
-                      estudiante={estudiante}
-                    /> */}
-                  </span>
+                  <span className=" ml-2 font-normal">Email</span>
                 </li>
                 <p className=" ml-9 mb-3 font-light">{estudiante.email}</p>
 
                 <li>
                   <span class="material-symbols-outlined">apartment</span>
-                  <span className=" ml-2 font-normal">
-                    Educacion actual
-                    <span
-                      className="material-symbols-outlined justify-end opacity-0 hover:opacity-100 top-0 right-0 transition-opacity duration-200"
-                      onClick={editarCarrera}
-                    >
-                      edit
-                    </span>
-                  </span>
+                  <span className=" ml-2 font-normal">Educacion actual</span>
                 </li>
                 <p className=" ml-9 font-light">{estudiante.carrera}</p>
               </ul>
@@ -647,14 +566,6 @@ const trabajosSubmit = async (e) => {
               <div className=" ml-5">
                 <h3 className=" text-2xl font-normal">
                   Experiencias en trabajos
-                  {location.pathname === "/studentProfile" ? (
-                    <span
-                      className="material-symbols-outlined justify-end opacity-0 hover:opacity-100 top-0 right-0 transition-opacity duration-200"
-                      // onClick={editarTrabajos}
-                    >
-                      edit
-                    </span>
-                  ) : null}
                 </h3>
                 <ul className=" font-light space-y-1 pt-2 text-lg">
                   {trabajos &&

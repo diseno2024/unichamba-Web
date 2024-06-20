@@ -7,23 +7,15 @@ import { getStorage } from "firebase/storage";
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
-// const firebaseConfig = {
-//   apiKey: "AIzaSyAOR5KdPGtzG3QKHctSQZ2dZNDUK5YdNt4",
-//   authDomain: "unichamba-ues.firebaseapp.com",
-//   projectId: "unichamba-ues",
-//   storageBucket: "unichamba-ues.appspot.com",
-//   messagingSenderId: "139568571677",
-//   appId: "1:139568571677:web:bb99f1fb2520a105c4edf4"
-// };
 const firebaseConfig = {
-  apiKey: "AIzaSyCTkQlmQK29THXXGwwIt9OYHlNRaZjPkhs",
-  authDomain: "unichambatest.firebaseapp.com",
-  projectId: "unichambatest",
-  storageBucket: "unichambatest.appspot.com",
-  messagingSenderId: "513323302564",
-  appId: "1:513323302564:web:18a5a91367b91a7eec3031",
-  measurementId: "G-BYB5HBD1JG"
+  apiKey: "AIzaSyAOR5KdPGtzG3QKHctSQZ2dZNDUK5YdNt4",
+  authDomain: "unichamba-ues.firebaseapp.com",
+  projectId: "unichamba-ues",
+  storageBucket: "unichamba-ues.appspot.com",
+  messagingSenderId: "139568571677",
+  appId: "1:139568571677:web:bb99f1fb2520a105c4edf4"
 };
+
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
