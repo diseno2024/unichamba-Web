@@ -37,7 +37,8 @@ export default {
         "WhatsApp": "#4FCE5D",
         "Navbar": "#D9D9D9",
         "Dark-Blue": "#04061A",
-        "bg-icon": "#0D541E"
+        "bg-icon": "#0D541E",
+        "Azul-Neblina": "#7077A1"
 
       },
       backgroundImage: {

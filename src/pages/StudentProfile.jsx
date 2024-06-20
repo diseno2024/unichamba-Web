@@ -16,6 +16,7 @@ import EditarPerfil from "../components/EditarPerfil";
 import withReactContent from "sweetalert2-react-content";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
+import OrdenarCarreras from "../components/ordenCarreras";
 
 
 // Este es la paginación de Elias
@@ -281,25 +282,101 @@ const trabajosSubmit = async (e) => {
 
   const editarTrabajos = () => {
     MySwal.fire({
-      title: "Actualizar trabajos",
+      title: "Editar Perfil",
       customClass: {
-        container: 'my-custom-modal'
+        container: "my-custom-modal",
       },
       html: (
-        <form onSubmit={trabajosSubmit}>
-          <div className="flex flex-col space-y-24">
-          {/* Input para seleccionar imagen */}
-          <Select
-            closeMenuOnSelect={false}
-            components={animatedComponents}
-            onChange={handleTrabajosChange}
-            isMulti
-            options={trabajosOptions}
-            required
-            className="rounded-lg border border-black p-3 w-100 h-16  mt-4 font-light"
-          />
-          <button className=" pt-24">Enviar</button>
-        </div>
+        <form onSubmit={handleSubmit}>
+          <div className="flex w-full">
+            {/* <label htmlFor="nombreInput" className="mt-7 font-normal">
+                Nombre(s)*
+              </label> */}
+            <div className="px-5 space-y-3">
+              <input
+                placeholder="Nombres"
+                type="text"
+                id="nombreInput"
+                className="rounded-lg border border-black font-normal py-4 w-[600px] px-5"
+                name="nombre"
+                pattern="^[A-Za-záéíóúÁÉÍÓÚ]+\s[A-Za-záéíóúÁÉÍÓÚ]+$"
+                title="Por favor introduce tus nombres adecuadamente"
+                required
+              />
+
+              <input
+                placeholder="Apellidos"
+                type="text"
+                id="apellidoInput"
+                className="rounded-lg border border-black font-normal py-4 w-[600px] px-5"
+                name="apellido"
+                pattern="^[A-Za-záéíóúÁÉÍÓÚ]+\s[A-Za-záéíóúÁÉÍÓÚ]+$"
+                title="Por favor introduce entre 5 y 30 dígitos."
+                required
+              />
+
+              <input
+                placeholder="Telefono"
+                type="text"
+                id="telefonoInput"
+                className="rounded-lg border border-black font-normal py-4 w-[600px] px-5"
+                name="telefono"
+                pattern="[0-9]{8}"
+                title="Por favor, introduce exactamente 8 números."
+                required
+              />
+            </div>
+
+            <div className="w-full px-5 flex flex-col items-center justify-start space-y-3">
+              <input
+                placeholder="WhatsApp"
+                type="text"
+                id="whatsappInput"
+                className="rounded-lg border border-black font-normal py-4 w-[600px] px-5"
+                name="whatsapp"
+                required
+                pattern="[0-9]{8}"
+                title="Por favor, introduce exactamente 8 números."
+              />
+
+              <Select
+                placeholder="Seleccione una carrera"
+                closeMenuOnSelect={false}
+                components={animatedComponents}
+                onChange={handleCarreraChange}
+                isMulti={false}
+                options={carrerasList}
+                required
+                className="rounded-lg border border-black  mt-4 font-light w-[600px] px-5 py-2"
+              />
+
+              <Select
+                placeholder="Seleccione los trabajos"
+                closeMenuOnSelect={false}
+                components={animatedComponents}
+                options={trabajosOptions}
+                isMulti
+                onChange={handleTrabajosChange}
+                required
+                className="rounded-lg border border-black  mt-4 font-light w-[600px] px-5 py-2"
+              />
+            </div>
+
+          </div>
+
+          <div className="py-5 px-5 mx-auto flex items-center justify-center">
+              <textarea
+                placeholder="Puedes hablar acerca de tus conocimientos o sobre tus aptitudes"
+                name="acercaDe"
+                id=""
+                cols="79"
+                required
+                rows="4"
+                maxLength={500}
+                className="rounded-lg border border-black  mt-4 font-light w-[1250px] py-5 px-3 h-[180px]"
+              />
+          </div>
+          <button className="py-4 px-5 border-[1px] border-Space-cadet rounded-md">Enviar</button>
         </form>
       ),
       showConfirmButton: false,
@@ -307,7 +384,7 @@ const trabajosSubmit = async (e) => {
     }).then((result) => {
       if (result.dismiss === Swal.DismissReason.cancel) {
         // Si se cancela, restablece el valor del select al inicial
-       trabajosInicial= []
+        trabajosInicial = [];
       }
     });
   }
@@ -376,7 +453,7 @@ const trabajosSubmit = async (e) => {
     }).then((result) => {
       if (result.dismiss === Swal.DismissReason.cancel) {
         // Si se cancela, restablece el valor del select al inicial
-       carreraActualizada={}
+        carreraActualizada={}
       }
     });
   };
@@ -403,7 +480,7 @@ const trabajosSubmit = async (e) => {
       <main className=" mb-10 mt-24">
         {/* FOTO DE PERFIL Y PORTADA */}
         <div className="realtive">
-          <div className=" mt-2 mx-5 bg-portada bg-cover h-[290px]">
+          <div className=" mt-2 mx-5 bg-portada bg-cover h-[290px] relative">
             <NavLink
               to="/"
               className="h-[50px] w-[80px] px-5 border-[1px]  border-transparent rounded-lg placeholder:text-white focus:outline-none mr-3 flex  text-white"
@@ -412,57 +489,71 @@ const trabajosSubmit = async (e) => {
                 <span class="material-symbols-outlined">arrow_back</span>
               </button>
             </NavLink>
+            <button className="mx-4 py-2 px-6 text-Space-cadet rounded-lg font-normal bg-Navbar absolute  bottom-5 right-1" onClick={editarTrabajos}>
+                Editar perfil
+            </button>
           </div>
-          <div className=" w-[200px]  h-[200px] ml-9 rounded-full overflow-hidden flex items-center absolute top-60 left-5 border-4">
+          <div className=" w-[200px]  h-[200px] ml-12 rounded-full overflow-hidden flex items-center absolute top-60 left-5 border-4">
             <img
               src={estudiante.imageUrl}
               alt=""
               className=" "
-              onClick={actualizarFoto}
+              
             />
+            
           </div>
 
-          <div className="absolute right-6 pt-5">
+          <span className="material-symbols-outlined cursor-pointer text-4xl pt-3 absolute left-60 z-50" onClick={actualizarFoto} >add_a_photo</span>
+
+
+          <div className="absolute right-6 pt-7 flex">
             {trabajos &&
               trabajos.map((trabajo) => (
                 <span class="material-symbols-outlined text-Dark-Blue text-5xl">
                   {trabajo.icono}
                 </span>
               ))}
+              
+              
           </div>
+
         </div>
 
         {/* INFORMACION */}
-        <div className="flex justify-between px-5 w-[97%] mx-auto relative mt-[85px]">
-          <div className="w-[20%] py-5">
-            <h2 className="ml-5 text-3xl font-normal">
+
+
+        <div className="flex justify-between w-[97%] mx-auto relative mt-[55px]">
+
+          <div className="w-[20%] py-5 flex flex-col items-center">
+            <h2 className="text-3xl font-normal">
               {estudiante.nombre}
-              <EditarPerfil
+              {/* <EditarPerfil
                 titulo={"nombre"}
                 referencia={"nombre"}
                 estudiante={estudiante}
-              />
+              /> */}
             </h2>
-            <h1 className="ml-[26px] text-2xl font-normal">
+            <h1 className="text-2xl font-normal">
               {estudiante.apellido}
-              <EditarPerfil
+              {/* <EditarPerfil
                 titulo={"apellido"}
                 referencia={"apellido"}
                 estudiante={estudiante}
-              />
+              /> */}
             </h1>
-            <div className=" mt-5 ">
-              <span className=" ml-5 font-normal">Informacion personal</span>
-              <ul className=" mt-5 ml-4">
+            <div className="w-full flex justify-center"> <WhatsAppButton phoneNumber={estudiante.whatsapp} /> </div>
+            <div className=" mt-5">
+              <span className="font-normal">Informacion personal</span>
+              <ul className=" mt-5">
                 <li className="flex items-center">
                   <span class="material-symbols-outlined">call</span>
                   <span className=" ml-2 font-normal">
                     Telefono fijo
-                    <EditarPerfil
+                    {/* <EditarPerfil
                       titulo={"telefono"}
                       referencia={"telefono"}
                       estudiante={estudiante}
-                    />
+                    /> */}
                   </span>
                 </li>
                 <p className=" ml-9 mb-3 font-light">{estudiante.telefono}</p>
@@ -471,11 +562,11 @@ const trabajosSubmit = async (e) => {
                   <span class="material-symbols-outlined">mail</span>
                   <span className=" ml-2 font-normal">
                     Email
-                    <EditarPerfil
+                    {/* <EditarPerfil
                       titulo={"email"}
                       referencia={"email"}
                       estudiante={estudiante}
-                    />
+                    /> */}
                   </span>
                 </li>
                 <p className=" ml-9 mb-3 font-light">{estudiante.email}</p>
@@ -494,18 +585,17 @@ const trabajosSubmit = async (e) => {
                 </li>
                 <p className=" ml-9 font-light">{estudiante.carrera}</p>
               </ul>
-              <WhatsAppButton phoneNumber={estudiante.whatsapp} />
             </div>
           </div>
 
-          <div className="w-[80%]">
+          <div className="w-[80%] pt-5">
             <h3 className=" ml-5 text-2xl font-normal">
               Acerca de
-              <EditarPerfil
+              {/* <EditarPerfil
                 titulo={"acerca de"}
                 referencia={"acercaDe"}
                 estudiante={estudiante}
-              />
+              /> */}
             </h3>
             <div className=" w-[100%] ml-5 font-light text-lg">
               <p>{estudiante.acercaDe}</p>
@@ -517,7 +607,7 @@ const trabajosSubmit = async (e) => {
                   {location.pathname === "/studentProfile" ? (
                     <span
                       className="material-symbols-outlined justify-end opacity-0 hover:opacity-100 top-0 right-0 transition-opacity duration-200"
-                      onClick={editarTrabajos}
+                      // onClick={editarTrabajos}
                     >
                       edit
                     </span>
@@ -541,7 +631,7 @@ const trabajosSubmit = async (e) => {
                         className="px-1"
                         onChange={handlePDFChange}
                       />
-                      <button className="bg-Rich-black text-white font-normal p-2 rounded-lg block mt-3">
+                      <button className="bg-Space-cadet text-white font-normal py-2 px-6 rounded-lg block mt-3">
                         Subir un archivo nuevo
                       </button>
                     </form>
