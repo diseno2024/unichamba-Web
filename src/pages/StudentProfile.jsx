@@ -27,10 +27,19 @@ const StudentProfile = () => {
   const [estudiante, setEstudiante] = useState([]);
   const [pdf, setPdf] = useState(null);
   const { user } = UserAuth();
-  const initialStateValues = { hojadevida: "" };
+  const initialpdf = { hojadevida: "" };
   const [trabajosOptions, setTrabajosOptions] = useState([])
- 
-  const [value, setValue] = useState(initialStateValues);
+
+  const valoresIniciales = {
+    nombre: "",
+    apellido: "",
+    telefono: "",
+    whatsapp: "",
+    acercaDe: "",
+  }
+
+  const [valores, setValores] = useState(valoresIniciales)
+  const [value, setValue] = useState(initialpdf);
   let trabajosInicial = []
   let carreraActualizada={}
   let setCarreraActualizada=null
@@ -199,6 +208,30 @@ const StudentProfile = () => {
     addOrEdit(value);
   };
 
+  const editSubmit = async (e) => {
+    e.preventDefault()
+    if (valoresIniciales.nombre != "") {
+      await updateDoc(doc(db, "estudiantes", estudiante.id), { nombre: valoresIniciales.nombre }); 
+    }
+
+    if (valores.apellido != "") {
+      await updateDoc(doc(db, "estudiantes", estudiante.id), { apellido: valores.apellido }); 
+    }
+
+    if (valores.telefono != "") {
+      await updateDoc(doc(db, "estudiantes", estudiante.id), { telefono: valores.telefono }); 
+    }
+
+    if (valores.whatsapp != "") {
+      await updateDoc(doc(db, "estudiantes", estudiante.id), { whatsapp: valores.whatsapp }); 
+    }
+
+    if (valores.acercaDe != "") {
+      await updateDoc(doc(db, "estudiantes", estudiante.id), { acercaDe: valores.acercaDe }); 
+    }
+
+  }
+
   const handleTrabajosChange = (selectedOptions) => {
     const trabajos = selectedOptions.map(option => ({
       icono: option.icon,
@@ -207,6 +240,23 @@ const StudentProfile = () => {
     trabajosInicial = trabajos
     console.log(trabajosInicial)
   }
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    if (name === "fechaNacimiento") {
+      if (!isValidDate(value)) {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Necesitas ser mayor de edad para crear una cuenta, por favor ingresa una fecha correcta",
+        });
+        return;
+      }
+    }
+    setValores({ ...valores, [name]: value });
+  }
+
+  console.log(valores)
 
   const handleCarreraChange = (e) => {
     const carreras = {
@@ -287,21 +337,19 @@ const trabajosSubmit = async (e) => {
         container: "my-custom-modal",
       },
       html: (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={editSubmit}>
           <div className="flex w-full">
             {/* <label htmlFor="nombreInput" className="mt-7 font-normal">
                 Nombre(s)*
               </label> */}
-            <div className="px-5 space-y-3">
+            <div className="px-5 space-y-3">  
               <input
                 placeholder="Nombres"
                 type="text"
                 id="nombreInput"
                 className="rounded-lg border border-black font-normal py-4 w-[600px] px-5"
                 name="nombre"
-                pattern="^[A-Za-záéíóúÁÉÍÓÚ]+\s[A-Za-záéíóúÁÉÍÓÚ]+$"
-                title="Por favor introduce tus nombres adecuadamente"
-                required
+                onChange={handleInputChange}
               />
 
               <input
@@ -310,9 +358,8 @@ const trabajosSubmit = async (e) => {
                 id="apellidoInput"
                 className="rounded-lg border border-black font-normal py-4 w-[600px] px-5"
                 name="apellido"
+                onChange={handleInputChange}
                 pattern="^[A-Za-záéíóúÁÉÍÓÚ]+\s[A-Za-záéíóúÁÉÍÓÚ]+$"
-                title="Por favor introduce entre 5 y 30 dígitos."
-                required
               />
 
               <input
@@ -322,8 +369,7 @@ const trabajosSubmit = async (e) => {
                 className="rounded-lg border border-black font-normal py-4 w-[600px] px-5"
                 name="telefono"
                 pattern="[0-9]{8}"
-                title="Por favor, introduce exactamente 8 números."
-                required
+                onChange={handleInputChange}
               />
             </div>
 
@@ -334,9 +380,8 @@ const trabajosSubmit = async (e) => {
                 id="whatsappInput"
                 className="rounded-lg border border-black font-normal py-4 w-[600px] px-5"
                 name="whatsapp"
-                required
+                onChange={handleInputChange}
                 pattern="[0-9]{8}"
-                title="Por favor, introduce exactamente 8 números."
               />
 
               <Select
@@ -346,7 +391,6 @@ const trabajosSubmit = async (e) => {
                 onChange={handleCarreraChange}
                 isMulti={false}
                 options={carrerasList}
-                required
                 className="rounded-lg border border-black  mt-4 font-light w-[600px] px-5 py-2"
               />
 
@@ -357,7 +401,6 @@ const trabajosSubmit = async (e) => {
                 options={trabajosOptions}
                 isMulti
                 onChange={handleTrabajosChange}
-                required
                 className="rounded-lg border border-black  mt-4 font-light w-[600px] px-5 py-2"
               />
             </div>
@@ -370,8 +413,8 @@ const trabajosSubmit = async (e) => {
                 name="acercaDe"
                 id=""
                 cols="79"
-                required
                 rows="4"
+                onChange={handleInputChange}
                 maxLength={500}
                 className="rounded-lg border border-black  mt-4 font-light w-[1250px] py-5 px-3 h-[180px]"
               />
