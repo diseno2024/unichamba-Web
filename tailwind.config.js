@@ -43,7 +43,7 @@ export default {
       },
       backgroundImage: {
         "portada-perfil":"url('Portada-perfil-estudiante.png')",
-        "portada":"url('segunda-portada.jpg')",
+        "portada":"url('/public/segunda-portada.jpg')",
         "foto-estudiante": "url('christina-wocintechchat-com-0Zx1bDv5BNY-unsplash.jpg')"
       },
       width: {
