@@ -17,7 +17,7 @@ const Inicio = () => {
   const navigate = useNavigate();
   let student = [];
   let administradores = [];
-  //let URLphoto = user.photoURL;
+  let URLphoto = user.photoURL;
   const [permiso, setpermiso] = useState(false);
   const [permisoIng, setpermisoIng] = useState(false);
   const [login, setLogin] = useState(false);
