@@ -171,14 +171,12 @@ const Inicio = () => {
               </div>
 
               : login && result && !permisoIng ? 
-              <div>
-                <button
-                  className="relative text-white font-semibold flex items-center gap-4 bg-Malachite h-[55px] justify-between pl-3 pr-[2px] rounded-[8px]"
-                  onClick={handleGoogleSingIn}
-                >
-                  Publicar Oferta
+              
+              <div className="flex space-x-3">
+                <NavLink to='/createOffer' className='bg-Malachite text-white h-[55px] px-10 flex items-center rounded-[8px] space-x-2 font-semibold'>
+                  <h2>Publicar oferta</h2>
                   <span className="material-symbols-outlined">work</span>
-                </button>
+                </NavLink>
 
                 <div className="flex items-center gap-4">
                   <button
@@ -191,12 +189,15 @@ const Inicio = () => {
               </div>
 
               : cuentaExterna ?
+
               <button
                     className="relative text-white font-semibold flex items-center gap-4 bg-Malachite h-[55px] justify-between px-4 rounded-[8px]"
                     onClick={handleGoogleSingOut}
                   >
                     Cerrar Sesión
               </button>
+
+              
 
               :
 
