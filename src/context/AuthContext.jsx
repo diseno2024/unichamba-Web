@@ -1,5 +1,6 @@
 import {useContext, createContext, useState, useEffect} from 'react'
-import { GoogleAuthProvider, signOut, onAuthStateChanged, getAuth, signInWithRedirect } from "firebase/auth";
+import { GoogleAuthProvider, signInWithRedirect, signOut, onAuthStateChanged, signInWithPopup } from "firebase/auth";
+import { auth } from '../data/firebase'
 
 const AuthContext = createContext();
 
@@ -9,31 +10,31 @@ export const AuthContextProvider = ({children}) => {
     const [user, setUser] = useState("") // datos de la persona que se registro 
     
 
-    const googleSingIn = async () => { // inicio de sesion 
+    const googleSingIn = () => { // inicio de sesion 
         const provider = new GoogleAuthProvider();
-        const auth = getAuth();
-        return signInWithRedirect(auth, provider);
+        signInWithPopup(auth, provider);
     }
 
-    const googleSingOut = async () => {
-        const auth = getAuth();
-        const responseLogout = await signOut(auth);
+    const googleSingOut = () => {
+        console.log('cierre de sesion')
+        signOut(auth);
     }
 
+    
 
     useEffect(() => {
-        const auth = getAuth();
-        const subscribe = onAuthStateChanged(auth, (currentUser) => {
+        const suscribed = onAuthStateChanged( auth, (currentUser) => {
             if(!currentUser){
-                console.log("no hay usuario registrado");
-                setUser("");
+                console.log("no hay usuario suscrito")
+                setUser("")
             }else{
-                setUser(currentUser);
+                setUser(currentUser)
             }
-    return () => {
-        subscribe();
-    }
-})
+            
+            
+        })
+    
+        return  () => suscribed();
     }, [])
     
 

@@ -10,14 +10,14 @@ import { NavLink, useNavigate } from "react-router-dom";
 
 const Inicio = () => {
   const { googleSingIn, user, googleSingOut } = UserAuth();
-  const result = /\..+@.*ues\.edu/gm.test(user.email);; // expresion que valida si hay un punto y luego un @
-  const cuentaExterna = /@g(oogle)?mail\.com/gm.test(user.email);; // expresion que valida si el dominio del correo es gmail
+  const result = /\..+@.*ues\.edu/gm.test(user.email); // expresion que valida si hay un punto y luego un @
+  const cuentaExterna = /@g(oogle)?mail\.com/gm.test(user.email); // expresion que valida si el dominio del correo es gmail
   const emailIng = "ernesto.calderon@ues.edu.sv";
-  const cuentaUes = /^[a-zA-Z0-9]{7}@ues\.edu/gm.test(user.email);;
+  const cuentaUes = /^[a-zA-Z0-9]{7}@ues\.edu/gm.test(user.email);
   const navigate = useNavigate();
   let student = [];
   let administradores = [];
-  let URLphoto = user.photoURL;
+  //let URLphoto = user.photoURL;
   const [permiso, setpermiso] = useState(false);
   const [permisoIng, setpermisoIng] = useState(false);
   const [login, setLogin] = useState(false);

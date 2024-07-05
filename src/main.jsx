@@ -4,7 +4,6 @@ import UnichambaWebApp from './UnichambaWebApp.jsx'
 import { BrowserRouter } from 'react-router-dom'
 import "./css/index.css"
 import { AuthContextProvider } from './context/AuthContext.jsx'
-
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <AuthContextProvider>
