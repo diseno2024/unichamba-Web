@@ -202,21 +202,21 @@ const CreateOffer = () => {
     <main className="w-[100%] mx-auto pl-4">
       <section className="w-[95%] mx-auto">
         <form onSubmit={handleSubmit} className="space-y-2">
-          <p className="pt-5 pl-2 font-roboto font-bold text-lg">Crea una oferta
-          <span className=" text-xs ml-60 pl-96 ">Para ayuda, haz clic aquí</span>
+          <p className="pt-5 pl-2 font-roboto font-bold text-lg">Crea una oferta <br />
+          <span className=" text-xs   lg:pl-96 lg:ml-72 ">Para ayuda, haz clic aquí</span>
            <span className="material-symbols-outlined cursor-pointer" 
             onClick={MostrarAyuda}>help</span>
        
             </p>
             
           <div className="flex flex-col lg:flex-row p-2">
-            <div className="w-full lg:w-2/4">
+            <div className="w-full lg:w-2/4 ">
               <label className="block text-sm font-medium">Quien publica*</label>
               <input
                 id="quienPublica"
                 name="quienPublica"
                 type="text"
-                className="transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300 mx-auto bg-Blanco-cremoso font-light rounded-lg border border-black p-2 w-96 mt-1 border-1 border-Dark-purple"
+                className="transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300 mx-auto bg-Blanco-cremoso font-light rounded-lg border border-black p-2 w-full sm:w-72 md:w-670 lg:w-96 mt-1"
                 required
                 title="Por favor introduce solo letras."
                 value={quienPublica}
@@ -224,12 +224,12 @@ const CreateOffer = () => {
                 disabled
               />
             </div>
-                  </div>
+          </div>
                   <div className="flex flex-col lg:flex-row p-2">
-                    <div className="w-full lg:w-2/4">
+                    <div className="w-full lg:w-2/4 md:w-1/2">
                       <label className="block text-sm font-medium">Carrera (opcional)</label>
                       <Select
-                        className="mr-20 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300 mx-auto bg-Blanco-cremoso font-light rounded-lg border border-black p-1 w-100% mt-1 border-1 border-Dark-purple"
+                        className="mr-20 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300 mx-auto bg-Blanco-cremoso font-light rounded-lg border border-black p-1 w-full sm:w-72 md:w-670 lg:w-96 mt-1"
                         components={animatedComponents}
                         isMulti
                         options={carrera.map(({ nombre, id }) => ({ value: id, label: nombre }))}
@@ -238,11 +238,11 @@ const CreateOffer = () => {
                       />
                     </div>
                     <div className="w-full lg:w-2/4 flex items-center">
-                      <div className="w-3/4">
+                      <div className="w-full lg:w-2/4 ">
                         <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-black" htmlFor="file_input">Selecciona Imagen (opcional)</label>
                         <input
-                          className="transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300 text-sm border border-Dark-purple rounded-lg text-Azul-Crepúsculo font-light dark:placeholder-gray-400 p-1.5 w-full mt-0 px-3"
-                          id="imagen"
+                        className="mr-20 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300 mx-auto bg-Blanco-cremoso font-light rounded-lg border border-black p-1 w-full sm:w-72 md:w-670 lg:w-96 mt-1"
+                        id="imagen"
                           name="imagen"
                           type="file"
                           onChange={handleImageChange}
