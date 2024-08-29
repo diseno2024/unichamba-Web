@@ -1,5 +1,3 @@
-import { NavLink, useLocation, useNavigate, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
 import {
   addDoc,
   collection,
@@ -7,15 +5,21 @@ import {
   getDocs,
   updateDoc,
 } from "firebase/firestore";
-import { db, storage } from "../data/firebase";
-import { UserAuth } from "../context/AuthContext";
-import Swal from "sweetalert2";
-import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
-import WhatsAppButton from "../components/WhatsAppButton";
-import withReactContent from "sweetalert2-react-content";
+import {
+  deleteObject,
+  getDownloadURL,
+  ref,
+  uploadBytes,
+} from "firebase/storage";
+import { useEffect, useState } from "react";
+import { NavLink, useLocation, useNavigate, useParams } from "react-router-dom";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
-
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+import WhatsAppButton from "../components/WhatsAppButton";
+import { UserAuth } from "../context/AuthContext";
+import { db, storage } from "../data/firebase";
 
 // Este es la paginación de Elias
 
@@ -26,7 +30,7 @@ const StudentProfile = () => {
   const [pdf, setPdf] = useState(null);
   const { user } = UserAuth();
   const initialpdf = { hojadevida: "" };
-  const [trabajosOptions, setTrabajosOptions] = useState([])
+  const [trabajosOptions, setTrabajosOptions] = useState([]);
   const navigate = useNavigate();
   let nombreActualizado = {};
   let apellidoActualizado = {};
@@ -35,9 +39,9 @@ const StudentProfile = () => {
   let acercaDeActualizado = {};
 
   const [value, setValue] = useState(initialpdf);
-  let trabajosInicial = []
-  let carreraActualizada={}
-  
+  let trabajosInicial = [];
+  let carreraActualizada = {};
+
   const [image, setImage] = useState(null);
   let student = [];
   let nombrePdf = "";
@@ -52,7 +56,7 @@ const StudentProfile = () => {
       id: doc.id,
     }));
     const perfilSeleccionado = estudiantes.find(
-      (estudiante) => estudiante.id === idPerfil
+      (estudiante) => estudiante.id === idPerfil,
     );
     student = estudiantes;
 
@@ -62,31 +66,31 @@ const StudentProfile = () => {
           setEstudiante(perfil);
         }
       });
-    } else if (perfilSeleccionado.email === user.email){
-      setEstudiante(perfilSeleccionado)
-      navigate("/studentProfile")
+    } else if (perfilSeleccionado.email === user.email) {
+      setEstudiante(perfilSeleccionado);
+      navigate("/studentProfile");
     } else {
-      setEstudiante(perfilSeleccionado)
+      setEstudiante(perfilSeleccionado);
     }
   };
 
   const fetchTrabajos = async () => {
     const trabajosCollection = collection(db, "trabajos");
-        const trabajosSnapshot = await getDocs(trabajosCollection);
-        const trabajosList = trabajosSnapshot.docs.map(doc => ({
-          value: doc.id,
-          label: doc.data().nombre,
-          icon: doc.data().icono
-        }));
-        trabajosList.sort((a, b) => a.label.localeCompare(b.label));
-        setTrabajosOptions(trabajosList);
-  }
+    const trabajosSnapshot = await getDocs(trabajosCollection);
+    const trabajosList = trabajosSnapshot.docs.map((doc) => ({
+      value: doc.id,
+      label: doc.data().nombre,
+      icon: doc.data().icono,
+    }));
+    trabajosList.sort((a, b) => a.label.localeCompare(b.label));
+    setTrabajosOptions(trabajosList);
+  };
 
   const fetchCarreras = async () => {
     try {
-      const carrerasCollection = collection(db, 'carreras');
+      const carrerasCollection = collection(db, "carreras");
       const carrerasSnapshot = await getDocs(carrerasCollection);
-      const carrerasList = carrerasSnapshot.docs.map(doc => ({
+      const carrerasList = carrerasSnapshot.docs.map((doc) => ({
         value: doc.id,
         label: doc.data().carrera,
         // Puedes agregar más propiedades según sea necesario
@@ -94,14 +98,14 @@ const StudentProfile = () => {
       carrerasList.sort((a, b) => a.label.localeCompare(b.label));
       setCarrerasOptions(carrerasList);
     } catch (error) {
-      console.error('Error al obtener carreras:', error);
+      console.error("Error al obtener carreras:", error);
       // Manejo de errores aquí
     }
   };
 
   const actualizarFoto = () => {
     MySwal.fire({
-      title: 'Actualizar Foto',
+      title: "Actualizar Foto",
       html: (
         <div className="flex flex-col space-y-2">
           {/* Input para seleccionar imagen */}
@@ -119,7 +123,6 @@ const StudentProfile = () => {
             Actualizar imagen de perfil
           </label>
           {/* Botón para subir imagen */}
-          
         </div>
       ),
       showConfirmButton: false,
@@ -205,108 +208,119 @@ const StudentProfile = () => {
   // CAPTURA LOS INPUTS PARA EDITAR
   const handleNombreChange = (e) => {
     const name = {
-      nombre: e.target.value
-    } 
+      nombre: e.target.value,
+    };
 
-    nombreActualizado = name
+    nombreActualizado = name;
   };
 
   const handleApellidoChange = (e) => {
     const lastName = {
-      apellido: e.target.value
-    } 
+      apellido: e.target.value,
+    };
 
-    apellidoActualizado = lastName
+    apellidoActualizado = lastName;
   };
 
   const handleTelefonoChange = (e) => {
     const phone = {
-      telefono: e.target.value
-    } 
+      telefono: e.target.value,
+    };
 
-    telefonoActualizado = phone
+    telefonoActualizado = phone;
   };
 
   const handleWhatsappChange = (e) => {
     const whats = {
-      whatsapp: e.target.value
-    } 
+      whatsapp: e.target.value,
+    };
 
-    whatsappActualizado = whats
+    whatsappActualizado = whats;
   };
 
   const handleAcercaDeChange = (e) => {
     const descripcion = {
-      acercaDe: e.target.value
-    } 
+      acercaDe: e.target.value,
+    };
 
-    acercaDeActualizado = descripcion
+    acercaDeActualizado = descripcion;
   };
 
   // SUBMIT PARA SUBIR EDICION
   const editSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     const isEmpty = (obj) => Object.keys(obj).length === 0;
 
     if (!isEmpty(nombreActualizado)) {
-      await updateDoc(doc(db, "estudiantes", estudiante.id), { nombre: nombreActualizado.nombre });
-      nombreActualizado = {}
+      await updateDoc(doc(db, "estudiantes", estudiante.id), {
+        nombre: nombreActualizado.nombre,
+      });
+      nombreActualizado = {};
     }
 
     if (!isEmpty(apellidoActualizado)) {
-      await updateDoc(doc(db, "estudiantes", estudiante.id), { apellido: apellidoActualizado.apellido }); 
-      apellidoActualizado = {} 
+      await updateDoc(doc(db, "estudiantes", estudiante.id), {
+        apellido: apellidoActualizado.apellido,
+      });
+      apellidoActualizado = {};
     }
 
     if (!isEmpty(telefonoActualizado)) {
-      await updateDoc(doc(db, "estudiantes", estudiante.id), { telefono: telefonoActualizado.telefono }); 
-      telefonoActualizado = {} 
+      await updateDoc(doc(db, "estudiantes", estudiante.id), {
+        telefono: telefonoActualizado.telefono,
+      });
+      telefonoActualizado = {};
     }
 
     if (!isEmpty(whatsappActualizado)) {
-      await updateDoc(doc(db, "estudiantes", estudiante.id), { whatsapp: whatsappActualizado.whatsapp }); 
-      whatsappActualizado = {} 
+      await updateDoc(doc(db, "estudiantes", estudiante.id), {
+        whatsapp: whatsappActualizado.whatsapp,
+      });
+      whatsappActualizado = {};
     }
 
     if (!isEmpty(acercaDeActualizado)) {
-      await updateDoc(doc(db, "estudiantes", estudiante.id), { acercaDe: acercaDeActualizado.acercaDe }); 
-      acercaDeActualizado = {} 
+      await updateDoc(doc(db, "estudiantes", estudiante.id), {
+        acercaDe: acercaDeActualizado.acercaDe,
+      });
+      acercaDeActualizado = {};
     }
 
     if (!isEmpty(carreraActualizada)) {
-      await updateDoc(doc(db, "estudiantes", estudiante.id), { carrera: carreraActualizada.carrera })
-      carreraActualizada = {} 
+      await updateDoc(doc(db, "estudiantes", estudiante.id), {
+        carrera: carreraActualizada.carrera,
+      });
+      carreraActualizada = {};
     }
-    
+
     if (trabajosInicial.length > 0) {
-      await updateDoc(doc(db, "estudiantes", estudiante.id), { trabajos: trabajosInicial })
-      trabajosInicial = [] 
+      await updateDoc(doc(db, "estudiantes", estudiante.id), {
+        trabajos: trabajosInicial,
+      });
+      trabajosInicial = [];
     }
-    
 
     Swal.fire({
       title: "Edicion exitosa",
       icon: "success",
-      text: "Los cambios se aplicaron correctamente"
-    })
-    fetchData()
+      text: "Los cambios se aplicaron correctamente",
+    });
+    fetchData();
+  };
 
-  }
-  
   const handleTrabajosChange = (selectedOptions) => {
-    const trabajos = selectedOptions.map(option => ({
+    const trabajos = selectedOptions.map((option) => ({
       icono: option.icon,
-      nombre: option.label
+      nombre: option.label,
     }));
-    trabajosInicial = trabajos
-  }
+    trabajosInicial = trabajos;
+  };
 
   const handleCarreraChange = (e) => {
     const carreras = {
-      carrera: e.label
+      carrera: e.label,
     };
-    carreraActualizada=carreras
-    
+    carreraActualizada = carreras;
   };
 
   const editarPerfil = () => {
@@ -321,7 +335,7 @@ const StudentProfile = () => {
             {/* <label htmlFor="nombreInput" className="mt-7 font-normal">
                 Nombre(s)*
               </label> */}
-            <div className="px-5 space-y-3">  
+            <div className="px-5 space-y-3">
               <input
                 placeholder="Nombres"
                 type="text"
@@ -384,22 +398,23 @@ const StudentProfile = () => {
                 className="rounded-lg border border-black  mt-4 font-light w-[600px] px-5 py-2"
               />
             </div>
-
           </div>
 
           <div className="py-5 px-5 mx-auto flex items-center justify-center">
-              <textarea
-                placeholder="Puedes hablar acerca de tus conocimientos o sobre tus aptitudes"
-                name="acercaDe"
-                id=""
-                cols="79"
-                rows="4"
-                onChange={handleAcercaDeChange}
-                maxLength={500}
-                className="rounded-lg border border-black  mt-4 font-light w-[1250px] py-5 px-3 h-[180px]"
-              />
+            <textarea
+              placeholder="Puedes hablar acerca de tus conocimientos o sobre tus aptitudes"
+              name="acercaDe"
+              id=""
+              cols="79"
+              rows="4"
+              onChange={handleAcercaDeChange}
+              maxLength={500}
+              className="rounded-lg border border-black  mt-4 font-light w-[1250px] py-5 px-3 h-[180px]"
+            />
           </div>
-          <button className="py-4 px-5 border-[1px] border-Space-cadet rounded-md">Enviar</button>
+          <button className="py-4 px-5 border-[1px] border-Space-cadet rounded-md">
+            Enviar
+          </button>
         </form>
       ),
       showConfirmButton: false,
@@ -416,7 +431,7 @@ const StudentProfile = () => {
         carreraActualizada = {};
       }
     });
-  }
+  };
 
   const handleImageChange = async (e) => {
     const selectedImage = e.target.files[0];
@@ -424,7 +439,7 @@ const StudentProfile = () => {
     try {
       const imageRef = ref(
         storage,
-        `imagenesPerfil/${estudiante.id}/${selectedImage.name}`
+        `imagenesPerfil/${estudiante.id}/${selectedImage.name}`,
       );
       await uploadBytes(imageRef, selectedImage);
       const imageUrl = await getDownloadURL(imageRef);
@@ -450,8 +465,7 @@ const StudentProfile = () => {
       });
     }
   };
-  
-  
+
   useEffect(() => {
     fetchData();
     fetchTrabajos();
@@ -462,7 +476,7 @@ const StudentProfile = () => {
     <>
       {/* HEADER */}
       <header>
-        <nav className="h-[90px] flex items-center justify-between px-10 bg-Dark-Blue shadow-md shadow-Gris-claro fixed top-0 w-full z-50">
+        <nav className=" h-[90px] flex items-center justify-center px-10 bg-Dark-Blue shadow-md shadow-Gris-claro fixed top-0 w-full z-50 md:justify-start">
           <NavLink to="/inicio">
             <img src="/LOGO.svg" alt="LOGO UNICHAMBA AZUL" />
           </NavLink>
@@ -473,10 +487,10 @@ const StudentProfile = () => {
       <main className=" mb-10 mt-24">
         {/* FOTO DE PERFIL Y PORTADA */}
         <div className="realtive">
-          <div className=" mt-2 mx-5 bg-portada bg-cover h-[290px] relative">
+          <div className=" mt-2 mx-2 bg-portada bg-cover h-[290px] relative md:mx-5 flex justify-between">
             <NavLink
               to="/"
-              className="h-[50px] w-[80px] px-5 border-[1px]  border-transparent rounded-lg placeholder:text-white focus:outline-none mr-3 flex  text-white"
+              className="h-[50px] w-[80px] px-2 border-[1px]  border-transparent rounded-lg placeholder:text-white focus:outline-none mr-3 flex text-white md:px-5"
             >
               <button>
                 <span class="material-symbols-outlined">arrow_back</span>
@@ -484,7 +498,7 @@ const StudentProfile = () => {
             </NavLink>
             {location.pathname === "/studentProfile" ? (
               <button
-                className="mx-4 py-2 px-6 text-Space-cadet rounded-lg font-normal bg-Navbar absolute  bottom-5 right-1"
+                className="mx-4 py-2 px-6 text-Space-cadet rounded-lg font-normal bg-Navbar relative top-3 max-h-10"
                 onClick={editarPerfil}
               >
                 Editar perfil
@@ -504,7 +518,7 @@ const StudentProfile = () => {
             </span>
           ) : null}
 
-          <div className="absolute right-6 pt-7 flex">
+          <div className="flex justify-center right-6 pt-20 md:pt-5 md:absolute ">
             {trabajos &&
               trabajos.map((trabajo) => (
                 <span class="material-symbols-outlined text-Dark-Blue text-5xl">
@@ -515,15 +529,15 @@ const StudentProfile = () => {
         </div>
 
         {/* INFORMACION */}
-        <div className="flex justify-between w-[97%] mx-auto relative mt-[55px]">
-          <div className="w-[20%] py-5 flex flex-col items-center ">
-            <h2 className="text-3xl font-normal">{estudiante.nombre}</h2>
-            <h1 className="text-2xl font-normal">{estudiante.apellido}</h1>
+        <div className=" w-[95%] mx-auto md:flex justify-between mt-[10px] md:w-[97%] md:mt-[55px]">
+          <div className=" w-[100%] py-5 flex flex-col items-center md:w-[20%]">
+            <h2 className="text-3xl font-normal ">{estudiante.nombre}</h2>
+            <h1 className="text-2xl font-normal ">{estudiante.apellido}</h1>
             <div className="w-full flex justify-center">
               {" "}
               <WhatsAppButton phoneNumber={estudiante.whatsapp} />{" "}
             </div>
-            <div className=" mt-5 px-10 flex flex-col items-center">
+            <div className=" mt-5 px-2 flex flex-col justify-start md:items-center w-full">
               <span className="font-normal">Informacion personal</span>
               <ul className=" mt-5">
                 <li className="flex items-center">
@@ -547,7 +561,7 @@ const StudentProfile = () => {
             </div>
           </div>
 
-          <div className="w-[80%] pt-5">
+          <div className="w-[95%] pt-5 md:w-[80%]">
             <h3 className=" ml-5 text-2xl font-normal">
               Acerca de
               {/* <EditarPerfil
