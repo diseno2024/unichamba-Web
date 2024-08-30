@@ -67,12 +67,12 @@ const CarrerasFiltro = ({ carrerasSeleccionadas, setCarrerasSeleccionadas}) => {
                 </h3>
 
                 <form className='form font-normal text-Dark-Blue text-sm '>
-                    <div className='flex flex-wrap justify-between pb-5'>
+                    <div className='flex flex-wrap justify-between pb-3 '>
                         <h3 className='text-lg pb-1'>
                             Carreras
                         </h3>
                         <div className='flex justify-end mr-10'>
-                            <button type='button' className='btn btn-secondary mt-1 text-black' onClick={reiniciarCarreras}><span class="material-symbols-outlined">
+                            <button type='button' className='btn btn-secondary lg:mt-1 text-black' onClick={reiniciarCarreras}><span class="material-symbols-outlined">
                                 mop
                             </span></button>
                         </div>
@@ -90,7 +90,7 @@ const CarrerasFiltro = ({ carrerasSeleccionadas, setCarrerasSeleccionadas}) => {
                         </div>
                     ))}
                     {mostrarBoton && (
-                        <button type='button' className='btn btn-primary mt-4 text-black' onClick={mostrarMasCarreras}>Ver Más..</button>
+                        <button type='button' className='btn btn-primary mt-4  text-black' onClick={mostrarMasCarreras}>Ver Más..</button>
                     )}
                 </form>
 
