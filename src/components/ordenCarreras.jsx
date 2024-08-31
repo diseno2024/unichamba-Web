@@ -42,7 +42,7 @@ const OrdenarCarreras = ({ onSelect }) => {
   return (
     <>
       <select
-        className="rounded-lg border border-black p-3 w-80 mt-4 text-lg bg-white"
+        className="rounded-lg border border-black p-3 w-[87%] md:w-80  mt-4 text-lg bg-white"
         onClick={() => setIsOpen((prev) => !prev)}
         onChange={handleSelectChange}
         value={selectedCarrera}
