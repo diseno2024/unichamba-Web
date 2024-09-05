@@ -59,20 +59,20 @@ const CarrerasFiltro = ({ carrerasSeleccionadas, setCarrerasSeleccionadas}) => {
     return (
         <>
             <div className='container'>
-                <h3 className='flex flex-wrap font-normal pb-3 text-Dark-Blue'>
+                <h3 className='flex flex-wrap font-normal pb-3 lg:text-Dark-Blue  text-Navbar  md:text-black'>
                     <span className="material-symbols-outlined mx-5">
                         filter_alt
                     </span>
                     FILTROS
                 </h3>
 
-                <form className='form font-normal text-Dark-Blue text-sm '>
+                <form className='form font-normal lg:text-Dark-Blue text-sm text-Navbar md:text-Dark-Blue '>
                     <div className='flex flex-wrap justify-between pb-3 '>
                         <h3 className='text-lg pb-1'>
                             Carreras
                         </h3>
                         <div className='flex justify-end mr-10'>
-                            <button type='button' className='btn btn-secondary lg:mt-1 text-black' onClick={reiniciarCarreras}><span class="material-symbols-outlined">
+                            <button type='button' className='btn btn-secondary lg:mt-1 text-Navbar lg:text-Dark-Blue  md:text-black' onClick={reiniciarCarreras}><span class="material-symbols-outlined">
                                 mop
                             </span></button>
                         </div>
@@ -86,11 +86,11 @@ const CarrerasFiltro = ({ carrerasSeleccionadas, setCarrerasSeleccionadas}) => {
                                 checked={carrerasSeleccionadas.includes(carrera)}//Aquí chequea si la carrera esta en carrerasSeleccionadas
                                 onChange={() => seleccionarCarrera(carrera)}
                             />
-                            <label className='form-check-label ms-2' htmlFor={`carrera-${index}`}>{carrera}</label>
+                            <label className='form-check-label ms-2 text-md' htmlFor={`carrera-${index}`}>{carrera}</label>
                         </div>
                     ))}
                     {mostrarBoton && (
-                        <button type='button' className='btn btn-primary mt-4  text-black' onClick={mostrarMasCarreras}>Ver Más..</button>
+                        <button type='button' className='btn btn-primary mt-4 text-Navbar lg:text-black  md:text-black' onClick={mostrarMasCarreras}>Ver Más..</button>
                     )}
                 </form>
 
