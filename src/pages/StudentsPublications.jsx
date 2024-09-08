@@ -13,6 +13,9 @@ const StudentsPublications = () => {
   const [trabajoSeleccionadoNav, setTrabajoSeleccionadoNav] = useState(null);
   const [carreraSeleccionada, setCarreraSeleccionada] = useState(null);
   const [trabajoSeleccionado, setTrabajoSeleccionado] = useState(null);
+  const [menuAbierto, setMenuAbierto] = useState(false); 
+
+  //Estado para menu hamburguesa
 
   const fetchNavData = async () => {
     try {
@@ -69,6 +72,10 @@ const StudentsPublications = () => {
     fetchFilterData();
   }, [carreraSeleccionada, trabajoSeleccionado]);
 
+  const toggleMenu = () => {
+    setMenuAbierto(!menuAbierto);
+  };
+  
   
   return (
     <>
@@ -79,8 +86,18 @@ const StudentsPublications = () => {
         />
       </header>
 
-      <main className="w-[95%] mx-auto mt-28 flex">
-        <section className="px-5 h-max w-[20%] border-r-2">
+      <main className="flex flex-col md:flex-row h-auto mt-[90px] relative space-y-8 md:space-y-0 md:space-x-7">
+
+     <div>
+     <button onClick={toggleMenu} className="text-black focus:outline-none pr-9">
+              <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path>
+              </svg>
+            </button>
+     </div>
+
+        <section className="px-5 h-max w-full md:w-1/5 border-r-2 flex flex-col space-y-4">
+        <div className={`lg:block md:block md:pl-2 ${menuAbierto ? 'block' : 'hidden'}`}> 
           <div>
             <CarreraFiltro 
               carreraSeleccionada={carreraSeleccionada} 
@@ -93,13 +110,16 @@ const StudentsPublications = () => {
               setTrabajoSeleccionado={setTrabajoSeleccionado} 
             />
           </div>
+          </div>
+
         </section>
+
         <div className=" ml-2 px-3">
           <NavLink to='/inicio'>
             <span class="material-symbols-outlined">arrow_back</span>
           </NavLink>
         </div>
-        <section className="grid grid-cols-2 mx-auto gap-4">
+        <section className="grid sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-20 mr-5">
           {dataStd.length > 0 ? (
             dataStd.map(student => (
               <TarjetaPublicacion listStudent={student} key={student.id} />
@@ -114,3 +134,5 @@ const StudentsPublications = () => {
 };
 
 export default StudentsPublications;
+
+
