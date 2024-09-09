@@ -85,16 +85,23 @@ const StudentsPublications = () => {
           setTrabajoSeleccionadoNav={setTrabajoSeleccionadoNav}
         />
       </header>
-
+      <br />
       <main className="flex flex-col md:flex-row h-auto mt-[90px] relative space-y-8 md:space-y-0 md:space-x-7">
 
-     <div>
-     <button onClick={toggleMenu} className="text-black focus:outline-none pr-9">
+      <div className="flex lg:hidden md:hidden justify-between items-center mb-3">
+            <div className='block sm:hidden'>
+              <NavLink to="/inicio">
+                <span className="material-symbols-outlined">
+                  arrow_back
+                </span>
+              </NavLink>
+            </div>
+            <button onClick={toggleMenu} className="text-black focus:outline-none pr-9">
               <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path>
               </svg>
             </button>
-     </div>
+          </div>
 
         <section className="px-5 h-max w-full md:w-1/5 border-r-2 flex flex-col space-y-4">
         <div className={`lg:block md:block md:pl-2 ${menuAbierto ? 'block' : 'hidden'}`}> 
@@ -114,12 +121,9 @@ const StudentsPublications = () => {
 
         </section>
 
-        <div className=" ml-2 px-3">
-          <NavLink to='/inicio'>
-            <span class="material-symbols-outlined">arrow_back</span>
-          </NavLink>
-        </div>
-        <section className="grid sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-20 mr-5">
+        <div className=" ml-2 px-3 ">
+          
+          <section className={`grid sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-20 mr-5 ${menuAbierto ? 'hidden' : 'grid'}`}>
           {dataStd.length > 0 ? (
             dataStd.map(student => (
               <TarjetaPublicacion listStudent={student} key={student.id} />
@@ -128,6 +132,8 @@ const StudentsPublications = () => {
             <p>No hay resultados para los filtros seleccionados.</p>
           )}
         </section>
+        </div>
+        
       </main>
     </>
   );

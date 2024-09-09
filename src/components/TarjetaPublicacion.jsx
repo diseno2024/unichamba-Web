@@ -12,27 +12,27 @@ const TarjetaPublicacion = ({ listStudent }) => {
     <>
       {/* foto del estudiante */}
       {location.pathname === "/studentsPublications" ? (
-        <NavLink key={id} to={`/studentProfile/${id}`} className="w-[525px] px-3 h-max py-10 border-b-2 flex flex-col justify-center  hover:bg-Space-cadet/15">
+        <NavLink key={id} to={`/studentProfile/${id}`} className="w-[400px] px-3 h-max py-5 border-b-2 flex flex-col justify-center  hover:bg-Space-cadet/15">
 
-          <div className="flex h-[250px] ">
+          <div className="flex h-[100%] ">
 
             {/* imagen */}
-            <div className="w-[180px] max-h-[250px] rounded-r-[25px] overflow-hidden">
+            <div className="w-[170px] max-h-[230px] rounded-r-[25px] overflow-hidden">
             <img src={imageUrl} alt="foto-perfil" className="rounded-r-[25px]"/>
             </div>
 
             {/* informacion del estudiante */}
-            <div className=" w-[65%] px-4">
+            <div className=" w-[70%] px-2 mb-12 py-2">
               <h1 className="text-lg font-normal px-2">{nombre}</h1>
               <span className="text-sm font-light px-2 text-black/75">{carrera}</span>
-              <p className="py-2 font-normal w-full h-[130px] px-2 overflow-hidden">{acercaDe}</p>
+              <p className="py-2 font-normal w-full h-[100%] px-2 overflow-hidden">{acercaDe}</p>
               
             </div>
 
           </div>
 
           {/* trabajos que el estudiante puede realizar */}
-          <div className="text-bg-icon flex gap-x-2 justify-end px-5 ">
+          <div className="text-bg-icon flex gap-x-2 justify-end px-5 my-10">
             {primerosCinco.map( trabajo => 
               <span className="material-symbols-outlined" style={{fontSize:35}} key={trabajo.nombre}>{trabajo.icono}</span>
             )}
