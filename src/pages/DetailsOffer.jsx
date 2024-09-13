@@ -43,6 +43,7 @@ const DetailsOffer = () => {
 
             <main className='relative'>
                 <section className='mt-[110px] px-4 md:px-20'>
+
                     <NavLink to="/OfferExploreStudent">
                         <span className="material-symbols-outlined">arrow_back</span>
                     </NavLink>
@@ -50,6 +51,13 @@ const DetailsOffer = () => {
                 </section>
 
                 <section className='grid md:grid-cols-2 gap-4'>
+                    <div className='my-5 md:mt-0 flex justify-center'>
+                        <img
+                            className='w-[300px] h-[350px] md:w-[450px] md:h-[400px] object-contain'
+                            src={oferta.imagen || "/imagenpredeterminadaempleo.svg"}
+                            alt="Imagen de la oferta"
+                        />
+                    </div>
                     <div className='ml-4 md:ml-20 mt-5 min-w-[300px] max-w-full'>
                         <div className='flex items-center'>
                             <span className="material-symbols-outlined">person</span>
@@ -81,13 +89,7 @@ const DetailsOffer = () => {
                         </div>
                     </div>
 
-                    <div className='mt-10 md:mt-0 flex justify-center'>
-                        <img 
-                            className='w-[300px] h-[350px] md:w-[450px] md:h-[400px] object-contain' 
-                            src={oferta.imagen || "/imagenpredeterminadaempleo.svg"} 
-                            alt="Imagen de la oferta" 
-                        />
-                    </div>
+
                 </section>
             </main>
         </>

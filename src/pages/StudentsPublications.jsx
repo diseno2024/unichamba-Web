@@ -86,59 +86,61 @@ const StudentsPublications = () => {
         />
       </header>
       <br />
-      <main className="flex flex-col md:flex-row h-auto mt-[90px] relative space-y-8 md:space-y-0 md:space-x-7">
-
-      <div className="flex lg:hidden md:hidden justify-between items-center mb-3">
-            <div className='block sm:hidden'>
-              <NavLink to="/inicio">
-                <span className="material-symbols-outlined">
-                  arrow_back
-                </span>
-              </NavLink>
-            </div>
-            <button onClick={toggleMenu} className="text-black focus:outline-none pr-9">
-              <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path>
-              </svg>
-            </button>
-          </div>
-
-        <section className="px-5 h-max w-full md:w-1/5 border-r-2 flex flex-col space-y-4">
-        <div className={`lg:block md:block md:pl-2 ${menuAbierto ? 'block' : 'hidden'}`}> 
-          <div>
-            <CarreraFiltro 
-              carreraSeleccionada={carreraSeleccionada} 
-              setCarreraSeleccionada={setCarreraSeleccionada} 
-            />
-          </div>
-          <div>
-            <AreadeTrabajo 
-              trabajoSeleccionado={trabajoSeleccionado} 
-              setTrabajoSeleccionado={setTrabajoSeleccionado} 
-            />
-          </div>
-          </div>
-
-        </section>
-
-        <div className=" ml-2 px-3 ">
-          
-          <section className={`grid sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-20 mr-5 ${menuAbierto ? 'hidden' : 'grid'}`}>
-          {dataStd.length > 0 ? (
-            dataStd.map(student => (
-              <TarjetaPublicacion listStudent={student} key={student.id} />
-            ))
-          ) : (
-            <p>No hay resultados para los filtros seleccionados.</p>
-          )}
-        </section>
-        </div>
+      <main className="flex flex-col md:flex-row h-auto mt-[70px] relative space-y-0 md:space-y-0 md:space-x-7">
         
+          <button onClick={toggleMenu} className={`${menuAbierto ? 'hidden' : 'flex'} md:hidden text-white  bg-Dark-Blue focus:outline-none justify-center py-2 mx-4 mt-2 rounded-2xl`}>
+            <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+          </button>
+       
+        <section className="px-5 h-max w-full md:min-w-[225px] md:max-w-[250px] border-r-2 flex-col space-y-4">
+          <div className={`lg:block md:block md:pl-2  ${menuAbierto ? 'block ' : 'hidden'}`}>
+            <div className="flex justify-end px-2 pt-2 md:hidden">
+              <button onClick={toggleMenu} className="text-black focus:outline-none">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+              </button>
+            </div>
+
+            <div>
+              <CarreraFiltro
+                carreraSeleccionada={carreraSeleccionada}
+                setCarreraSeleccionada={setCarreraSeleccionada}
+              />
+            </div>
+            <div>
+              <AreadeTrabajo
+                trabajoSeleccionado={trabajoSeleccionado}
+                setTrabajoSeleccionado={setTrabajoSeleccionado}
+              />
+            </div>
+          </div>
+        </section>
+
+        <div className="px-3 flex flex-col">
+          <section className="my-4 mx-4">
+            <NavLink to="/inicio" >
+              <span className="material-symbols-outlined">
+                arrow_back
+              </span>
+            </NavLink>
+          </section>
+          <section className={`grid sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-10 ${menuAbierto ? 'hidden' : 'grid'}`}>
+            {dataStd.length > 0 ? (
+              dataStd.map(student => (
+                <TarjetaPublicacion listStudent={student} key={student.id} />
+              ))
+            ) : (
+              <p>No hay resultados para los filtros seleccionados.</p>
+            )}
+          </section>
+        </div>
+
       </main>
     </>
   );
 };
 
 export default StudentsPublications;
-
-
