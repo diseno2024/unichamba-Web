@@ -77,3 +77,16 @@
     height: 90vh !important; 
     width: 90vw;
   }
+
+  @keyframes scroll {
+    0%{
+      transform: translateX(0);
+    }
+    100%{
+      transform: translateX(calc(-760px * 5 - 0.5rem * 10));
+    }
+  }
+
+  /* .animate-scroll{
+    animation: scroll 60s linear infinite;
+  } */

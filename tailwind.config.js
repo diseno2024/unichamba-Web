@@ -7,6 +7,7 @@ export default {
 
   theme: {
     extend: {
+
       gridTemplateColumns: {
         'custom': '1fr 2.2fr 1fr'
       },
@@ -29,7 +30,6 @@ export default {
         
         // NUEVA PALETA DE COLORES
         
-        "Rich-black": "#04061A",
         "Malachite":"#1AD361",
         "Space-cadet":"#2D3250",
         "Blue":"#0A05FE",
@@ -43,10 +43,20 @@ export default {
       },
       backgroundImage: {
         "portada":"url('/segunda-portada.jpg')",
+        "open-menu":"url(public/menu.svg)",
+        "close-menu":"url(public/close.svg)",
+        "banner":"url('public/bg_banner.png')",
+        "bannerOferta":"url('public/carruselOferta.png')",
+        "estudiante":"url('public/the-dream-archives-BqD0Id4qemc-unsplash.jpg')",
+        "oferta":"url('public/oferta.jpg')"
       },
       width: {
         '670': '670px',
       },
+      screens:{
+        'phone': '320px',
+      }
+      
     }
   },
   plugins: [],
