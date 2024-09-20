@@ -331,16 +331,16 @@ const StudentProfile = () => {
       },
       html: (
         <form onSubmit={editSubmit}>
-          <div className="flex w-full">
+          <div className="md:flex w-full">
             {/* <label htmlFor="nombreInput" className="mt-7 font-normal">
                 Nombre(s)*
               </label> */}
-            <div className="px-5 space-y-3">
+            <div className="md:px-5 space-y-3 ">
               <input
                 placeholder="Nombres"
                 type="text"
                 id="nombreInput"
-                className="rounded-lg border border-black font-normal py-4 w-[600px] px-5"
+                className="rounded-lg border border-black font-normal py-4 w-[270px] md:w-[600px] px-5"
                 name="nombre"
                 onChange={handleNombreChange}
                 pattern="^[A-Za-záéíóúÁÉÍÓÚ]+\s[A-Za-záéíóúÁÉÍÓÚ]+$"
@@ -350,29 +350,30 @@ const StudentProfile = () => {
                 placeholder="Apellidos"
                 type="text"
                 id="apellidoInput"
-                className="rounded-lg border border-black font-normal py-4 w-[600px] px-5"
+                className="rounded-lg border border-black font-normal py-4  w-[270px] md:w-[600px] px-5"
                 name="apellido"
                 onChange={handleApellidoChange}
                 pattern="^[A-Za-záéíóúÁÉÍÓÚ]+\s[A-Za-záéíóúÁÉÍÓÚ]+$"
+                
               />
 
               <input
                 placeholder="Telefono"
                 type="text"
                 id="telefonoInput"
-                className="rounded-lg border border-black font-normal py-4 w-[600px] px-5"
+                className="rounded-lg border border-black font-normal py-4  w-[270px] md:w-[600px] px-5"
                 name="telefono"
                 pattern="[0-9]{8}"
                 onChange={handleTelefonoChange}
               />
             </div>
 
-            <div className="w-full px-5 flex flex-col items-center justify-start space-y-3">
+            <div className="w-full px-5 flex flex-col items-center justify-start space-y-3 mt-3 md:mt-0">
               <input
                 placeholder="WhatsApp"
                 type="text"
                 id="whatsappInput"
-                className="rounded-lg border border-black font-normal py-4 w-[600px] px-5"
+                className="rounded-lg border border-black font-normal py-4  w-[270px] md:w-[600px] px-5"
                 name="whatsapp"
                 onChange={handleWhatsappChange}
                 pattern="[0-9]{8}"
@@ -385,7 +386,7 @@ const StudentProfile = () => {
                 onChange={handleCarreraChange}
                 isMulti={false}
                 options={carrerasList}
-                className="rounded-lg border border-black  mt-4 font-light w-[600px] px-5 py-2"
+                className="rounded-lg border border-black  mt-4 font-light  w-[270px] md:w-[600px] px-5 py-2"
               />
 
               <Select
@@ -395,7 +396,7 @@ const StudentProfile = () => {
                 options={trabajosOptions}
                 isMulti
                 onChange={handleTrabajosChange}
-                className="rounded-lg border border-black  mt-4 font-light w-[600px] px-5 py-2"
+                className="rounded-lg border border-black  mt-4 font-light  w-[270px] md:w-[600px] px-5 py-2"
               />
             </div>
           </div>
@@ -505,13 +506,13 @@ const StudentProfile = () => {
               </button>
             ) : null}
           </div>
-          <div className=" w-[200px]  h-[200px] ml-12 rounded-full overflow-hidden flex items-center absolute top-60 left-5 border-4">
+          <div className=" w-[200px]  h-[200px] ml-12 rounded-full overflow-hidden flex items-center absolute top-60 left-10 md:left-5 border-4">
             <img src={estudiante.imageUrl} alt="" className=" " />
           </div>
 
           {location.pathname === "/studentProfile" ? (
             <span
-              className="material-symbols-outlined cursor-pointer text-4xl pt-3 absolute left-60 z-50"
+              className="material-symbols-outlined cursor-pointer text-4xl pt-3 absolute left-64 md:left-60 z-50"
               onClick={actualizarFoto}
             >
               add_a_photo
@@ -608,7 +609,7 @@ const StudentProfile = () => {
                             target="_blank"
                             className="font-bold mt-5 pl-2 block"
                           >
-                            Ver Curriculum
+                            <img src="../../public/pdf.png" className=" w-20 ml-5"/>
                           </a>
                           <button
                             className=" bg-red-600 text-white font-normal p-2 rounded-lg block mt-3"
@@ -628,7 +629,7 @@ const StudentProfile = () => {
                         target="_blank"
                         className="font-bold mt-2 block"
                       >
-                        Ver Curriculum
+                        <img src="../../public/pdf.png" className=" w-20 ml-5"/>
                       </a>
                     ) : null}
                   </div>
