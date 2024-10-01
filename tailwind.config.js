@@ -43,12 +43,12 @@ export default {
       },
       backgroundImage: {
         "portada":"url('/segunda-portada.jpg')",
-        "open-menu":"url(public/menu.svg)",
-        "close-menu":"url(public/close.svg)",
-        "banner":"url('public/bg_banner.png')",
-        "bannerOferta":"url('public/carruselOferta.png')",
-        "estudiante":"url('public/the-dream-archives-BqD0Id4qemc-unsplash.jpg')",
-        "oferta":"url('public/oferta.jpg')"
+        "open-menu":"url(/menu.svg)",
+        "close-menu":"url(/close.svg)",
+        "banner":"url('/bg_banner.png')",
+        "bannerOferta":"url('/carruselOferta.png')",
+        "estudiante":"url('/the-dream-archives-BqD0Id4qemc-unsplash.jpg')",
+        "oferta":"url('/oferta.jpg')"
       },
       width: {
         '670': '670px',

@@ -3,14 +3,9 @@ import { UserAuth } from "../context/AuthContext";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../data/firebase";
 import { NavLink, useNavigate } from "react-router-dom";
-
-// lado de los estudiantes 
-import { Slice } from "../components/Slice";
+import { Carrusel } from "../components/Carrusel";
 import { cardsEstudiantes } from '../data/dataSlices'
-
-// lado de las ofertas de empelo 
 import { cardsOfertas } from '../data/dataSliceOferta'
-import { SliceOferta } from "../components/SliceOferta";
 
 
 const Inicio = () => {
@@ -27,8 +22,8 @@ const Inicio = () => {
   const [permiso, setpermiso] = useState(false);
   const [permisoIng, setpermisoIng] = useState(false);
   const [login, setLogin] = useState(false);
-  const [dataStd, setdataStd] = useState([]);
   const [nombres, setnombres] = useState([]);
+  const [dataStd, setdataStd] = useState([]);
   
 
   //  inicio de sesion
@@ -51,6 +46,7 @@ const Inicio = () => {
     }
   };
 
+  // data de estudiantes y administradores 
   const fetchData = async () => {
     const studentsSnapshot = await getDocs(collection(db, "estudiantes"));
     const studentsData = studentsSnapshot.docs.map((doc) => doc.data().email);
@@ -90,6 +86,8 @@ const Inicio = () => {
             }
           }
         }
+      }else{
+        console.log('cuenta externa')
       }
       //}
     }
@@ -102,37 +100,6 @@ const Inicio = () => {
       fetchData();
     };
   }, [user]);
-
-  // carrusel 
-
-  const [currentIndex, setCurrentIndex] = useState(0);// cambio por id de la tarjeta 
-  const [isFading, setIsFading] = useState(false); // estado para manejar la transicion 
-
-
-  const goToNext = () => {
-    setIsFading(true); // Inicia la transición
-
-    // para estudiantes
-    setTimeout(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % cardsEstudiantes.length);
-      setIsFading(false);
-    }, 500); // duracion de la transicion de 0.5 seg
-
-    // para ofertas 
-    setTimeout(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % cardsOfertas.length);
-      setIsFading(false);
-    }, 500); // duracion de la transicion de 0.5 seg
-
-  };
-
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      goToNext();
-    }, 5000);
-
-    return () => clearInterval(intervalId);
-  }, []);
 
   return (
     <>
@@ -429,9 +396,7 @@ const Inicio = () => {
 
           <section className="overflow-hidden">
 
-            <div className="flex whitespace-nowrap h-[355px] rounded-md">
-                <Slice card={cardsEstudiantes[currentIndex]} fading={isFading}/>
-            </div>
+          <Carrusel data={cardsEstudiantes}/> 
 
           </section>
 
@@ -442,11 +407,9 @@ const Inicio = () => {
         <h3 className="text-center text-3xl font-semibold    my-3">Ofertas laborales</h3>
 
           <section className="overflow-hidden">
-            <div className="flex whitespace-nowrap h-[355px] rounded-md">
-              <SliceOferta card={cardsOfertas[currentIndex]} fading={isFading} />
-            </div>
-
+            <Carrusel data={cardsOfertas}/> 
           </section>
+
         </NavLink>
         
     </main>
