@@ -9,7 +9,7 @@ export const cardsEstudiantes = [
         "id":2,
         "type":"estudiante",
         "titulo":'Crea tu cuenta',
-        "texto":'Y hablanos sobre ti para que profesionales puedan encotrare y darte la oportunidad de demostrar tus habilidades! '
+        "texto":'Hablanos sobre ti para que profesionales puedan encotrare y darte la oportunidad de demostrar tus habilidades! '
     },
     {
         "id":3,

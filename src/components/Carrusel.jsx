@@ -32,7 +32,7 @@ export const Carrusel = ({data}) => {
 
   return (
    <>
-    <div className="flex whitespace-nowrap h-[355px] rounded-md">
+    <div className="flex h-[355px] rounded-md">
         <Slice card={data[currentIndex]} fading={isFading} />
     </div>
    </>

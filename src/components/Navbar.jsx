@@ -50,7 +50,7 @@ const Navbar = ({ setCarreraSeleccionadaNav, setTrabajoSeleccionadoNav }) => {
     <>
       { location.pathname === "/studentProfile"  ?
       
-      <nav className="h-[90px] flex items-center justify-between px-10 bg-Dark-Blue shadow-md shadow-Gris-claro fixed top-0 w-full z-50">
+      <nav className="h-[90px] flex items-center justify-center px-10 bg-Dark-Blue shadow-md shadow-Gris-claro fixed top-0 w-full z-50">
           <NavLink to="/inicio">
             <img src="/LOGO.svg" alt="LOGO UNICHAMBA AZUL" />
           </NavLink>
@@ -58,7 +58,7 @@ const Navbar = ({ setCarreraSeleccionadaNav, setTrabajoSeleccionadoNav }) => {
 
         : location.pathname === "/anuncios/:idOferta" ?
 
-        <nav className="h-[90px] flex items-center justify-between px-10 bg-Dark-Blue shadow-md shadow-Gris-claro fixed top-0 w-full z-50">
+        <nav className="h-[90px] flex items-center justify-center md:justify-between px-10 bg-Dark-Blue shadow-md shadow-Gris-claro fixed top-0 w-full z-50">
           <NavLink to="/inicio">
             <img src="/LOGO.svg" alt="LOGO UNICHAMBA AZUL" />
           </NavLink>
@@ -66,12 +66,12 @@ const Navbar = ({ setCarreraSeleccionadaNav, setTrabajoSeleccionadoNav }) => {
 
         : location.pathname === "/studentsPublications" ?
 
-        <nav className="h-[90px] flex items-center justify-between px-10 bg-Dark-Blue shadow-md shadow-Gris-claro fixed top-0 w-full z-50">
+        <nav className="h-[90px] flex items-center justify-center md:justify-between px-5 bg-Dark-Blue shadow-md shadow-Gris-claro fixed top-0 w-full z-50">
           <NavLink to="/inicio">
             <img src="/LOGO.svg" alt="LOGO UNICHAMBA AZUL" />
           </NavLink>
           
-          <div className="flex w-[200px] items-center justify-center">
+          <div className="md:flex w-[200px] items-center md:justify-between justify-center hidden">
             <NavLink to="/studentProfile">
             { !user ? <h2 className="text-xl font-normal text-Dark-Blue">{nombres.nombre}</h2> : <h2 className="text-xl font-normal text-white">{nombres.nombre}</h2>}
             </NavLink>
@@ -80,12 +80,12 @@ const Navbar = ({ setCarreraSeleccionadaNav, setTrabajoSeleccionadoNav }) => {
 
         :
         
-        <nav className="h-[90px] flex items-center justify-between px-10 bg-Dark-Blue shadow-md shadow-Gris-claro fixed top-0 w-full z-50">
+        <nav className="h-[90px] flex items-center justify-center md:justify-between px-10 bg-Dark-Blue shadow-md shadow-Gris-claro fixed top-0 w-full z-50">
           <NavLink to="/inicio">
             <img src="/LOGO.svg" alt="LOGO UNICHAMBA AZUL" />
           </NavLink>
   
-          <div className="flex w-[200px] items-center justify-center">
+          <div className="md:flex w-[200px] items-center justify-center hidden">
             <NavLink to="/studentProfile">
             { !user ? <h2 className="text-xl font-normal text-Dark-Blue">{nombres.nombre}</h2> : <h2 className="text-xl font-normal text-white">{nombres.nombre}</h2>}
             </NavLink>

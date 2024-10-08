@@ -103,7 +103,7 @@ const Inicio = () => {
 
   return (
     <>
-    <header className="h-[405px] bg-Dark-Blue rounded-b-2xl relative">
+    <header className="h-[370px] bg-Dark-Blue rounded-b-2xl relative">
       <nav className="w-full flex items-center justify-between px-3 py-5 md:px-5">
 
         <figure className="phone:w-40 md:w-64">
@@ -112,7 +112,7 @@ const Inicio = () => {
 
         {/* menu de hamburgesa para movil  */}
         <input type="checkbox" id="menu" className="peer hidden"/>
-        <label htmlFor="menu" className="bg-open-menu text-transparent bg-no-repeat w-7 h-7 bg-center bg-cover cursor-pointer peer-checked:bg-close-menu transition-all z-50 phone:block lg:hidden">activa</label>
+        <label htmlFor="menu" className="bg-open-menu text-transparent bg-no-repeat w-8 h-7 bg-center bg-cover cursor-pointer peer-checked:bg-close-menu transition-all z-50 phone:block lg:hidden">activa</label>
 
         {/* menu hamburgesa en movil */}
 
@@ -379,22 +379,22 @@ const Inicio = () => {
 
         
       </nav>
-      <h1 className="text-white font-medium text-4xl md:w-[60%] md:left-[40px] relative text-center md:top-20 phone:top-10 phone:px-4">
+      <h1 className="text-white font-medium w-[90%] mx-auto md:mx-0 text-3xl md:text-4xl md:w-[60%] md:left-[40px] relative text-center md:top-20 phone:top-10 phone:px-4">
           Te ayudamos a encontrar tu primer empleo
       </h1>
       <img
           src="/minerva_sola_white.png"
           alt="minerva"
-          className="phone:w-[80px] phone:h-[120px] md:w-[140px] md:h-[190px] absolute md:top-32 md:right-10 lg:right-20 phone:bottom-5 phone:right-8"
+          className="phone:w-[80px] phone:h-[120px] md:w-[140px] md:h-[190px] absolute md:top-32 md:right-10 lg:right-20 phone:bottom-8 phone:right-8"
         />
     </header> 
-    <main className="grid md:grid-cols-2 grid-cols-1 my-5 mx-auto md:gap-8 relative items-center justify-center w-[95%]">
+    <main className="grid xl:grid-cols-2 my-5 mx-auto md:gap-8 relative items-center justify-center w-[95%] pb-5">
 
         <NavLink to="/studentsPublications">
 
         <h3 className="text-center text-3xl font-semibold my-3">Estudiantes</h3>
 
-          <section className="overflow-hidden">
+          <section className="overflow-hidden"> 
 
           <Carrusel data={cardsEstudiantes}/> 
 
@@ -414,7 +414,7 @@ const Inicio = () => {
         
     </main>
 
-    <div className="justify-between w-[95%] mx-auto mt-5 font-semibold text-white my-5 phone:hidden lg:flex">
+    <div className="justify-between w-[95%] mx-auto mt-5 font-semibold text-white my-5 phone:hidden xl:flex">
 
       <NavLink to="/studentsPublications" className="pl-4">
         <button className="bg-Malachite px-10 py-3 rounded-md">Ver Estudiantes</button>
@@ -426,7 +426,7 @@ const Inicio = () => {
 
     </div>
 
-    <footer className="w-full h-[425px] bg-Dark-Blue space-y-5 py-5 ">
+    <footer className="w-full h-max bg-Dark-Blue space-y-5 py-7 ">
         <div className="w-[95%] mx-auto h-max flex flex-col items-center text-white font-normal text-xl space-y-5">
           <h2>Descarga nuestra app en tu celular!</h2>
           <img
@@ -437,7 +437,7 @@ const Inicio = () => {
           <h2 className="text-white font-normal text-xl">
             copyright© 2024 Unichamba
           </h2>
-          <div className="w-full flex justify-center">
+          <div className="w-full flex justify-center text-center">
             <a href="https://website-unichamba.netlify.app/policy"
             >
               Términos y Condiciones
