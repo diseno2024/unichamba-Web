@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import NavGeneral from "../components/NavGeneral";
 import OrdenarCarreras from "../components/ordenCarreras";
+import axios from "axios";
 import { db, storage } from "../data/firebase";
+
 import {
   collection,
   addDoc,
@@ -40,93 +42,45 @@ const CreateStudentAccount = () => {
     pdfNombre: "",
   };
 
-  const isValidDate = (dateString) => {
-    // Convertir la cadena de fecha a objeto Date
-    const selectedDate = new Date(dateString);
-    // Obtener la fecha actual
-    const today = new Date();
-    // Calcular la diferencia de tiempo entre las fechas
-    const diffTime = Math.abs(today - selectedDate);
-    // Calcular la diferencia de años
-    const diffYears = Math.floor(diffTime / (1000 * 60 * 60 * 24 * 365));
-    // La persona debe tener al menos 18 años
-    return diffYears >= 18;
-  };
-  const [values, setValues] = useState(initialStateValues);
-  const [imageFiles, setImageFiles] = useState([]); // Estado para manejar el archivo de imagen
-  const [trabajosOptions, setTrabajosOptions] = useState([]);
-  const [pdf, setPdf] = useState(null);
-
   useEffect(() => {
-    // Función para obtener los trabajos de Firestore
-    const fetchTrabajos = async () => {
+    const fetchTrabajosFromCouchDB = async () => {
       try {
-        const trabajosCollection = collection(db, "trabajos");
-        const trabajosSnapshot = await getDocs(trabajosCollection);
-        const trabajosList = trabajosSnapshot.docs.map((doc) => ({
-          value: doc.id,
-          label: doc.data().nombre,
-          icon: doc.data().icono,
+        const response = await axios.get('https://couchdbbackend.esaapp.com/unichamba-trabajos/_all_docs', {
+          auth: {
+            username: 'unichamba',
+            password: 'S3pt13mbre#2024Work'
+          },
+          params: {
+            include_docs: true  // Incluir los documentos completos
+          }
+        });
+  
+        const trabajosList = response.data.rows.map((row) => ({
+          value: row.id,
+          label: row.doc?.nombre || 'Sin nombre',  // Verificar si 'doc' y 'nombre' existen
+          icon: row.doc?.icono || 'default-icon',
         }));
+  
         trabajosList.sort((a, b) => a.label.localeCompare(b.label));
+  
         setTrabajosOptions(trabajosList);
       } catch (error) {
-        console.error("Error obteniendo trabajos: ", error);
+        console.error("Error obteniendo trabajos de CouchDB: ", error);
       }
     };
-
-    fetchTrabajos();
+  
+    fetchTrabajosFromCouchDB();
   }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    if (name === "fechaNacimiento") {
-      if (!isValidDate(value)) {
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: "Necesitas ser mayor de edad para crear una cuenta, por favor ingresa una fecha correcta",
-        });
-        return;
-      }
-    }
     setValues({ ...values, [name]: value });
   };
-
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      // Validar la extensión del archivo utilizando una expresión regular
-      const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
-      if (!allowedExtensions.test(file.name)) {
-        Swal.fire({
-          icon: "error",
-          title: "Formato no válido",
-          text: "Por favor, sube una imagen en formato png, jpg o jpeg.",
-        });
-        e.target.value = null; // Limpiar el campo de archivo
-      } else {
-        setImageFiles([file]);
-      }
-    }
-  };
-
-  const handlePDFChange = (e) => {
-    const archivo = e.target.files[0]; // obtener el archivo seleccionado
-    const extPermitidas = /(.pdf)$/i; // expresión regular para validar la extensión .pdf
-
-    if (!extPermitidas.exec(archivo.name)) {
-      Swal.fire({
-        title: "Error",
-        icon: "error",
-        text: "Asegúrate de subir el archivo en formato .pdf",
-      });
-      e.target.value = ""; // resetear el valor del input
-      return false;
-    } else {
-      setPdf(archivo); // almacenar el archivo PDF
-    }
-  };
+ 
+  const [values, setValues] = useState(initialStateValues);
+  const [imageFiles, setImageFiles] = useState([]); // Estado para manejar el archivo de imagen
+  const [trabajosOptions, setTrabajosOptions] = useState([]);
+  const [pdf, setPdf] = useState(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -134,13 +88,6 @@ const CreateStudentAccount = () => {
     addOrEditLink(values);
   };
 
-  const handleTrabajosChange = (selectedOptions) => {
-    const trabajos = selectedOptions.map((option) => ({
-      nombre: option.label,
-      icono: option.icon, // include icon in selected job
-    }));
-    setValues({ ...values, trabajos: trabajos });
-  };
 
   const handleCarreraChange = (carrera) => {
     setValues({ ...values, carrera: carrera });
@@ -156,6 +103,68 @@ const CreateStudentAccount = () => {
     }
   };
 
+  const handleTrabajosChange = (selectedOptions) => {
+    const trabajos = selectedOptions.map((option) => ({
+      nombre: option.label,
+      icono: option.icon,  // Incluir el ícono en el trabajo seleccionado
+    }));
+    setValues({ ...values, trabajos: trabajos });
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Validar que el archivo sea PDF
+      const allowedExtensions = /(\.pdf)$/i;
+      if (!allowedExtensions.test(file.name)) {
+        Swal.fire({
+          icon: "error",
+          title: "Formato no válido",
+          text: "Por favor, sube un archivo en formato PDF.",
+        });
+        e.target.value = null; // Limpiar el campo de archivo
+      } else {
+        const reader = new FileReader();
+  
+        // Convertir PDF a base64 después de que el archivo se haya leído
+        reader.onloadend = () => {
+          const base64String = reader.result; // El archivo convertido a Base64
+  
+          // Actualizar el estado con el PDF en base64
+          setValues((prevValues) => ({
+            ...prevValues,
+            hojadevida: base64String,  // Aquí almacenamos el base64 del PDF
+            pdfNombre: file.name,  // Guardamos el nombre del archivo
+          }));
+        };
+  
+        reader.readAsDataURL(file); // Lee el archivo y lo convierte a base64
+      }
+    }
+  };
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Validar la extensión del archivo utilizando una expresión regular
+      const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
+      if (!allowedExtensions.test(file.name)) {
+        Swal.fire({
+          icon: "error",
+          title: "Formato no válido",
+          text: "Por favor, sube una imagen en formato png, jpg o jpeg.",
+        });
+        e.target.value = null; // Limpiar el campo de archivo
+      } else {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          const base64String = reader.result; // La imagen convertida a Base64
+          setValues({ ...values, imageUrl: base64String });
+        };
+        reader.readAsDataURL(file); // Convierte la imagen a Base64
+      }
+    }
+  };
+
   const MostrarAyuda = () => {
     Swal.fire({
       icon: "info",
@@ -163,73 +172,108 @@ const CreateStudentAccount = () => {
       text: "Aceptar nuestros términos y condiciones implica que usted acepta todas las normas y políticas que rigen el uso de nuestro servicio. Esto incluye cómo recopilamos y utilizamos sus datos personales, las reglas sobre el contenido que puede publicar, y sus responsabilidades al utilizar nuestra plataforma. Aceptar estos términos es necesario para garantizar una experiencia segura y justa para todos los usuarios.",
     });
   };
-  const resizeFile = (file) =>
-    new Promise((resolve) => {
-      Resizer.imageFileResizer(
-        file,
-        130,
-        130,
-        "JPEG",
-        100,
-        0,
-        (uri) => {
-          resolve(uri);
-        },
-        "file"
-      );
-    });
-  const addOrEditLink = async (linkObject) => {
+
+  const addOrEditLink = async (studentData) => {
     setLoading(true);
-    let pdfNombre = ""; // Inicializar la variable pdfNombre
     try {
-      // Crear el documento del estudiante en Firestore
-      const docRef = await addDoc(collection(db, "estudiantes"), {
-        ...linkObject,
-        imageUrl: "", // Inicialmente vacío
-        thumbUrl: "", // Inicialmente vacío
-        hojadevida: "", // Inicialmente vacío
-        pdfNombre: "",
-      });
-      const docId = docRef.id;
-
-      // Función para subir imágenes
-      const uploadImage = async (file) => {
-        const imageRef = ref(storage, `imagenesPerfil/${docId}/${file.name}`);
-        await uploadBytes(imageRef, file);
-        const fileUrl = await getDownloadURL(imageRef);
-
-        const resizedImage = await resizeFile(file);
-        const thumbRef = ref(
-          storage,
-          `imagenesPerfil/${docId}/thumb_${file.name}`
-        );
-        await uploadBytes(thumbRef, resizedImage);
-        const resizedImageUrl = await getDownloadURL(thumbRef);
-
-        return { imageUrl: fileUrl, thumbUrl: resizedImageUrl };
-      };
-
-      // Subir las imágenes
-      const results = await Promise.all(
-        imageFiles.map((file) => uploadImage(file))
+      // 1. Guardar los datos del estudiante (sin _id para que CouchDB lo genere)
+      const studentResponse = await axios.post('https://couchdbbackend.esaapp.com/unichamba-estudiantes/', 
+        studentData,
+        {
+          auth: {
+            username: 'unichamba',
+            password: 'S3pt13mbre#2024Work',
+          },
+        }
       );
-      const imageUrls = results.map((result) => result.imageUrl).join(", ");
-      const thumbUrls = results.map((result) => result.thumbUrl).join(", ");
-
-      // Subir el PDF
-      pdfNombre = pdf.name;
-      const pdfRef = ref(storage, `cvPerfil/${docId}/${pdfNombre}`);
-      await uploadBytes(pdfRef, pdf);
-      const pdfUrl = await getDownloadURL(pdfRef);
-
-      // Actualizar el documento del estudiante con las URLs de las imágenes y del PDF
-      await updateDoc(doc(db, "estudiantes", docId), {
-        imageUrl: imageUrls,
-        thumbUrl: thumbUrls,
-        hojadevida: pdfUrl,
-        pdfNombre: pdfNombre,
-      });
-
+  
+      // Obtén el ID generado por CouchDB
+      const studentId = studentResponse.data.id;
+  
+      let storageDoc; // Variable para almacenar el documento existente en storage
+  
+      // 2. Verificar si ya existe un documento en la base de almacenamiento
+      try {
+        const existingStorageDoc = await axios.get(
+          `https://couchdbbackend.esaapp.com/unichamba-estudiantes-storage/${studentId}`,
+          {
+            auth: {
+              username: 'unichamba',
+              password: 'S3pt13mbre#2024Work',
+            },
+          }
+        );
+        storageDoc = existingStorageDoc.data; // Guardar el documento existente
+      } catch (error) {
+        if (error.response && error.response.status === 404) {
+          // Si no se encuentra el documento (error 404), continuamos normalmente
+          storageDoc = null;
+        } else {
+          // Si hay otros errores, los manejamos
+          throw error;
+        }
+      }
+  
+      // 3. Guardar o actualizar la imagen y el PDF en la base de datos de almacenamiento
+      const attachments = {
+        _attachments: {
+          "imagen.jpg": {
+            content_type: "image/jpeg", // Ajusta el tipo de contenido según sea necesario
+            data: values.imageUrl.split(",")[1], // Base64 sin el prefijo de tipo de archivo
+          },
+          "curriculum.pdf": {
+            content_type: "application/pdf",
+            data: values.hojadevida.split(",")[1], // Base64 sin el prefijo de tipo de archivo
+          }
+        }
+      };
+  
+      if (storageDoc) {
+        // Si existe, incluimos _rev para actualizar el documento
+        attachments._rev = storageDoc._rev;
+      }
+  
+      const storageResponse = await axios.put(
+        `https://couchdbbackend.esaapp.com/unichamba-estudiantes-storage/${studentId}`,
+        attachments,
+        {
+          auth: {
+            username: 'unichamba',
+            password: 'S3pt13mbre#2024Work',
+          },
+        }
+      );
+  
+      console.log('Imagen y PDF guardados:', storageResponse.data);
+  
+      // 4. Obtener la última versión del documento del estudiante
+      const studentDoc = await axios.get(
+        `https://couchdbbackend.esaapp.com/unichamba-estudiantes/${studentId}`,
+        {
+          auth: {
+            username: 'unichamba',
+            password: 'S3pt13mbre#2024Work',
+          },
+        }
+      );
+  
+      // 5. Actualizar el documento del estudiante con la URL de la imagen
+      await axios.put(
+        `https://couchdbbackend.esaapp.com/unichamba-estudiantes/${studentId}`,
+        {
+          ...studentDoc.data, // Incluye el documento actual con _rev para evitar conflictos
+          imageUrl: `https://couchdbbackend.esaapp.com/unichamba-estudiantes-storage/${studentId}/imagen.jpg`, // Enlace directo a la imagen
+          pdfUrl: `https://couchdbbackend.esaapp.com/unichamba-estudiantes-storage/${studentId}/curriculum.pdf`, // Enlace directo al PDF
+  
+        },
+        {
+          auth: {
+            username: 'unichamba',
+            password: 'S3pt13mbre#2024Work',
+          },
+        }
+      );
+  
       Swal.fire({
         icon: "success",
         title: "Registro con éxito",
@@ -239,15 +283,20 @@ const CreateStudentAccount = () => {
           window.location.href = "/";
         }
       });
+  
       setValues(initialStateValues);
       setImageFiles([]);
       setPdf(null); // Restablecer el estado del PDF
     } catch (error) {
-      console.log(error);
+      console.error('Error al guardar en CouchDB:', error);
+      Swal.fire('¡Error!', `Hubo un problema al guardar los datos: ${error.message}`, 'error');
     } finally {
       setLoading(false);
     }
   };
+  
+  
+ 
 
   return (
     <>
@@ -281,7 +330,8 @@ const CreateStudentAccount = () => {
                   name="nombre"
                   pattern="^[A-Za-záéíóúÁÉÍÓÚ]+\s[A-Za-záéíóúÁÉÍÓÚ]+$"
                   title="Por favor introduce tus nombres adecuadamente"
-                  onChange={handleInputChange}
+                  value={values.nombre}  // conectar al estado
+                  onChange={handleInputChange}  // actualizar el estado
                   required
                 />
                 <br></br>
@@ -298,7 +348,8 @@ const CreateStudentAccount = () => {
                   name="telefono"
                   pattern="[0-9]{8}"
                   title="Por favor, introduce exactamente 8 números."
-                  onChange={handleInputChange}
+                  value={values.telefono}  // conectar al estado
+                  onChange={handleInputChange}  // actualizar el estado
                   required
                 />
                 <br />
@@ -322,7 +373,8 @@ const CreateStudentAccount = () => {
                   id="imagenInput"
                   className="rounded-lg border border-black p-3 w-80 mt-4 font-normal"
                   name="imagen"
-                  onChange={handleImageChange}
+               
+                  onChange={handleImageChange}  // actualizar el estado
                   title="Las fotos deben subirse en formato png, jpg, jpeg"
                   required
                 />
@@ -346,7 +398,8 @@ const CreateStudentAccount = () => {
                   name="apellido"
                   pattern="^[A-Za-záéíóúÁÉÍÓÚ]+\s[A-Za-záéíóúÁÉÍÓÚ]+$"
                   title="Por favor introduce entre 5 y 30 dígitos."
-                  onChange={handleInputChange}
+                  value={values.apellido}  // conectar al estado
+                  onChange={handleInputChange}  // actualizar el estado
                   required
                 />
                 <br></br>
@@ -361,7 +414,8 @@ const CreateStudentAccount = () => {
                   id="whatsappInput"
                   className="rounded-lg border border-black p-3 w-80 mt-4 font-normal"
                   name="whatsapp"
-                  onChange={handleInputChange}
+                  value={values.whatsapp}  // conectar al estado
+                  onChange={handleInputChange}  // actualizar el estado
                   required
                   pattern="[0-9]{8}"
                   title="Por favor, introduce exactamente 8 números."
@@ -373,7 +427,6 @@ const CreateStudentAccount = () => {
                   Fecha de Nacimiento
                 </label>
                 <br></br>
-
                 <input
                   type="date"
                   id="fechaInput"
@@ -396,8 +449,9 @@ const CreateStudentAccount = () => {
                   id="imagenCV"
                   className="rounded-lg border border-black p-3 w-80 mt-4 font-normal"
                   name="curriculum"
-                  onChange={handlePDFChange}
-                  title="El archivom debe estar en formato PDF"
+                    // conectar al estado
+                  onChange={handleFileChange}  // actualizar el estado
+                  title="El archivo debe estar en formato PDF"
                   required
                 />
                 <h6 className="text-sm text-gray-500 mt-2 ml-1 font-normal">
@@ -417,7 +471,7 @@ const CreateStudentAccount = () => {
             </div>
             <div>
               <br />
-              <div className="ml-10">
+             <div className="ml-10">
                 <label htmlFor="trabajoInput" className=" font-normal">
                   Trabajos
                 </label>
@@ -433,6 +487,7 @@ const CreateStudentAccount = () => {
                   className="rounded-lg border border-black p-3 w-670 mt-4 font-light "
                 />
               </div>
+              
               <br />
             </div>
             <div className="flex ml-10 bg-Blanco-cremoso justify-between pr-10">
@@ -447,7 +502,8 @@ const CreateStudentAccount = () => {
                   placeholder="Puedes hablar acerca de tus conocimientos o sobre tus aptitudes"
                   name="acercaDe"
                   id=""
-                  onChange={handleInputChange}
+                  value={values.acercaDe}  // conectar al estado
+                  onChange={handleInputChange}  // actualizar el estado
                   cols="79"
                   required
                   rows="4"
@@ -502,7 +558,8 @@ const CreateStudentAccount = () => {
                       name="nombre"
                       pattern="^[A-Za-záéíóúÁÉÍÓÚ]+\s[A-Za-záéíóúÁÉÍÓÚ]+$"
                       title="Por favor introduce tus nombres adecuadamente"
-                      onChange={handleInputChange}
+                      value={values.nombre}  // conectar al estado
+                      onChange={handleInputChange}  // actualizar el estado
                       required
                     />
                     <br></br>
@@ -517,9 +574,11 @@ const CreateStudentAccount = () => {
                       id="apellidoInput"
                       className="rounded-lg border border-black p-3 w-[87%] mt-4 font-normal"
                       name="apellido"
+                      value={values.apellido}  // conectar al estado
+                      onChange={handleInputChange}  // actualizar el estado
                       pattern="^[A-Za-záéíóúÁÉÍÓÚ]+\s[A-Za-záéíóúÁÉÍÓÚ]+$"
                       title="Por favor introduce entre 5 y 30 dígitos."
-                      onChange={handleInputChange}
+                     
                       required
                     />
                     <br></br>
@@ -536,7 +595,8 @@ const CreateStudentAccount = () => {
                       name="telefono"
                       pattern="[0-9]{8}"
                       title="Por favor, introduce exactamente 8 números."
-                      onChange={handleInputChange}
+                      value={values.telefono}  // conectar al estado
+                      onChange={handleInputChange}  // actualizar el estado
                       required
                     />
                     <br />
@@ -560,7 +620,7 @@ const CreateStudentAccount = () => {
                       id="imagenInput"
                       className="rounded-lg border border-black p-3 w-[87%] mt-4 font-normal"
                       name="imagen"
-                      onChange={handleImageChange}
+                      onChange={handleImageChange}  // actualizar el estado
                       title="Las fotos deben subirse en formato png, jpg, jpeg"
                       required
                     />
@@ -582,7 +642,8 @@ const CreateStudentAccount = () => {
                       id="whatsappInput"
                       className="rounded-lg border border-black p-3 w-[87%] mt-4 font-normal"
                       name="whatsapp"
-                      onChange={handleInputChange}
+                      value={values.whatsapp}  // conectar al estado
+                      onChange={handleInputChange}  // actualizar el estado
                       required
                       pattern="[0-9]{8}"
                       title="Por favor, introduce exactamente 8 números."
@@ -617,7 +678,7 @@ const CreateStudentAccount = () => {
                       id="imagenCV"
                       className="rounded-lg border border-black p-3 w-[87%] mt-4 font-normal"
                       name="curriculum"
-                      onChange={handlePDFChange}
+                      onChange={handleFileChange}  // actualizar el estado
                       title="El archivom debe estar en formato PDF"
                       required
                     />
@@ -649,7 +710,8 @@ const CreateStudentAccount = () => {
                       placeholder="Puedes hablar acerca de tus conocimientos o sobre tus aptitudes"
                       name="acercaDe"
                       id=""
-                      onChange={handleInputChange}
+                      value={values.acercaDe}  // conectar al estado
+                      onChange={handleInputChange} 
                       required
                       rows="4"
                       maxLength={500}
