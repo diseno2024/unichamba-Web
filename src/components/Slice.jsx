@@ -41,7 +41,7 @@ export const Slice = ({card, fading}) => {
                     <p className='text-sm font-light'>Ingeniería en sistemas informáticos</p>
                     <p className='font-normal py-3 h-[110px] overflow-hidden mt-1 px-1'>{texto}</p>
                 </div>
-                <div className='absolute md:right-10 md:top-[65px] bottom-16 left-5'>
+                <div className='absolute md:left-20 md:bottom-[45px] bottom-16 left-5'>
 
                     <span className="material-symbols-outlined text-3xl">support_agent</span>
                     <span className="material-symbols-outlined text-3xl">format_paint</span>
@@ -56,7 +56,7 @@ export const Slice = ({card, fading}) => {
                 // perfil generico
 
                  // oferta de empleo
-                 <div className={`flex justify-center items-center h-full space-x-6 space-y-4 relative border border-red-500 px-2 transition-transform duration-500 ${fading ? 'translate-x-full' : 'translate-x-0'} `}>
+                 <div className={`flex justify-center items-center h-full space-x-6 space-y-4 relative px-2 transition-transform duration-500 ${fading ? 'translate-x-full' : 'translate-x-0'} `}>
                  <figure className='bg-oferta w-[200px] h-[300px] md:w-[32%] md:h-[90%] bg-contain bg-center md:bg-cover bg-no-repeat rounded-md' />
 
                  <div className='w-[60%] h-[60%] overflow-hidden whitespace-normal hidden md:block'>

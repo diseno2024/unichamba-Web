@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { UserAuth } from "../context/AuthContext";
-import { collection, getDocs } from "firebase/firestore";
-import { db } from "../data/firebase";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Carrusel } from "../components/Carrusel";
 import { cardsEstudiantes } from '../data/dataSlices'
 import { cardsOfertas } from '../data/dataSliceOferta'
+import { useFetch } from "../hooks/useFetch";
 
 
 const Inicio = () => {
@@ -16,14 +15,14 @@ const Inicio = () => {
   const emailIng = "ernesto.calderon@ues.edu.sv";
   const cuentaUes = /^[a-zA-Z0-9]{7}@ues\.edu/gm.test(user.email);
   const navigate = useNavigate();
-  let student = [];
-  let administradores = [];
+  let studentEmail = [];
+  let adminisEmail = [];
   let URLphoto = user.photoURL;
   const [permiso, setpermiso] = useState(false);
   const [permisoIng, setpermisoIng] = useState(false);
   const [login, setLogin] = useState(false);
   const [nombres, setnombres] = useState([]);
-  const [dataStd, setdataStd] = useState([]);
+
   
 
   //  inicio de sesion
@@ -40,65 +39,46 @@ const Inicio = () => {
     setLogin(false);
     try {
       await googleSingOut();
+      setnombres([]);
       // setLogin(false);
     } catch (error) {
       console.log(error);
     }
   };
 
-  // data de estudiantes y administradores 
-  const fetchData = async () => {
-    const studentsSnapshot = await getDocs(collection(db, "estudiantes"));
-    const studentsData = studentsSnapshot.docs.map((doc) => doc.data().email);
-    const estudiantes = studentsSnapshot.docs.map((doc) => ({...doc.data(), id: doc.id}));
-    setdataStd(estudiantes);
-    // spread de la data
-    student = studentsData; // emails de los estudiantes ya registrados
+  const {estudiantes} = useFetch("unichamba-estudiantes");
+  const {admins} = useFetch("unichamba-administradores");
 
-    estudiantes.filter( perfil => {
-      if(perfil.email === user.email){
-        setnombres(perfil)
-      }
-    })
+  studentEmail = estudiantes.map( estudiante => {
+    return estudiante.doc.email;
+  })
 
-    // administradores
-    const adminSnapshot = await getDocs(collection(db, "administradores"));
-    const admins = adminSnapshot.docs.map((doc) => doc.data().correo);
-    administradores = admins;
-    if (Object.keys(user).length !== 0) {
-      setLogin(true);
-
-      if (!cuentaExterna) {
-        if (administradores.includes(user.email)) {
-          setpermiso(true);
-          if (administradores.includes(emailIng)) {
-            setpermisoIng(true);
-          }
-        } else {
-          if (!result) {
-            // no es empleado de la use
-            if (!administradores.includes(user.email)) {
-              // no es administrador
-              if (!student.includes(user.email)) {
-                // no tiene cuenta registrada
-                navigate("/createAccountStd");
-              }
-            }
-          }
-        }
-      }else{
-        console.log('cuenta externa')
-      }
-      //}
-    }
-  };
+  adminisEmail = admins.map( (admin) => {
+    return admin.doc.email;
+  })
 
   useEffect(() => {
-    fetchData();
-
-    return () => {
-      fetchData();
-    };
+    if (Object.keys(user).length !== 0) {
+      setLogin(true);
+      if(!cuentaExterna){ // no gmail
+        if(!result){ // no cuenta empleado 
+          if( studentEmail.includes(user.email) ){ // si se encuentra una cuenta 
+            estudiantes.filter( estudiante => {
+              if(estudiante.doc.email === user.email){
+                setnombres(estudiante.doc);
+              }
+            })
+          }else if(adminisEmail.includes(user.email)){ // si no tiene cuenta posiblemente sea un administrador
+            setpermiso(true);
+            if(adminisEmail.includes(emailIng)){
+              setpermisoIng(true);
+            }
+          }else{ // no tiene una cuenta  
+            navigate("/createAccountStd");
+          }
+        }
+      }
+    }
   }, [user]);
 
   return (
@@ -151,7 +131,7 @@ const Inicio = () => {
 
                   <div className="h-[150px] w-[150px] rounded-full ">
                     <img
-                      src={nombres.thumbUrl}
+                      src={nombres.imageUrl}
                       alt="imagen-estudiante"
                       className="w-full h-full rounded-full"
                       style={{objectFit:"cover"}}
@@ -299,7 +279,7 @@ const Inicio = () => {
                   </h1>
                   <div className="h-[55px] w-[55px] rounded-full">
                     <img
-                      src={nombres.thumbUrl}
+                      src={nombres.imageUrl}
                       alt="imagen-estudiante"
                       className="w-full h-full rounded-full"
                       style={{objectFit:"cover"}}
