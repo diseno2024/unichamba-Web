@@ -176,124 +176,97 @@ const CreateStudentAccount = () => {
   const addOrEditLink = async (studentData) => {
     setLoading(true);
     try {
-      // 1. Guardar los datos del estudiante (sin _id para que CouchDB lo genere)
-      const studentResponse = await axios.post('https://couchdbbackend.esaapp.com/unichamba-estudiantes/', 
-        studentData,
-        {
-          auth: {
-            username: 'unichamba',
-            password: 'S3pt13mbre#2024Work',
-          },
-        }
-      );
-  
-      // Obtén el ID generado por CouchDB
-      const studentId = studentResponse.data.id;
-  
-      let storageDoc; // Variable para almacenar el documento existente en storage
-  
-      // 2. Verificar si ya existe un documento en la base de almacenamiento
-      try {
-        const existingStorageDoc = await axios.get(
-          `https://couchdbbackend.esaapp.com/unichamba-estudiantes-storage/${studentId}`,
-          {
-            auth: {
-              username: 'unichamba',
-              password: 'S3pt13mbre#2024Work',
-            },
-          }
+        // 1. Guardar los datos del estudiante (sin _id para que CouchDB lo genere)
+        const studentResponse = await axios.post('https://couchdbbackend.esaapp.com/unichamba-estudiantes/',
+            studentData,
+            {
+                auth: {
+                    username: 'unichamba',
+                    password: 'S3pt13mbre#2024Work',
+                },
+            }
         );
-        storageDoc = existingStorageDoc.data; // Guardar el documento existente
-      } catch (error) {
-        if (error.response && error.response.status === 404) {
-          // Si no se encuentra el documento (error 404), continuamos normalmente
-          storageDoc = null;
-        } else {
-          // Si hay otros errores, los manejamos
-          throw error;
-        }
-      }
-  
-      // 3. Guardar o actualizar la imagen y el PDF en la base de datos de almacenamiento
-      const attachments = {
-        _attachments: {
-          "imagen.jpg": {
-            content_type: "image/jpeg", // Ajusta el tipo de contenido según sea necesario
-            data: values.imageUrl.split(",")[1], // Base64 sin el prefijo de tipo de archivo
-          },
-          "curriculum.pdf": {
-            content_type: "application/pdf",
-            data: values.hojadevida.split(",")[1], // Base64 sin el prefijo de tipo de archivo
-          }
-        }
-      };
-  
-      if (storageDoc) {
-        // Si existe, incluimos _rev para actualizar el documento
-        attachments._rev = storageDoc._rev;
-      }
-  
-      const storageResponse = await axios.put(
-        `https://couchdbbackend.esaapp.com/unichamba-estudiantes-storage/${studentId}`,
-        attachments,
-        {
-          auth: {
-            username: 'unichamba',
-            password: 'S3pt13mbre#2024Work',
-          },
-        }
-      );
-  
-      console.log('Imagen y PDF guardados:', storageResponse.data);
-  
-      // 4. Obtener la última versión del documento del estudiante
-      const studentDoc = await axios.get(
-        `https://couchdbbackend.esaapp.com/unichamba-estudiantes/${studentId}`,
-        {
-          auth: {
-            username: 'unichamba',
-            password: 'S3pt13mbre#2024Work',
-          },
-        }
-      );
-  
-      // 5. Actualizar el documento del estudiante con la URL de la imagen
-      await axios.put(
-        `https://couchdbbackend.esaapp.com/unichamba-estudiantes/${studentId}`,
-        {
-          ...studentDoc.data, // Incluye el documento actual con _rev para evitar conflictos
-          imageUrl: `https://couchdbbackend.esaapp.com/unichamba-estudiantes-storage/${studentId}/imagen.jpg`, // Enlace directo a la imagen
-          pdfUrl: `https://couchdbbackend.esaapp.com/unichamba-estudiantes-storage/${studentId}/curriculum.pdf`, // Enlace directo al PDF
-  
-        },
-        {
-          auth: {
-            username: 'unichamba',
-            password: 'S3pt13mbre#2024Work',
-          },
-        }
-      );
-  
-      Swal.fire({
-        icon: "success",
-        title: "Registro con éxito",
-        text: "¡Estudiante registrado con éxito!",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          window.location.href = "/";
-        }
-      });
-  
-      setValues(initialStateValues);
-      setImageFiles([]);
-      setPdf(null); // Restablecer el estado del PDF
+
+        // Obtén el ID generado por CouchDB
+        const studentId = studentResponse.data.id;
+        console.log('ID del estudiante generado:', studentId); // Verificar el ID
+
+        // 2. Preparar los datos para el almacenamiento
+        const attachments = {
+            _attachments: {
+                "imagen.jpg": {
+                    content_type: "image/jpeg", // Ajusta el tipo de contenido según sea necesario
+                    data: values.imageUrl.split(",")[1], // Base64 sin el prefijo de tipo de archivo
+                },
+                "curriculum.pdf": {
+                    content_type: "application/pdf",
+                    data: values.hojadevida.split(",")[1], // Base64 sin el prefijo de tipo de archivo
+                }
+            }
+        };
+
+        // 3. Guardar la imagen y el PDF en la base de datos de almacenamiento
+        await axios.put(
+            `https://couchdbbackend.esaapp.com/unichamba-estudiantes-storage/${studentId}`,
+            attachments,
+            {
+                auth: {
+                    username: 'unichamba',
+                    password: 'S3pt13mbre#2024Work',
+                },
+            }
+        );
+
+        console.log('Imagen y PDF guardados.');
+
+        // 4. Obtener el documento del estudiante para actualizarlo
+        const studentDoc = await axios.get(
+            `https://couchdbbackend.esaapp.com/unichamba-estudiantes/${studentId}`,
+            {
+                auth: {
+                    username: 'unichamba',
+                    password: 'S3pt13mbre#2024Work',
+                },
+            }
+        );
+
+        // 5. Actualizar el documento del estudiante con las URLs de la imagen y PDF
+        await axios.put(
+            `https://couchdbbackend.esaapp.com/unichamba-estudiantes/${studentId}`,
+            {
+                ...studentDoc.data, // Incluye el documento actual con _rev para evitar conflictos
+                imageUrl: `https://couchdbbackend.esaapp.com/unichamba-estudiantes-storage/${studentId}/imagen.jpg`, // Enlace directo a la imagen
+                pdfUrl: `https://couchdbbackend.esaapp.com/unichamba-estudiantes-storage/${studentId}/curriculum.pdf`, // Enlace directo al PDF
+            },
+            {
+                auth: {
+                    username: 'unichamba',
+                    password: 'S3pt13mbre#2024Work',
+                },
+            }
+        );
+
+        Swal.fire({
+            icon: "success",
+            title: "Registro con éxito",
+            text: "¡Estudiante registrado con éxito!",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = "/";
+            }
+        });
+
+        setValues(initialStateValues);
+        setImageFiles([]); // Resetear los archivos de imagen
+        setPdf(null); // Restablecer el estado del PDF
     } catch (error) {
-      console.error('Error al guardar en CouchDB:', error);
-      Swal.fire('¡Error!', `Hubo un problema al guardar los datos: ${error.message}`, 'error');
+        console.error('Error al guardar en CouchDB:', error);
+        Swal.fire('¡Error!', `Hubo un problema al guardar los datos: ${error.message}`, 'error');
     } finally {
-      setLoading(false);
+        setLoading(false);
     }
-  };
+};
+
   
   
  

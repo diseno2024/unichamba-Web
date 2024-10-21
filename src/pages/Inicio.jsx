@@ -5,7 +5,7 @@ import { Carrusel } from "../components/Carrusel";
 import { cardsEstudiantes } from '../data/dataSlices'
 import { cardsOfertas } from '../data/dataSliceOferta'
 import { useFetch } from "../hooks/useFetch";
-
+import axios from "axios";
 
 const Inicio = () => {
 
@@ -21,8 +21,7 @@ const Inicio = () => {
   const [permiso, setpermiso] = useState(false);
   const [permisoIng, setpermisoIng] = useState(false);
   const [login, setLogin] = useState(false);
-  const [nombres, setnombres] = useState([]);
-
+  const [nombres, setNombres] = useState({});
   
 
   //  inicio de sesion
@@ -39,7 +38,7 @@ const Inicio = () => {
     setLogin(false);
     try {
       await googleSingOut();
-      setnombres([]);
+      setNombres([]);
       // setLogin(false);
     } catch (error) {
       console.log(error);
@@ -57,30 +56,81 @@ const Inicio = () => {
     return admin.doc.email;
   })
 
+  const checkUserExists = async (email) => {
+    try {
+      // Verificar en la base de datos de estudiantes
+      const estudiantesResponse = await axios.post(
+        'https://couchdbbackend.esaapp.com/unichamba-estudiantes/_find',
+        {
+          selector: {
+            email: email
+          },
+          limit: 1
+        },
+        {
+          auth: {
+            username: 'unichamba', // Reemplaza con tu nombre de usuario
+            password: 'S3pt13mbre#2024Work' // Reemplaza con tu contraseña
+          }
+        }
+      );
+
+      if (estudiantesResponse.data.docs.length > 0) {
+        // Si existe el documento, establece los nombres
+        setNombres(estudiantesResponse.data.docs[0]);
+        console.log("Estudiante encontrado:", estudiantesResponse.data.docs[0]); // Mostrar información en la consola
+      } else {
+        console.log("No se encontró el estudiante, verificando administradores..."); // Mensaje si no se encuentra el estudiante
+        await checkAdminExists(email); // Llamar a la función para verificar si es administrador
+      }
+    } catch (error) {
+      console.error('Error al consultar el usuario en estudiantes:', error.response ? error.response.data : error.message);
+      // Manejo de errores aquí
+    }
+  };
+
+  // Función para verificar si el usuario es un administrador
+  const checkAdminExists = async (email) => {
+    try {
+      const adminsResponse = await axios.post(
+        'https://couchdbbackend.esaapp.com/unichamba-administradores/_find',
+        {
+          selector: {
+            email: email
+          },
+          limit: 1
+        },
+        {
+          auth: {
+            username: 'unichamba', // Reemplaza con tu nombre de usuario
+            password: 'S3pt13mbre#2024Work' // Reemplaza con tu contraseña
+          }
+        }
+      );
+
+      if (adminsResponse.data.docs.length > 0) {
+        // Si existe el documento, se establece que el usuario es administrador
+        setIsAdmin(true);
+        console.log("Administrador encontrado:", adminsResponse.data.docs[0]); // Mostrar información en la consola
+      } else {
+        console.log("No se encontró el administrador, redirigiendo a crear cuenta...");
+        navigate("/createAccountStd"); // Navegar a crear cuenta si no existe
+      }
+    } catch (error) {
+      console.error('Error al consultar el usuario en administradores:', error.response ? error.response.data : error.message);
+      // Manejo de errores aquí
+    }
+  };
+
   useEffect(() => {
     if (Object.keys(user).length !== 0) {
       setLogin(true);
-      if(!cuentaExterna){ // no gmail
-        if(!result){ // no cuenta empleado 
-          if( studentEmail.includes(user.email) ){ // si se encuentra una cuenta 
-            estudiantes.filter( estudiante => {
-              if(estudiante.doc.email === user.email){
-                setnombres(estudiante.doc);
-              }
-            })
-          }else if(adminisEmail.includes(user.email)){ // si no tiene cuenta posiblemente sea un administrador
-            setpermiso(true);
-            if(adminisEmail.includes(emailIng)){
-              setpermisoIng(true);
-            }
-          }else{ // no tiene una cuenta  
-            navigate("/createAccountStd");
-          }
-        }
+      if (!cuentaExterna) { // Si no es una cuenta externa
+        checkUserExists(user.email); // Verifica si el usuario existe
       }
     }
   }, [user]);
-
+  
   return (
     <>
     <header className="h-[370px] bg-Dark-Blue rounded-b-2xl relative">
