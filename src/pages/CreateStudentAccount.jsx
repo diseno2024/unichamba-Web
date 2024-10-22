@@ -116,11 +116,21 @@ const CreateStudentAccount = () => {
     if (file) {
       // Validar que el archivo sea PDF
       const allowedExtensions = /(\.pdf)$/i;
+      // Validar que el nombre del archivo no contenga espacios
+      const noSpacesInName = /^[^\s]+\.pdf$/i;
+  
       if (!allowedExtensions.test(file.name)) {
         Swal.fire({
           icon: "error",
           title: "Formato no válido",
           text: "Por favor, sube un archivo en formato PDF.",
+        });
+        e.target.value = null; // Limpiar el campo de archivo
+      } else if (!noSpacesInName.test(file.name)) {
+        Swal.fire({
+          icon: "error",
+          title: "Nombre no válido",
+          text: "El nombre del archivo PDF no debe contener espacios.",
         });
         e.target.value = null; // Limpiar el campo de archivo
       } else {
@@ -142,16 +152,27 @@ const CreateStudentAccount = () => {
       }
     }
   };
+  
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       // Validar la extensión del archivo utilizando una expresión regular
       const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
+      // Validar que el nombre del archivo no contenga espacios
+      const noSpacesInName = /^[^\s]+\.(jpg|jpeg|png)$/i;
+  
       if (!allowedExtensions.test(file.name)) {
         Swal.fire({
           icon: "error",
           title: "Formato no válido",
           text: "Por favor, sube una imagen en formato png, jpg o jpeg.",
+        });
+        e.target.value = null; // Limpiar el campo de archivo
+      } else if (!noSpacesInName.test(file.name)) {
+        Swal.fire({
+          icon: "error",
+          title: "Nombre no válido",
+          text: "El nombre de la imagen no debe contener espacios.",
         });
         e.target.value = null; // Limpiar el campo de archivo
       } else {
@@ -164,6 +185,7 @@ const CreateStudentAccount = () => {
       }
     }
   };
+  
 
   const MostrarAyuda = () => {
     Swal.fire({
@@ -352,7 +374,10 @@ const CreateStudentAccount = () => {
                   required
                 />
                 <h6 className="text-sm text-gray-500 mt-2 ml-1 font-normal">
-                  La imagen debe estar en formato .png .jpg .jpeg
+                  La imagen debe estar en formato .png .jpg .jpeg 
+                </h6>
+                <h6 className="text-sm text-gray-500 mt-2 ml-1 font-normal">
+                  La imagen no debe contener espacios 
                 </h6>
               </div>
 
@@ -429,6 +454,9 @@ const CreateStudentAccount = () => {
                 />
                 <h6 className="text-sm text-gray-500 mt-2 ml-1 font-normal">
                   El archivo debe estar en formato .pdf
+                </h6>
+                <h6 className="text-sm text-gray-500 mt-2 ml-1 font-normal">
+                  La archivo no debe contener espacios 
                 </h6>
               </div>
 
@@ -600,6 +628,10 @@ const CreateStudentAccount = () => {
                     <h6 className="text-sm text-gray-500 mt-2 ml-1 font-normal w-[87%]">
                       La imagen debe estar en formato .png .jpg .jpeg
                     </h6>
+                    <h6 className="text-sm text-gray-500 mt-2 ml-1 font-normal">
+                  La imagen no debe contener espacios 
+                </h6>
+                    
                   </div>
 
                   <div>
@@ -658,6 +690,9 @@ const CreateStudentAccount = () => {
                     <h6 className="text-sm text-gray-500 mt-2 ml-1 font-normal">
                       El archivo debe estar en formato .pdf
                     </h6>
+                    <h6 className="text-sm text-gray-500 mt-2 ml-1 font-normal">
+                  La archivo no debe contener espacios 
+                </h6>
                     <br />
                     <label htmlFor="trabajoInput" className=" font-normal">
                       Trabajos
