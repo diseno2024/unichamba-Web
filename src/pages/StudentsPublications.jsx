@@ -4,8 +4,7 @@ import CarreraFiltro from "../components/CarreraFiltro";
 import AreadeTrabajo from "../components/AreaTrabajo";
 import TarjetaPublicacion from "../components/TarjetaPublicacion";
 import { NavLink } from "react-router-dom";
-import { collection, getDocs, query, where } from "firebase/firestore";
-import { db } from "../data/firebase";
+import axios from "axios";
 
 const StudentsPublications = () => {
   const [dataStd, setDataStd] = useState([]);
@@ -13,21 +12,31 @@ const StudentsPublications = () => {
   const [trabajoSeleccionadoNav, setTrabajoSeleccionadoNav] = useState(null);
   const [carreraSeleccionada, setCarreraSeleccionada] = useState(null);
   const [trabajoSeleccionado, setTrabajoSeleccionado] = useState(null);
-  const [menuAbierto, setMenuAbierto] = useState(false); 
+  const [menuAbierto, setMenuAbierto] = useState(false);
 
-  //Estado para menu hamburguesa
+  // Estado para el menú hamburguesa
 
+  // Función para obtener estudiantes desde CouchDB
   const fetchNavData = async () => {
     try {
-      let q = collection(db, "estudiantes");
+      const auth = {
+        username: "unichamba", // Cambia esto por tu usuario
+        password: "S3pt13mbre#2024Work", // Cambia esto por tu contraseña
+      };
 
+      const response = await axios.get(
+        "https://couchdbbackend.esaapp.com/unichamba-estudiantes/_all_docs?include_docs=true",
+        { auth }
+      );
+
+      let estudiantes = response.data.rows.map(row => row.doc); // Extraer los datos de los documentos
+
+      // Filtrar por carrera seleccionada desde el navbar
       if (carreraSeleccionadaNav) {
-        q = query(q, where("carrera", "==", carreraSeleccionadaNav));
+        estudiantes = estudiantes.filter(estudiante => estudiante.carrera === carreraSeleccionadaNav);
       }
 
-      const studentsSnapshot = await getDocs(q);
-      let estudiantes = studentsSnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
-
+      // Filtrar por trabajo seleccionado desde el navbar
       if (trabajoSeleccionadoNav) {
         estudiantes = estudiantes.filter(estudiante =>
           estudiante.trabajos.some(trabajo => trabajo.icono === trabajoSeleccionadoNav)
@@ -36,31 +45,40 @@ const StudentsPublications = () => {
 
       setDataStd(estudiantes);
     } catch (error) {
-      console.error("Error fetching documents: ", error);
+      console.error("Error al obtener los estudiantes:", error);
     }
   };
 
-   const fetchFilterData = async () => {
+  // Función para filtrar estudiantes según los filtros seleccionados
+  const fetchFilterData = async () => {
     try {
-      let q = collection(db, "estudiantes");
+      const auth = {
+        username: "unichamba", // Cambia esto por tu usuario
+        password: "S3pt13mbre#2024Work", // Cambia esto por tu contraseña
+      };
 
+      const response = await axios.get(
+        "https://couchdbbackend.esaapp.com/unichamba-estudiantes/_all_docs?include_docs=true",
+        { auth }
+      );
+
+      let estudiantesSeleccionados = response.data.rows.map(row => row.doc); // Extraer los datos de los documentos
+
+      // Filtrar por carrera seleccionada
       if (carreraSeleccionada) {
-        q = query(q, where('carrera', '==', carreraSeleccionada));
+        estudiantesSeleccionados = estudiantesSeleccionados.filter(estudiante => estudiante.carrera === carreraSeleccionada);
       }
 
-      const studentsSnapshot = await getDocs(q);
-      let estudiantesSeleccionados = studentsSnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
-
+      // Filtrar por trabajo seleccionado
       if (trabajoSeleccionado) {
         estudiantesSeleccionados = estudiantesSeleccionados.filter(estudiante =>
           estudiante.trabajos.some(trabajo => trabajo.nombre === trabajoSeleccionado)
         );
       }
-      // Actualiza el estado nuevamente con los resultados de la segunda consulta si es necesario
-      setDataStd(estudiantesSeleccionados);
 
+      setDataStd(estudiantesSeleccionados);
     } catch (error) {
-      console.error("Error fetching documents: ", error);
+      console.error("Error al obtener los estudiantes:", error);
     }
   };
 
@@ -75,7 +93,6 @@ const StudentsPublications = () => {
   const toggleMenu = () => {
     setMenuAbierto(!menuAbierto);
   };
-  
   
   return (
     <>

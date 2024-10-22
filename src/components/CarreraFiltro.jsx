@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { db } from '../data/firebase';
-import { collection, getDocs } from 'firebase/firestore';
+import axios from 'axios';
 
 const CarreraFiltro = ({ carreraSeleccionada, setCarreraSeleccionada }) => {
     const [carreras, setCarreras] = useState([]);
@@ -8,22 +7,35 @@ const CarreraFiltro = ({ carreraSeleccionada, setCarreraSeleccionada }) => {
     const [mostrarBoton, setMostrarBoton] = useState(true);
 
     const fetchData = async () => {
-        const carrerasSnapshot = await getDocs(collection(db, 'carreras')); // 'carreras' es el nombre de tu colección en Firestore
-        const carrerasData = carrerasSnapshot.docs.map(doc => doc.data().carrera); // Suponiendo que tienes un campo 'carrera' en tus documentos
-        const carrerasOrdenadas = carrerasData.sort((a, b) => a.localeCompare(b)); // Orden alfabético
-        setCarreras(carrerasOrdenadas);
-        setCarrerasMostradas(carrerasOrdenadas.slice(0, 15)); // Mostrar solo las primeras 15 carreras inicialmente
-        if (carrerasOrdenadas.length <= 15) {
-            setMostrarBoton(false); // Ocultar el botón "Ver más" si hay menos de 15 carreras en total
+        try {
+            const auth = {
+                username: 'unichamba', // Cambia por tu usuario
+                password: 'S3pt13mbre#2024Work' // Cambia por tu contraseña
+            };
+    
+            const response = await axios.get(
+                'https://couchdbbackend.esaapp.com/unichamba-carreras/_all_docs?include_docs=true',
+                { auth } // Incluir autenticación
+            );
+    
+            const carrerasData = response.data.rows.map(row => row.doc.carrera); // Asegúrate de que 'carrera' sea el campo en CouchDB
+            const carrerasOrdenadas = carrerasData.sort((a, b) => a.localeCompare(b)); // Orden alfabético
+            setCarreras(carrerasOrdenadas);
+            setCarrerasMostradas(carrerasOrdenadas.slice(0, 15)); // Mostrar solo las primeras 15 carreras inicialmente
+    
+            if (carrerasOrdenadas.length <= 15) {
+                setMostrarBoton(false); // Ocultar el botón "Ver más" si hay menos de 15 carreras en total
+            }
+        } catch (error) {
+            console.error('Error al obtener las carreras:', error.response ? error.response.data : error.message);
         }
     };
+    
 
     useEffect(() => {
         fetchData();
-        return () => {
-            fetchData();
-        }
     }, []);
+
 
     const seleccionarCarrera = (carrera) => {
         setCarreraSeleccionada(carrera);
@@ -73,7 +85,7 @@ const CarreraFiltro = ({ carreraSeleccionada, setCarreraSeleccionada }) => {
                                 checked={carreraSeleccionada === carrera}
                                 onChange={() => seleccionarCarrera(carrera)}
                             />
-                            <label className='form-check-label ms-2' htmlFor={`carrera-${index}`}>{carrera}</label>
+                            <label className='form-check-label ms-2' htmlFor={` carrera-${index}` }>{carrera}</label>
                         </div>
                     ))}
                     {mostrarBoton && (
@@ -87,7 +99,6 @@ const CarreraFiltro = ({ carreraSeleccionada, setCarreraSeleccionada }) => {
 };
 
 export default CarreraFiltro;
-
 
 
 

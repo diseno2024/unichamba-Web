@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { db } from '../data/firebase';
-import { collection, getDocs } from 'firebase/firestore';
+import axios from 'axios';
 
 const AreadeTrabajo = ({ trabajoSeleccionado, setTrabajoSeleccionado }) => {
     const [trabajos, setTrabajos] = useState([]);
@@ -9,19 +8,30 @@ const AreadeTrabajo = ({ trabajoSeleccionado, setTrabajoSeleccionado }) => {
 
     const fetchData = async () => {
         try {
-            const trabajosSnapshot = await getDocs(collection(db, 'trabajos')); // 'trabajos' es el nombre de tu colección en Firestore
-            const trabajosData = trabajosSnapshot.docs.map(doc => doc.data().nombre); // Suponiendo que tienes un campo 'nombre' en tus documentos
+            const auth = {
+                username: 'unichamba', // Cambia por tu usuario
+                password: 'S3pt13mbre#2024Work' // Cambia por tu contraseña
+            };
+    
+            // Realizar la consulta a CouchDB
+            const response = await axios.get(
+                'https://couchdbbackend.esaapp.com/unichamba-trabajos/_all_docs?include_docs=true',
+                { auth } // Incluir autenticación
+            );
+    
+            const trabajosData = response.data.rows.map(row => row.doc.nombre); // Asegúrate de que 'nombre' sea el campo en CouchDB
             const trabajosOrdenados = trabajosData.sort((a, b) => a.localeCompare(b)); // Orden alfabético
             setTrabajos(trabajosOrdenados);
             setTrabajosMostrados(trabajosOrdenados.slice(0, 10)); // Mostrar solo los primeros 10 trabajos inicialmente
+    
             if (trabajosOrdenados.length <= 10) {
                 setMostrarBoton(false); // Ocultar el botón "Ver más" si hay menos de 10 trabajos en total
             }
         } catch (error) {
-            console.error("Error fetching documents: ", error);
+            console.error('Error al obtener los trabajos:', error.response ? error.response.data : error.message);
         }
-
     };
+    
 
     useEffect(() => {
         fetchData();
@@ -67,11 +77,11 @@ const AreadeTrabajo = ({ trabajoSeleccionado, setTrabajoSeleccionado }) => {
                             <input
                                 type='checkbox'
                                 className='form-check-input'
-                                id={`carrera-${index}`}
+                                id={ `carrera-${index} `}
                                 checked={trabajoSeleccionado === trabajo}
                                 onChange={() => seleccionarTrabajo(trabajo)}
                             />
-                            <label className='form-check-label ms-2' htmlFor={`carrera-${index}`}>{trabajo}</label>
+                            <label className='form-check-label ms-2' htmlFor={ `carrera-${index} `}>{trabajo}</label>
                         </div>
                     ))}
                     {mostrarBoton && (
