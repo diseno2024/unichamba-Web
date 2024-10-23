@@ -3,20 +3,30 @@ import { collection, getDocs } from "firebase/firestore";
 import { db } from '../data/firebase';
 import Navbar from '../components/Navbar';
 import { NavLink, useParams } from 'react-router-dom';
+import axios from 'axios';
 
 const DetailsOffer = () => {
-    const { idOferta } = useParams();
+    const { idOferta } = useParams();// Obtengo el parametro de la pagina, en este caso el ID del anuncio
     const [oferta, setOferta] = useState(null);
 
     const fetchDetalleOferta = async () => {
         try {
-            const querySnapshot = await getDocs(collection(db, "anuncios"));
-            const OfertaData = querySnapshot.docs.map(doc => ({
-                ...doc.data(),
-                id: doc.id
-            }));
-            const ofertaFiltrada = OfertaData.find(oferta => oferta.id === idOferta);
-            setOferta(ofertaFiltrada);
+            const auth = { //Credenciales para acceder ala DB
+                username: "unichamba", // Cambia esto por tu usuario
+                password: "S3pt13mbre#2024Work", // Cambia esto por tu contraseña
+              };
+
+              const response = await axios.get(
+                `https://couchdbbackend.esaapp.com/unichamba-anuncios/${idOferta}`,
+                { auth }
+              );
+            
+            const fetchedOffer= response.data;
+            console.log(fetchedOffer)
+            setOferta(fetchedOffer)
+
+            // console.log(idOferta);
+            // console.log(ofertaFiltrada);
         } catch (error) {
             console.error("Error fetching document:", error);
         }
@@ -27,7 +37,11 @@ const DetailsOffer = () => {
     }, [idOferta]);
 
     if (!oferta) {
-        return <div>Loading...</div>;
+        return ( //Spinner de carga mientras trae la data o no la encuentre
+            <div className="flex justify-center items-center h-screen">
+                <div className="animate-spin rounded-full h-32 w-32 border-t-8 border-blue-900"></div>
+            </div>
+        );
     }
 
     return (
@@ -51,32 +65,32 @@ const DetailsOffer = () => {
                 </section>
 
                 <section className='grid md:grid-cols-2 gap-4'>
-                    <div className='my-5 md:mt-0 flex justify-center'>
+                    <div className='my-2 md:my-1 flex justify-center'>
                         <img
-                            className='w-[300px] h-[350px] md:w-[450px] md:h-[400px] object-contain'
+                            className='w-[300px] h-[375px] md:w-[475px] md:h-[550px] object-contain'
                             src={oferta.imagen || "/imagenpredeterminadaempleo.svg"}
                             alt="Imagen de la oferta"
                         />
                     </div>
-                    <div className='ml-4 md:ml-20 mt-5 min-w-[300px] max-w-full'>
+                    <div className='mx-4 md:mx-2 my-2 min-w-[300px] max-w-full'>
                         <div className='flex items-center'>
                             <span className="material-symbols-outlined">person</span>
                             <span className='text-xl md:text-2xl mx-2 font-[420]'>Publicado por:</span>
                         </div>
-                        <p className='mx-[29px] my-4 font-light text-lg'>
+                        <p className='mx-[40px] my-4 font-light text-lg'>
                             {oferta.quienPublica}
                         </p>
                         <div className='flex items-center'>
                             <span className="material-symbols-outlined">pill</span>
                             <span className='text-xl md:text-2xl mx-2 font-[420]'>Descripción del empleo</span>
                         </div>
-                        <p className='mx-[29px] my-4 font-light text-lg'>{oferta.description}</p>
+                        <p className='mx-[40px] my-4 font-light text-lg'>{oferta.description}</p>
 
                         <div className='flex items-center'>
                             <span className="material-symbols-outlined">school</span>
                             <span className='text-xl md:text-2xl mx-2 font-[420]'>Carreras Afines</span>
                         </div>
-                        <p className='mx-[29px] my-4 font-light text-lg'>
+                        <p className='mx-[40px] my-4 font-light text-lg'>
                             {oferta.carrera ? oferta.carrera.join(', ') : 'No especificado'}
                         </p>
 
