@@ -27,7 +27,7 @@ export const cardsOfertas = [
         "id": 5,
         "type": "oferta",
         "titulo": 'OFERTA LABORAL',
-        "texto": "Se parte de nuestra zona de talento ¡OPORTUNIDAD DE EMPLEO! Revisa los requisitos en el perfil y si cuentas con ellos, aplica a la plaza siguiendo los pasos que se describen en la imagen.",
+        // "texto": "Se parte de nuestra zona de talento ¡OPORTUNIDAD DE EMPLEO! Revisa los requisitos en el perfil y si cuentas con ellos, aplica a la plaza siguiendo los pasos que se describen en la imagen.",
     }
 
 ]

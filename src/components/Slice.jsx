@@ -1,8 +1,9 @@
 import React from 'react'
 
-export const Slice = ({card, fading}) => {
+export const Slice = ({card, fading, estudianteAleatorio, ofertaAleatoria}) => {
     const {id, titulo, texto, type} = card
 
+    // console.log(ofertaAleatoria)
   return (
     <div className={`w-[400px] md:w-[700px] mx-[3px] h-full flex-shrink-0 cursor-pointer relative ${type === 'estudiante' ? 'bg-banner bg-left' : 'bg-bannerOferta phone:bg-left'} bg-cover bg-center rounded-xl`}>
         {/* <img src="public/bg_banner.png" alt=""/> */}
@@ -34,21 +35,23 @@ export const Slice = ({card, fading}) => {
                 : titulo == 'estudiante' ?
 
                 <div className={`flex justify-center items-center h-full gap-5 relative transition-transform duration-500 ${fading ? 'translate-x-full' : 'translate-x-0'}`}>
-                <figure className='bg-estudiante w-[140px] h-[140px] md:w-[180px] md:h-[180px] bg-cover bg-center rounded-full' />
+                    <figure className=' overflow-hidden w-[165px] h-[165px] md:w-[195px] md:h-[195px] bg-cover bg-center rounded-full'>
+                        <img src={estudianteAleatorio.imageUrl} alt="perfil-aleatorio" className='-z-50'/>
+                    </figure>
 
-                <div className='w-[60%] h-[60%] overflow-hidden whitespace-normal'>
-                    <h3 className='text-[22px] font-normal'>Vanessa Rodriguez</h3>
-                    <p className='text-sm font-light'>Ingeniería en sistemas informáticos</p>
-                    <p className='font-normal py-3 h-[110px] overflow-hidden mt-1 px-1'>{texto}</p>
-                </div>
-                <div className='absolute md:left-20 md:bottom-[45px] bottom-16 left-5'>
+                    <div className='w-[60%] h-[60%] overflow-hidden whitespace-normal'>
+                        <h3 className='text-[22px] font-normal'>{estudianteAleatorio.nombre}</h3>
+                        <p className='text-sm font-light'>{estudianteAleatorio.carrera}</p>
+                        <p className='font-normal py-3 h-[110px] overflow-hidden mt-1 px-1'>{estudianteAleatorio.acercaDe}</p>
+                    </div>
+                    <div className='absolute md:left-[85px] md:bottom-[35px] bottom-16 left-5'>
 
-                    <span className="material-symbols-outlined text-3xl">support_agent</span>
-                    <span className="material-symbols-outlined text-3xl">format_paint</span>
-                    <span className="material-symbols-outlined text-3xl">electrical_services</span>
-                    <span className="material-symbols-outlined text-3xl">computer</span>
+                    {estudianteAleatorio.trabajos.map( trabajo => 
+                        <span className="material-symbols-outlined text-3xl" key={trabajo.nombre}>{trabajo.icono}</span>
+                    )}
+                        
 
-                </div>
+                    </div>
                 </div>
 
                 :
@@ -57,14 +60,16 @@ export const Slice = ({card, fading}) => {
 
                  // oferta de empleo
                  <div className={`flex justify-center items-center h-full space-x-6 space-y-4 relative px-2 transition-transform duration-500 ${fading ? 'translate-x-full' : 'translate-x-0'} `}>
-                 <figure className='bg-oferta w-[200px] h-[300px] md:w-[32%] md:h-[90%] bg-contain bg-center md:bg-cover bg-no-repeat rounded-md' />
-
+                    <figure className='w-[250px] h-[250px] md:w-[32%] md:h-[85%] bg-center md:bg-cover bg-no-repeat rounded-md'>
+                        <img src={ofertaAleatoria.imagen} alt='oferta' className='w-full h-full'/>
+                    </figure>
                  <div className='w-[60%] h-[60%] overflow-hidden whitespace-normal hidden md:block'>
-                    <p className='text-2xl font-semibold py-3 text-center'>OFERTA LABORAL</p>
-                    <p className='font-normal text-lg px-1'>{texto}</p>
+                    <p className='font-normal text-lg px-1'>{
+                        ofertaAleatoria.description.length > 300 ? `${ofertaAleatoria.description.slice(0, 200)}...` : ofertaAleatoria.description
+                    }</p>
                 </div>
 
-                <p className='absolute bottom-2 left-20 md:bottom-8 md:left-72 font-bold'>Aplican todas las carreras</p>
+                <p className='absolute bottom-2 left-5 md:bottom-8 md:left-[250px] font-bold'>{ofertaAleatoria.carrera}</p>
                 
                 </div> 
 

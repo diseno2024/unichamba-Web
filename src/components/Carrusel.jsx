@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 // tarjetas
 import { Slice } from './Slice';
+import { useRandomStuden } from '../hooks/useRandomStuden';
 
 export const Carrusel = ({data}) => {
 
@@ -8,6 +9,9 @@ export const Carrusel = ({data}) => {
 
   const [currentIndex, setCurrentIndex] = useState(0);// cambio por id de la tarjeta 
   const [isFading, setIsFading] = useState(false); // estado para manejar la transicion 
+
+const {docStudent, docOffer} = useRandomStuden(); // lista estudiantes aleatorios y ofertas
+ 
 
 
   const goToNext = () => {
@@ -33,7 +37,7 @@ export const Carrusel = ({data}) => {
   return (
    <>
     <div className="flex h-[355px] rounded-md">
-        <Slice card={data[currentIndex]} fading={isFading} />
+        <Slice card={data[currentIndex]} fading={isFading} estudianteAleatorio={docStudent} ofertaAleatoria={docOffer}/>
     </div>
    </>
   )

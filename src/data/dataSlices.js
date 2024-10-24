@@ -27,6 +27,6 @@ export const cardsEstudiantes = [
         "id":5,
         "type":"estudiante",
         "titulo":"estudiante",
-        "texto":"Soy un estudiante universitario en la búsqueda activa de un empleo temporal que me permita equilibrar mis estudios con el trabajo. Mis habilidades incluyen una gran capacidad de organización, adaptabilidad y una ética de trabajo sólida, cualidades que considero esenciales para manejar ambas responsabilidades eficientemente. Estoy interesado en roles que ofrezcan horarios flexibles o la posibilidad de trabajar a distancia, lo que me ayudaría a mantener mi compromiso con la excelencia académica mientras gano experestudiante valiosa.",
+        // "texto":"Soy un estudiante universitario en la búsqueda activa de un empleo temporal que me permita equilibrar mis estudios con el trabajo. Mis habilidades incluyen una gran capacidad de organización, adaptabilidad y una ética de trabajo sólida, cualidades que considero esenciales para manejar ambas responsabilidades eficientemente. Estoy interesado en roles que ofrezcan horarios flexibles o la posibilidad de trabajar a distancia, lo que me ayudaría a mantener mi compromiso con la excelencia académica mientras gano experestudiante valiosa.",
     }
 ]

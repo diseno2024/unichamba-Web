@@ -12,16 +12,15 @@ const Inicio = () => {
   const { googleSingIn, user, googleSingOut } = UserAuth();
   const result = /\..+@.*ues\.edu/gm.test(user.email); // expresion que valida si hay un punto y luego un @
   const cuentaExterna = /@g(oogle)?mail\.com/gm.test(user.email); // expresion que valida si el dominio del correo es gmail
-  const emailIng = "ernesto.calderon@ues.edu.sv";
   const cuentaUes = /^[a-zA-Z0-9]{7}@ues\.edu/gm.test(user.email);
   const navigate = useNavigate();
-  let studentEmail = [];
-  let adminisEmail = [];
+
   let URLphoto = user.photoURL;
-  const [permiso, setpermiso] = useState(false);
-  const [permisoIng, setpermisoIng] = useState(false);
+
+  const [admin, setAdmin] = useState(false);
   const [login, setLogin] = useState(false);
-  const [nombres, setNombres] = useState({});
+  const [dataUser, setDataUser] = useState({});
+
   
 
   //  inicio de sesion
@@ -45,17 +44,6 @@ const Inicio = () => {
     }
   };
 
-  const {estudiantes} = useFetch("unichamba-estudiantes");
-  const {admins} = useFetch("unichamba-administradores");
-
-  studentEmail = estudiantes.map( estudiante => {
-    return estudiante.doc.email;
-  })
-
-  adminisEmail = admins.map( (admin) => {
-    return admin.doc.email;
-  })
-
   const checkUserExists = async (email) => {
     try {
       // Verificar en la base de datos de estudiantes
@@ -69,15 +57,15 @@ const Inicio = () => {
         },
         {
           auth: {
-            username: 'unichamba', // Reemplaza con tu nombre de usuario
-            password: 'S3pt13mbre#2024Work' // Reemplaza con tu contraseña
+            username: 'unichamba',
+            password: 'S3pt13mbre#2024Work' 
           }
         }
       );
 
       if (estudiantesResponse.data.docs.length > 0) {
         // Si existe el documento, establece los nombres
-        setNombres(estudiantesResponse.data.docs[0]);
+        setDataUser(estudiantesResponse.data.docs[0]);
         console.log("Estudiante encontrado:", estudiantesResponse.data.docs[0]); // Mostrar información en la consola
       } else {
         console.log("No se encontró el estudiante, verificando administradores..."); // Mensaje si no se encuentra el estudiante
@@ -85,7 +73,7 @@ const Inicio = () => {
       }
     } catch (error) {
       console.error('Error al consultar el usuario en estudiantes:', error.response ? error.response.data : error.message);
-      // Manejo de errores aquí
+
     }
   };
 
@@ -102,19 +90,20 @@ const Inicio = () => {
         },
         {
           auth: {
-            username: 'unichamba', // Reemplaza con tu nombre de usuario
-            password: 'S3pt13mbre#2024Work' // Reemplaza con tu contraseña
+            username: 'unichamba', 
+            password: 'S3pt13mbre#2024Work' 
           }
         }
       );
 
       if (adminsResponse.data.docs.length > 0) {
         // Si existe el documento, se establece que el usuario es administrador
-        setIsAdmin(true);
-        console.log("Administrador encontrado:", adminsResponse.data.docs[0]); // Mostrar información en la consola
+        setAdmin(true);
+        console.log("Administrador encontrado:", adminsResponse.data.docs[0]); 
       } else {
         console.log("No se encontró el administrador, redirigiendo a crear cuenta...");
         navigate("/createAccountStd"); // Navegar a crear cuenta si no existe
+
       }
     } catch (error) {
       console.error('Error al consultar el usuario en administradores:', error.response ? error.response.data : error.message);
@@ -125,12 +114,12 @@ const Inicio = () => {
   useEffect(() => {
     if (Object.keys(user).length !== 0) {
       setLogin(true);
-      if (!cuentaExterna) { // Si no es una cuenta externa
+      if (!cuentaExterna || !result) { // Si no es una cuenta externa o empleado ues
         checkUserExists(user.email); // Verifica si el usuario existe
       }
     }
   }, [user]);
-  
+    
   return (
     <>
     <header className="h-[370px] bg-Dark-Blue rounded-b-2xl relative">
@@ -172,7 +161,7 @@ const Inicio = () => {
               </div>
              
 
-              : login && cuentaUes ?
+              : login && !admin?
               // logueado y cuenta estudiante
               <div className="flex flex-col items-center gap-4 w-[90%] mx-auto py-5 mt-20">
 
@@ -181,14 +170,14 @@ const Inicio = () => {
 
                   <div className="h-[150px] w-[150px] rounded-full ">
                     <img
-                      src={nombres.imageUrl}
+                      src={dataUser.imageUrl}
                       alt="imagen-estudiante"
                       className="w-full h-full rounded-full"
                       style={{objectFit:"cover"}}
                     />
                   </div>
                   <h1 className="text-3xl font-normal text-white mr-3">
-                    {nombres.nombre}
+                    {dataUser.nombre}
                   </h1>
   
                 </NavLink>
@@ -206,7 +195,7 @@ const Inicio = () => {
 
               </div>
 
-              : login && permiso ?
+              : login && admin ?
               // logueado y cuenta administrador 
               <div className="w-[90%] mx-auto mt-14 h-screen flex flex-col items-center space-y-10 pt-20">
 
@@ -236,7 +225,7 @@ const Inicio = () => {
 
               </div>
 
-              : login && result && !permisoIng ?
+              : login && result && !admin ?
               // logueado con cuenta empleado
               <di className="w-[90%] mx-auto flex flex-col items-center space-y-5 mt-10 pt-20 h-screen">
                 <NavLink to='/createOffer' className='bg-Malachite text-white h-[55px] px-10 flex items-center rounded-[8px] space-x-2 font-semibold'>
@@ -313,7 +302,7 @@ const Inicio = () => {
                 />
               </button>
 
-              : login && cuentaUes ?
+              : login && !admin ?
 
               <div className="flex items-center gap-4">
                 <button
@@ -325,11 +314,11 @@ const Inicio = () => {
 
                 <NavLink to="/studentProfile" className="flex items-center">
                   <h1 className="text-2xl font-normal text-white mr-3">
-                    {nombres.nombre}
+                    {dataUser.nombre}
                   </h1>
                   <div className="h-[55px] w-[55px] rounded-full">
                     <img
-                      src={nombres.imageUrl}
+                      src={dataUser.imageUrl}
                       alt="imagen-estudiante"
                       className="w-full h-full rounded-full"
                       style={{objectFit:"cover"}}
@@ -337,7 +326,7 @@ const Inicio = () => {
                 </NavLink>
               </div>
 
-              : login && permiso ?
+              : login && admin ?
 
               <div className="flex items-center gap-4">
                 <button
@@ -361,7 +350,7 @@ const Inicio = () => {
                 </NavLink>
               </div>
 
-              : login && result && !permisoIng ? 
+              : login && result && !admin ? 
               
               <div className="flex space-x-3">
                 <NavLink to='/createOffer' className='bg-Malachite text-white h-[55px] px-10 flex items-center rounded-[8px] space-x-2 font-semibold'>
