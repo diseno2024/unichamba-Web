@@ -29,7 +29,7 @@ const StudentsPublications = () => {
         { auth }
       );
 
-      let estudiantes = response.data.rows.map(row => row.doc); // Extraer los datos de los documentos
+      let estudiantes = response.data.rows.map(row => ({...row.doc, id: row.id})); // Extraer los datos de los documentos
 
       // Filtrar por carrera seleccionada desde el navbar
       if (carreraSeleccionadaNav) {
@@ -62,7 +62,7 @@ const StudentsPublications = () => {
         { auth }
       );
 
-      let estudiantesSeleccionados = response.data.rows.map(row => row.doc); // Extraer los datos de los documentos
+      let estudiantesSeleccionados = response.data.rows.map(row => ({...row.doc, id: row.id})); // Extraer los datos de los documentos
 
       // Filtrar por carrera seleccionada
       if (carreraSeleccionada) {

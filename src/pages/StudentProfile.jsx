@@ -3,6 +3,7 @@ import {
   collection,
   doc,
   getDocs,
+  limit,
   updateDoc,
 } from "firebase/firestore";
 import {
@@ -20,6 +21,7 @@ import withReactContent from "sweetalert2-react-content";
 import WhatsAppButton from "../components/WhatsAppButton";
 import { UserAuth } from "../context/AuthContext";
 import { db, storage } from "../data/firebase";
+import axios from "axios";
 
 // Este es la paginación de Elias
 
@@ -27,7 +29,6 @@ const StudentProfile = () => {
   const location = useLocation();
   const { idPerfil } = useParams();
   const [estudiante, setEstudiante] = useState([]);
-  const [pdf, setPdf] = useState(null);
   const { user } = UserAuth();
   const initialpdf = { hojadevida: "" };
   const [trabajosOptions, setTrabajosOptions] = useState([]);
@@ -42,66 +43,67 @@ const StudentProfile = () => {
   let trabajosInicial = [];
   let carreraActualizada = {};
 
-  const [image, setImage] = useState(null);
-  let student = [];
-  let nombrePdf = "";
+  let students = [];
+  let pdf = {};
+  let fotoPerfil = {};
   const MySwal = withReactContent(Swal);
   const animatedComponents = makeAnimated();
   const [carrerasList, setCarrerasOptions] = useState([]);
 
   const fetchData = async () => {
-    const studentsSnapshot = await getDocs(collection(db, "estudiantes"));
-    const estudiantes = studentsSnapshot.docs.map((doc) => ({
-      ...doc.data(),
-      id: doc.id,
-    }));
-    const perfilSeleccionado = estudiantes.find(
-      (estudiante) => estudiante.id === idPerfil,
-    );
-    student = estudiantes;
+    const getRequest = "https://couchdbbackend.esaapp.com/unichamba-estudiantes/_all_docs?include_docs=True";
+    const findRequest = "https://couchdbbackend.esaapp.com/unichamba-estudiantes/_find"
 
+    const studentsSnapshot = await axios.get(getRequest, {auth:{username: "unichamba", password: "S3pt13mbre#2024Work"}});
+    const rawStudents = studentsSnapshot.data.rows;
+    const estudiantes = rawStudents.map((document) => ({
+      ...document.doc,
+      rev: document.value.rev
+    }));
+
+    const perfilSeleccionado = await axios.post(findRequest, {selector: {_id: idPerfil}, limit: 1}, {auth:{username: "unichamba", password: "S3pt13mbre#2024Work"}})
+    students = estudiantes;
     if (location.pathname === "/studentProfile") {
-      student.map((perfil) => {
+      students.map((perfil) => {
         if (perfil.email === user.email) {
           setEstudiante(perfil);
         }
       });
-    } else if (perfilSeleccionado.email === user.email) {
-      setEstudiante(perfilSeleccionado);
+    } else if (perfilSeleccionado.data.docs[0].email === user.email) {
+      setEstudiante(perfilSeleccionado.data.docs[0]);
       navigate("/studentProfile");
     } else {
-      setEstudiante(perfilSeleccionado);
+      setEstudiante(perfilSeleccionado.data.docs[0]);
     }
   };
 
+
+
   const fetchTrabajos = async () => {
-    const trabajosCollection = collection(db, "trabajos");
-    const trabajosSnapshot = await getDocs(trabajosCollection);
-    const trabajosList = trabajosSnapshot.docs.map((doc) => ({
-      value: doc.id,
-      label: doc.data().nombre,
-      icon: doc.data().icono,
+    const getTrabajos = "https://couchdbbackend.esaapp.com/unichamba-trabajos/_all_docs?include_docs=True"
+    const trabajosCollection = await axios.get(getTrabajos, {auth: {username: "unichamba", password: "S3pt13mbre#2024Work"}})
+    const rawTrabajos = trabajosCollection.data.rows;
+    const trabajosList = rawTrabajos.map((document) => ({
+      value: document.id,
+      label: document.doc.nombre,
+      icon: document.doc.icono,
     }));
     trabajosList.sort((a, b) => a.label.localeCompare(b.label));
     setTrabajosOptions(trabajosList);
   };
 
   const fetchCarreras = async () => {
-    try {
-      const carrerasCollection = collection(db, "carreras");
-      const carrerasSnapshot = await getDocs(carrerasCollection);
-      const carrerasList = carrerasSnapshot.docs.map((doc) => ({
-        value: doc.id,
-        label: doc.data().carrera,
-        // Puedes agregar más propiedades según sea necesario
-      }));
-      carrerasList.sort((a, b) => a.label.localeCompare(b.label));
-      setCarrerasOptions(carrerasList);
-    } catch (error) {
-      console.error("Error al obtener carreras:", error);
-      // Manejo de errores aquí
-    }
+    const getCarreras = "https://couchdbbackend.esaapp.com/unichamba-carreras/_all_docs?include_docs=True"
+    const carrerasCollection = await axios.get(getCarreras, {auth: {username: "unichamba", password: "S3pt13mbre#2024Work"}});
+    const rawCarreras = carrerasCollection.data.rows;
+    const carrerasList = rawCarreras.map((document) => ({
+      value: document.id,
+      label: document.doc.carrera,
+    }));
+    carrerasList.sort((a, b) => a.label.localeCompare(b.label));
+    setCarrerasOptions(carrerasList);
   };
+
 
   const actualizarFoto = () => {
     MySwal.fire({
@@ -145,27 +147,61 @@ const StudentProfile = () => {
       archivo.value = "";
       return false;
     } else {
-      setPdf(e.target.files[0]);
+      pdf = e.target.files[0];
+
+      const reader = new FileReader();
+      
+      reader.onloadend = () => {
+        const base64String = reader.result;
+        estudiante.hojadevida = base64String;
+      }
+
+      reader.readAsDataURL(pdf);
     }
   };
 
   const addOrEdit = async (link) => {
-    try {
-      const docId = estudiante.id;
 
-      const uploadPdf = async (file) => {
-        nombrePdf = file.name;
-        const pdfRef = ref(storage, `cvPerfil/${docId}/${file.name}`);
-        await uploadBytes(pdfRef, file);
-        const fileUrl = await getDownloadURL(pdfRef);
-        return fileUrl;
-      };
+    const getStorage = `https://couchdbbackend.esaapp.com/unichamba-estudiantes-storage/${estudiante.id}`
+    const storageStudent = await axios.get(getStorage, {auth: {username: "unichamba", password: "S3pt13mbre#2024Work"}});
 
-      const url = await uploadPdf(pdf);
+    const storagePdf = {
+      data: storageStudent.data,
+    }
 
-      await updateDoc(doc(db, "estudiantes", docId), { hojadevida: url });
-      await updateDoc(doc(db, "estudiantes", docId), { pdfNombre: nombrePdf });
-      document.getElementById("archivo").value = "";
+    const attachments = {
+      _attachments: {
+          "curriculum.pdf": {
+              content_type: "application/pdf",
+              data: estudiante.hojadevida.split(",")[1],
+          }
+        }
+    };
+
+    storagePdf.data._attachments["curriculum.pdf"] = attachments._attachments["curriculum.pdf"]
+
+    await axios.put(`https://couchdbbackend.esaapp.com/unichamba-estudiantes-storage/${estudiante.id}`, storagePdf.data, {
+      auth: {
+        username: "unichamba",
+        password: "S3pt13mbre#2024Work"
+      },
+      params:{"rev":storagePdf.rev},
+    })
+
+      estudiante.pdfNombre = pdf.name;
+      estudiante.pdfUrl = `https://couchdbbackend.esaapp.com/unichamba-estudiantes-storage/${estudiante.id}/curriculum.pdf`
+
+      await axios.put(`https://couchdbbackend.esaapp.com/unichamba-estudiantes/${estudiante.id}`, estudiante, {
+        auth: {
+          username: "unichamba",
+          password: "S3pt13mbre#2024Work"
+        },
+        params:{"rev":estudiante.rev},
+        headers:{
+          "Content-Type":"application/json"
+        }
+      })
+
 
       Swal.fire({
         title: "PDF agregado",
@@ -173,31 +209,27 @@ const StudentProfile = () => {
         text: "El PDF se agregó correctamente",
       });
       fetchData();
-    } catch (error) {
-      console.log(error);
-    }
   };
 
   const deletePdf = async () => {
-    try {
-      const docId = estudiante.id;
-      const docNombre = estudiante.pdfNombre;
+    estudiante.pdfUrl = "";
 
-      const pdfRef = ref(storage, `cvPerfil/${docId}/${docNombre}`);
-
-      await deleteObject(pdfRef);
-
-      await updateDoc(doc(db, "estudiantes", docId), { hojadevida: "" });
-      await updateDoc(doc(db, "estudiantes", docId), { pdfNombre: "" });
+    await axios.put(`https://couchdbbackend.esaapp.com/unichamba-estudiantes/${estudiante.id}`, estudiante, {
+      auth: {
+        username: "unichamba",
+        password: "S3pt13mbre#2024Work"
+      },
+      params:{"rev":estudiante.rev},
+      headers:{
+        "Content-Type":"application/json"
+      }
+    })
       Swal.fire({
         title: "PDF eliminado",
         icon: "success",
         text: "El PDF se elimino correctamente",
       });
       fetchData();
-    } catch (error) {
-      console.log(error);
-    }
   };
 
   const handleSubmit = (e) => {
@@ -251,54 +283,45 @@ const StudentProfile = () => {
     e.preventDefault();
     const isEmpty = (obj) => Object.keys(obj).length === 0;
 
+
     if (!isEmpty(nombreActualizado)) {
-      await updateDoc(doc(db, "estudiantes", estudiante.id), {
-        nombre: nombreActualizado.nombre,
-      });
-      nombreActualizado = {};
-    }
+      estudiante.nombre = nombreActualizado.nombre
+    }    
 
     if (!isEmpty(apellidoActualizado)) {
-      await updateDoc(doc(db, "estudiantes", estudiante.id), {
-        apellido: apellidoActualizado.apellido,
-      });
-      apellidoActualizado = {};
+      estudiante.apellido = apellidoActualizado.apellido
     }
 
     if (!isEmpty(telefonoActualizado)) {
-      await updateDoc(doc(db, "estudiantes", estudiante.id), {
-        telefono: telefonoActualizado.telefono,
-      });
-      telefonoActualizado = {};
+      estudiante.telefono = telefonoActualizado.telefono
     }
 
     if (!isEmpty(whatsappActualizado)) {
-      await updateDoc(doc(db, "estudiantes", estudiante.id), {
-        whatsapp: whatsappActualizado.whatsapp,
-      });
-      whatsappActualizado = {};
+      estudiante.whatsapp = whatsappActualizado.whatsapp
     }
 
     if (!isEmpty(acercaDeActualizado)) {
-      await updateDoc(doc(db, "estudiantes", estudiante.id), {
-        acercaDe: acercaDeActualizado.acercaDe,
-      });
-      acercaDeActualizado = {};
+      estudiante.acercaDe = acercaDeActualizado.acercaDe
     }
 
     if (!isEmpty(carreraActualizada)) {
-      await updateDoc(doc(db, "estudiantes", estudiante.id), {
-        carrera: carreraActualizada.carrera,
-      });
-      carreraActualizada = {};
+      estudiante.carrera = carreraActualizada.carrera
     }
 
     if (trabajosInicial.length > 0) {
-      await updateDoc(doc(db, "estudiantes", estudiante.id), {
-        trabajos: trabajosInicial,
-      });
-      trabajosInicial = [];
+      estudiante.trabajos = trabajosInicial
     }
+
+    await axios.put(`https://couchdbbackend.esaapp.com/unichamba-estudiantes/${estudiante.id}`, estudiante, {
+      auth: {
+        username: "unichamba",
+        password: "S3pt13mbre#2024Work"
+      },
+      params:{"rev":estudiante.rev},
+      headers:{
+        "Content-Type":"application/json"
+      }
+    })
 
     Swal.fire({
       title: "Edicion exitosa",
@@ -435,21 +458,56 @@ const StudentProfile = () => {
   };
 
   const handleImageChange = async (e) => {
-    const selectedImage = e.target.files[0];
+    fotoPerfil = e.target.files[0];
 
-    try {
-      const imageRef = ref(
-        storage,
-        `imagenesPerfil/${estudiante.id}/${selectedImage.name}`,
-      );
-      await uploadBytes(imageRef, selectedImage);
-      const imageUrl = await getDownloadURL(imageRef);
+    const reader = new FileReader();
+    
+    reader.onloadend = () => {
+      const base64String = reader.result;
+      estudiante.imageUrl = base64String;
+    }
 
-      await updateDoc(doc(db, "estudiantes", estudiante.id), {
-        imageUrl: imageUrl,
-      });
+    reader.readAsDataURL(fotoPerfil);
 
-      setEstudiante({ ...estudiante, imageUrl: imageUrl });
+    const getStorage = `https://couchdbbackend.esaapp.com/unichamba-estudiantes-storage/${estudiante.id}`
+    const storageStudent = await axios.get(getStorage, {auth: {username: "unichamba", password: "S3pt13mbre#2024Work"}});
+
+    const storageImage = {
+      data: storageStudent.data,
+    }
+
+    const attachments = {
+      _attachments: {
+          "imagen.jpg": {
+              content_type: "image/jpeg",
+              data: estudiante.imageUrl.split(",")[1],
+          }
+        }
+    };
+
+    storageImage.data._attachments["imagen.jpg"] = attachments._attachments["imagen.jpg"]
+
+    await axios.put(`https://couchdbbackend.esaapp.com/unichamba-estudiantes-storage/${estudiante.id}`, storageImage.data, {
+      auth: {
+        username: "unichamba",
+        password: "S3pt13mbre#2024Work"
+      },
+      params:{"rev":storageImage.rev},
+    })
+
+      estudiante.imageUrl = `https://couchdbbackend.esaapp.com/unichamba-estudiantes-storage/${estudiante.id}/imagen.jpg`
+
+      await axios.put(`https://couchdbbackend.esaapp.com/unichamba-estudiantes/${estudiante.id}`, estudiante, {
+        auth: {
+          username: "unichamba",
+          password: "S3pt13mbre#2024Work"
+        },
+        params:{"rev":estudiante.rev},
+        headers:{
+          "Content-Type":"application/json"
+        }
+      })
+
 
       Swal.fire({
         title: "Imagen actualizada",
@@ -457,14 +515,9 @@ const StudentProfile = () => {
         text: "La imagen se actualizó correctamente",
       });
 
-      setImage(null); // Limpiar la imagen seleccionada después de subirla
-    } catch (error) {
-      Swal.fire({
-        title: "Error",
-        icon: "error",
-        text: "Hubo un problema al subir la imagen",
-      });
-    }
+      fotoPerfil = {}
+      fetchData();
+    
   };
 
   useEffect(() => {
@@ -582,7 +635,10 @@ const StudentProfile = () => {
                 <ul className=" font-light space-y-1 pt-2 text-lg">
                   {trabajos &&
                     trabajos.map((trabajo) => (
-                      <li key={trabajo.id}>{trabajo.nombre}</li>
+                      <li key={trabajo.id}>
+                        <span className="material-symbols-outlined mr-2">{trabajo.icono}</span>
+                        {trabajo.nombre}
+                        </li>
                     ))}
                 </ul>
               </div>
@@ -602,10 +658,10 @@ const StudentProfile = () => {
                       </button>
                     </form>
                     <div>
-                      {estudiante.hojadevida ? (
+                      {estudiante.pdfUrl ? (
                         <>
                           <a
-                            href={estudiante.hojadevida}
+                            href={estudiante.pdfUrl}
                             target="_blank"
                             className="font-bold mt-5 pl-2 block"
                           >
@@ -625,7 +681,7 @@ const StudentProfile = () => {
                   <div>
                     {estudiante.hojadevida ? (
                       <a
-                        href={estudiante.hojadevida}
+                        href={estudiante.pdfUrl}
                         target="_blank"
                         className="font-bold mt-2 block"
                       >
