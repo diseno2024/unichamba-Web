@@ -84,7 +84,7 @@ const CarrerasFiltro = ({ carrerasSeleccionadas, setCarrerasSeleccionadas}) => {
                             Carreras
                         </h3>
                         <div className='flex justify-end mr-10'>
-                            <button type='button' className='btn btn-secondary lg:mt-1 text-Navbar lg:text-Dark-Blue  md:text-black' onClick={reiniciarCarreras}><span class="material-symbols-outlined">
+                            <button type='button' className='btn btn-secondary lg:mt-1 text-Navbar lg:text-Dark-Blue  md:text-black' onClick={reiniciarCarreras}><span className="material-symbols-outlined">
                                 mop
                             </span></button>
                         </div>
