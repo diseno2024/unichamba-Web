@@ -1,17 +1,3 @@
-import {
-  addDoc,
-  collection,
-  doc,
-  getDocs,
-  limit,
-  updateDoc,
-} from "firebase/firestore";
-import {
-  deleteObject,
-  getDownloadURL,
-  ref,
-  uploadBytes,
-} from "firebase/storage";
 import { useEffect, useState } from "react";
 import { NavLink, useLocation, useNavigate, useParams } from "react-router-dom";
 import Select from "react-select";
@@ -20,10 +6,7 @@ import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import WhatsAppButton from "../components/WhatsAppButton";
 import { UserAuth } from "../context/AuthContext";
-import { db, storage } from "../data/firebase";
 import axios from "axios";
-
-// Este es la paginación de Elias
 
 const StudentProfile = () => {
   const location = useLocation();
@@ -58,9 +41,10 @@ const StudentProfile = () => {
     const rawStudents = studentsSnapshot.data.rows;
     const estudiantes = rawStudents.map((document) => ({
       ...document.doc,
+      id: document.id,
       rev: document.value.rev
     }));
-
+    
     const perfilSeleccionado = await axios.post(findRequest, {selector: {_id: idPerfil}, limit: 1}, {auth:{username: "unichamba", password: "S3pt13mbre#2024Work"}})
     students = estudiantes;
     if (location.pathname === "/studentProfile") {
@@ -311,7 +295,6 @@ const StudentProfile = () => {
     if (trabajosInicial.length > 0) {
       estudiante.trabajos = trabajosInicial
     }
-
     await axios.put(`https://couchdbbackend.esaapp.com/unichamba-estudiantes/${estudiante.id}`, estudiante, {
       auth: {
         username: "unichamba",
@@ -618,11 +601,6 @@ const StudentProfile = () => {
           <div className="w-[95%] pt-5 md:w-[80%]">
             <h3 className=" ml-5 text-2xl font-normal">
               Acerca de
-              {/* <EditarPerfil
-                titulo={"acerca de"}
-                referencia={"acercaDe"}
-                estudiante={estudiante}
-              /> */}
             </h3>
             <div className=" w-[100%] ml-5 font-light text-lg">
               <p>{estudiante.acercaDe}</p>
