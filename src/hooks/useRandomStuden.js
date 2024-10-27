@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { useState } from 'react'
 
 export const useRandomStuden = () => {
@@ -33,20 +33,16 @@ export const useRandomStuden = () => {
     // oferta aleatoria 
 
     const getOffer = async() => {
-        const response = await axios.get(`https://couchdbbackend.esaapp.com/unichamba-anuncios/_all_docs?limit=1`,{auth: {username  : 'unichamba', password : 'S3pt13mbre#2024Work'}})
+        await axios.get(`https://couchdbbackend.esaapp.com/unichamba-anuncios/_design/anuncio-reciente/_view/anuncio-reciente?descending=true&limit=1`,{auth: {username  : 'unichamba', password : 'S3pt13mbre#2024Work'}})
                .then((response) => {
                    // setrandom(Math.floor(Math.random()*response.data.total_rows))
-                   return (Math.floor(Math.random()*response.data.total_rows))
+                   setdocOffer(response.data.rows[0].value)
            })
-       const offer = await axios.get(`https://couchdbbackend.esaapp.com/unichamba-anuncios/_all_docs?skip=${response}&limit=1&include_docs=true`,{auth: {username  : 'unichamba', password : 'S3pt13mbre#2024Work'}})
-               .then((response) => {
-                  return (response.data.rows);
-               })
    
    
-       setdocOffer(offer[0].doc)
            
        }
+
 
 return{
     docStudent,

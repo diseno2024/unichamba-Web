@@ -26,7 +26,7 @@ const Secure = ({children}) => {
         administradores = admins;
     
         if(!user){
-            navigate('/inicio')
+            navigate('/studentsPublications')
             Swal.fire({
                 icon: "error",
                 title: "Oops...",

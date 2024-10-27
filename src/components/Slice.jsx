@@ -1,9 +1,9 @@
 import React from 'react'
 
-export const Slice = ({card, fading, estudianteAleatorio, ofertaAleatoria}) => {
+export const Slice = ({card, fading, estudianteAleatorio, ultimaOferta}) => {
     const {id, titulo, texto, type} = card
 
-    // console.log(ofertaAleatoria)
+    // console.log(ultimaOferta)
   return (
     <div className={`w-[400px] md:w-[700px] mx-[3px] h-full flex-shrink-0 cursor-pointer relative ${type === 'estudiante' ? 'bg-banner bg-left' : 'bg-bannerOferta phone:bg-left'} bg-cover bg-center rounded-xl`}>
         {/* <img src="public/bg_banner.png" alt=""/> */}
@@ -56,20 +56,18 @@ export const Slice = ({card, fading, estudianteAleatorio, ofertaAleatoria}) => {
 
                 :
         
-                // perfil generico
-
                  // oferta de empleo
                  <div className={`flex justify-center items-center h-full space-x-6 space-y-4 relative px-2 transition-transform duration-500 ${fading ? 'translate-x-full' : 'translate-x-0'} `}>
                     <figure className='w-[250px] h-[250px] md:w-[32%] md:h-[85%] bg-center md:bg-cover bg-no-repeat rounded-md'>
-                        <img src={ofertaAleatoria.imagen} alt='oferta' className='w-full h-full'/>
+                        <img src={ultimaOferta.imagen} alt='oferta' className='w-full h-full'/>
                     </figure>
                  <div className='w-[60%] h-[60%] overflow-hidden whitespace-normal hidden md:block'>
                     <p className='font-normal text-lg px-1'>{
-                        ofertaAleatoria.description.length > 300 ? `${ofertaAleatoria.description.slice(0, 200)}...` : ofertaAleatoria.description
+                        ultimaOferta.description.length > 300 ? `${ultimaOferta.description.slice(0, 200)}...` : ultimaOferta.description
                     }</p>
                 </div>
 
-                <p className='absolute bottom-2 left-5 md:bottom-8 md:left-[250px] font-bold'>{ofertaAleatoria.carrera}</p>
+                <p className='absolute bottom-2 left-5 md:bottom-8 md:left-[250px] font-bold'>{ultimaOferta.carrera}</p>
                 
                 </div> 
 

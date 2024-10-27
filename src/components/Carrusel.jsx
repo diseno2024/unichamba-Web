@@ -37,7 +37,7 @@ const {docStudent, docOffer} = useRandomStuden(); // lista estudiantes aleatorio
   return (
    <>
     <div className="flex h-[355px] rounded-md">
-        <Slice card={data[currentIndex]} fading={isFading} estudianteAleatorio={docStudent} ofertaAleatoria={docOffer}/>
+        <Slice card={data[currentIndex]} fading={isFading} estudianteAleatorio={docStudent} ultimaOferta={docOffer}/>
     </div>
    </>
   )
