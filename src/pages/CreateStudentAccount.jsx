@@ -153,38 +153,67 @@ const CreateStudentAccount = () => {
     }
   };
   
-  const handleImageChange = (e) => {
+  const convertToJPG = async (base64Image) => {
+    const [type, data] = base64Image.split(",");
+    const mimeType = type.match(/:(.*?);/)[1];
+
+    // Si ya es JPG, no necesita conversión
+    if (mimeType === "image/jpeg") {
+        return base64Image;
+    }
+
+    // Convertir PNG o JPEG a JPG
+    const img = new Image();
+    img.src = base64Image;
+    
+    return new Promise((resolve) => {
+        img.onload = () => {
+            const canvas = document.createElement("canvas");
+            canvas.width = img.width;
+            canvas.height = img.height;
+            const ctx = canvas.getContext("2d");
+
+            ctx.drawImage(img, 0, 0);
+            const jpgBase64 = canvas.toDataURL("image/jpeg", 0.9); // Convierte a JPEG con 90% de calidad
+            resolve(jpgBase64); // Devuelve la imagen convertida a base64
+        };
+    });
+};
+
+// Manejo de cambios en la imagen
+const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      // Validar la extensión del archivo utilizando una expresión regular
-      const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
-      // Validar que el nombre del archivo no contenga espacios
-      const noSpacesInName = /^[^\s]+\.(jpg|jpeg|png)$/i;
-  
-      if (!allowedExtensions.test(file.name)) {
-        Swal.fire({
-          icon: "error",
-          title: "Formato no válido",
-          text: "Por favor, sube una imagen en formato png, jpg o jpeg.",
-        });
-        e.target.value = null; // Limpiar el campo de archivo
-      } else if (!noSpacesInName.test(file.name)) {
-        Swal.fire({
-          icon: "error",
-          title: "Nombre no válido",
-          text: "El nombre de la imagen no debe contener espacios.",
-        });
-        e.target.value = null; // Limpiar el campo de archivo
-      } else {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          const base64String = reader.result; // La imagen convertida a Base64
-          setValues({ ...values, imageUrl: base64String });
-        };
-        reader.readAsDataURL(file); // Convierte la imagen a Base64
-      }
+        // Validar la extensión del archivo utilizando una expresión regular
+        const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
+        const noSpacesInName = /^[^\s]+\.(jpg|jpeg|png)$/i;
+
+        if (!allowedExtensions.test(file.name)) {
+            Swal.fire({
+                icon: "error",
+                title: "Formato no válido",
+                text: "Por favor, sube una imagen en formato png, jpg o jpeg.",
+            });
+            e.target.value = null; // Limpiar el campo de archivo
+        } else if (!noSpacesInName.test(file.name)) {
+            Swal.fire({
+                icon: "error",
+                title: "Imagen no válida",
+                text: "El nombre de la imagen no debe contener espacios.",
+            });
+            e.target.value = null; // Limpiar el campo de archivo
+        } else {
+            const reader = new FileReader();
+            reader.onloadend = async () => {
+                let base64String = reader.result; // La imagen convertida a Base64
+                base64String = await convertToJPG(base64String); // Convertir a JPG si es necesario
+                setValues({ ...values, imageUrl: base64String });
+            };
+            reader.readAsDataURL(file); // Convierte la imagen a Base64
+        }
     }
-  };
+};
+
   
 
   const MostrarAyuda = () => {
@@ -194,6 +223,8 @@ const CreateStudentAccount = () => {
       text: "Aceptar nuestros términos y condiciones implica que usted acepta todas las normas y políticas que rigen el uso de nuestro servicio. Esto incluye cómo recopilamos y utilizamos sus datos personales, las reglas sobre el contenido que puede publicar, y sus responsabilidades al utilizar nuestra plataforma. Aceptar estos términos es necesario para garantizar una experiencia segura y justa para todos los usuarios.",
     });
   };
+
+  
 
   const addOrEditLink = async (studentData) => {
     setLoading(true);
@@ -456,7 +487,7 @@ const CreateStudentAccount = () => {
                   El archivo debe estar en formato .pdf
                 </h6>
                 <h6 className="text-sm text-gray-500 mt-2 ml-1 font-normal">
-                  La archivo no debe contener espacios 
+                  El archivo no debe contener espacios 
                 </h6>
               </div>
 
@@ -691,7 +722,7 @@ const CreateStudentAccount = () => {
                       El archivo debe estar en formato .pdf
                     </h6>
                     <h6 className="text-sm text-gray-500 mt-2 ml-1 font-normal">
-                  La archivo no debe contener espacios 
+                  El archivo no debe contener espacios 
                 </h6>
                     <br />
                     <label htmlFor="trabajoInput" className=" font-normal">
