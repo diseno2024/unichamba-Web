@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import {useLocation } from "react-router-dom";
+import {NavLink, useLocation } from "react-router-dom";
 import axios from 'axios';
+
 
 const OfertaLaboral = ({ carrerasSeleccionadas, carreraSeleccionadaNav }) => {
     const [ofertasLaborales, setOfertasLaborales] = useState([]);
@@ -103,7 +104,7 @@ const OfertaLaboral = ({ carrerasSeleccionadas, carreraSeleccionadaNav }) => {
                 <>
                     {ofertasAMostrar.map((oferta) => (
                         location.pathname === '/OfferExploreStudent' ? (
-                            <div key={oferta.id} to={'/DetailsOffer'}
+                            <NavLink key={oferta.id} to={`/anuncios/${oferta.id}`}
                                 className='lg:min-h-[210px] lg:min-w-[100px] py-2 px-2 flex justify-between mb-6 lg:border-b-[1px] lg:border-black/40 hover:bg-Malachite/15 cursor-pointer '>
                                 <div className='flex items-center gap-2 relative'>
                                     {/* foto (visible en pantallas grandes) */}
@@ -135,9 +136,9 @@ const OfertaLaboral = ({ carrerasSeleccionadas, carreraSeleccionadaNav }) => {
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </NavLink>
                         ) : (
-                            <div key={oferta.id} to={'/DetailsOffer'} className='min-h-[300px] py-3 px-3 mt-3 flex justify-between mb-3 border-b-2 hover:bg-Malachite/15'>
+                            <NavLink key={oferta.id} to={`/anuncios/${oferta.id}`} className='min-h-[300px] py-3 px-3 mt-3 flex justify-between mb-3 border-b-2 hover:bg-Malachite/15'>
                                 <div className='flex items-center gap-3 relative'>
                                     <div className='min-h-[250px] min-w-[190px] grid justify-items-start'>
                                         <img src={oferta.imagenSmall} style={{ width: '183px', height: '200px' }} alt="imagen oferta" />
@@ -156,7 +157,7 @@ const OfertaLaboral = ({ carrerasSeleccionadas, carreraSeleccionadaNav }) => {
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </NavLink>
                         )
                     ))}
 
