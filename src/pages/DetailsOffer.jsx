@@ -1,7 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { collection, getDocs } from "firebase/firestore";
-import { db } from '../data/firebase';
-import Navbar from '../components/Navbar';
 import { NavLink, useParams } from 'react-router-dom';
 import axios from 'axios';
 

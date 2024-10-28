@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useMemo,useCallback } from "react";
 import Navbar from "../components/Navbar";
 import CarreraFiltro from "../components/CarreraFiltro";
 import AreadeTrabajo from "../components/AreaTrabajo";
@@ -35,7 +35,7 @@ const StudentsPublications = () => {
   const [studentsPerPage] = useState(6);
   const [pageRange, setPageRange] = useState({ start: 1, end: 5 });
 
-  const fetchNavData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const auth = {
         username: "unichamba",
@@ -44,76 +44,49 @@ const StudentsPublications = () => {
 
       const response = await axios.get(
         "https://couchdbbackend.esaapp.com/unichamba-estudiantes/_design/cuenta-reciente/_view/cuenta-reciente?descending=true",
-        { auth,
-          params: {
-              include_docs: true // Incluir documentos completos en la respuesta
-          } },
+        { auth, params: { include_docs: true } }
       );
 
-      let estudiantes = response.data.rows.map(row => ({ ...row.doc, id: row.id }));
-
-      if (carreraSeleccionadaNav) {
-        estudiantes = estudiantes.filter(estudiante => estudiante.carrera === carreraSeleccionadaNav);
-      }
-
-      if (trabajoSeleccionadoNav) {
-        estudiantes = estudiantes.filter(estudiante =>
-          estudiante.trabajos.some(trabajo => trabajo.icono === trabajoSeleccionadoNav)
-        );
-      }
-
+      const estudiantes = response.data.rows.map(row => ({ ...row.doc, id: row.id }));
       setDataStd(estudiantes);
     } catch (error) {
       console.error("Error al obtener los estudiantes:", error);
     }
-  };
+  }, []);
+  const estudiantesFiltrados = useMemo(() => {
+    let filteredData = dataStd;
 
-  const fetchFilterData = async () => {
-    try {
-      const auth = {
-        username: "unichamba",
-        password: "S3pt13mbre#2024Work",
-      };
-
-      const response = await axios.get(
-        "https://couchdbbackend.esaapp.com/unichamba-estudiantes/_design/cuenta-reciente/_view/cuenta-reciente?descending=true",
-        { auth, 
-          params: {
-              include_docs: true // Incluir documentos completos en la respuesta
-          }}
-      );
-
-      let estudiantesSeleccionados = response.data.rows.map(row => ({ ...row.doc, id: row.id }));
-
-      if (carreraSeleccionada) {
-        estudiantesSeleccionados = estudiantesSeleccionados.filter(estudiante => estudiante.carrera === carreraSeleccionada);
-      }
-
-      if (trabajoSeleccionado) {
-        estudiantesSeleccionados = estudiantesSeleccionados.filter(estudiante =>
-          estudiante.trabajos.some(trabajo => trabajo.nombre === trabajoSeleccionado)
-        );
-      }
-
-      setDataStd(estudiantesSeleccionados);
+    if (carreraSeleccionada || trabajoSeleccionado) {
+      filteredData = dataStd.filter(estudiante => {
+        const carreraMatches = carreraSeleccionada ? estudiante.carrera === carreraSeleccionada : true;
+        const trabajoMatches = trabajoSeleccionado
+          ? estudiante.trabajos.some(trabajo => trabajo.nombre === trabajoSeleccionado)
+          : true;
+        return carreraMatches && trabajoMatches;
+      });
 
       // Mostrar modal si no hay registros
-      if (estudiantesSeleccionados.length === 0) {
+      if (filteredData.length === 0 && (carreraSeleccionada || trabajoSeleccionado)) {
         setModalMessage("No hay registros que coincidan con los filtros seleccionados.");
         setModalVisible(true);
       }
-    } catch (error) {
-      console.error("Error al obtener los estudiantes:", error);
     }
-  };
+
+    return filteredData;
+  }, [dataStd, carreraSeleccionada, trabajoSeleccionado]);
+  const currentStudents = useMemo(() => {
+    const indexOfLastStudent = currentPage * studentsPerPage;
+    const indexOfFirstStudent = indexOfLastStudent - studentsPerPage;
+    return estudiantesFiltrados.slice(indexOfFirstStudent, indexOfLastStudent);
+  }, [estudiantesFiltrados, currentPage, studentsPerPage]);
+
+  
+  const totalPages = Math.ceil(estudiantesFiltrados.length / studentsPerPage);
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   useEffect(() => {
-    fetchNavData();
-  }, [carreraSeleccionadaNav, trabajoSeleccionadoNav]);
-
-  useEffect(() => {
-    fetchFilterData();
-  }, [carreraSeleccionada, trabajoSeleccionado]);
+    fetchData();
+  }, [fetchData])
 
   const toggleMenu = () => {
     setMenuAbierto(!menuAbierto);
@@ -122,19 +95,11 @@ const StudentsPublications = () => {
   // Calcular los estudiantes para la página actual
   const indexOfLastStudent = currentPage * studentsPerPage;
   const indexOfFirstStudent = indexOfLastStudent - studentsPerPage;
-  const currentStudents = dataStd.slice(indexOfFirstStudent, indexOfLastStudent);
 
   // Cambiar de página
-  const paginate = (pageNumber) => {
-    setCurrentPage(pageNumber);
-    if (pageNumber > pageRange.end) {
-      setPageRange({ start: Math.min(pageNumber, totalPages - 4), end: Math.min(pageNumber + 4, totalPages) });
-    } else if (pageNumber < pageRange.start) {
-      setPageRange({ start: Math.max(pageNumber - 4, 1), end: Math.max(pageNumber, 5) });
-    }
-  };
+ 
 
-  const totalPages = Math.ceil(dataStd.length / studentsPerPage);
+
 
   const handleNextPageRange = () => {
     if (pageRange.end < totalPages) {
@@ -152,7 +117,7 @@ const StudentsPublications = () => {
     setModalVisible(false);
     setCarreraSeleccionada(null); // Reiniciar filtro de carrera
     setTrabajoSeleccionado(null); // Reiniciar filtro de trabajo
-    fetchNavData(); // Volver a cargar los datos sin filtros
+    
   };
 
   return (
@@ -235,37 +200,24 @@ const StudentsPublications = () => {
 
           {/* Paginador */}
           <div className="md:absolute md:top-0 md:right-0 lg:absolute lg:top-0 lg:right-0 flex justify-center my-4">
-            <button
-              onClick={() => {
-                if (currentPage > 1) {
-                  paginate(currentPage - 1);
-                }
-              }}
+          <button
+              onClick={() => currentPage > 1 && paginate(currentPage - 1)}
               disabled={currentPage === 1}
               className="mx-0.5 p-2 bg-Dark-Blue text-white rounded"
             >
               {`<<`}
             </button>
-
-            {Array.from({ length: Math.min(5, totalPages - pageRange.start + 1) }, (_, index) => {
-              const pageNumber = pageRange.start + index;
-              return (
-                <button
-                  key={pageNumber}
-                  onClick={() => paginate(pageNumber)}
-                  className={`mx-0.5 p-2 rounded ${currentPage === pageNumber ? 'bg-green-500 text-white' : 'bg-Dark-Blue text-white'}`}
-                >
-                  {pageNumber}
-                </button>
-              );
-            })}
-
+            {[...Array(totalPages).keys()].slice(0, 5).map(num => (
+              <button
+                key={num}
+                onClick={() => paginate(num + 1)}
+                className={`mx-0.5 p-2 rounded ${currentPage === num + 1 ? 'bg-green-500 text-white' : 'bg-Dark-Blue text-white'}`}
+              >
+                {num + 1}
+              </button>
+            ))}
             <button
-              onClick={() => {
-                if (currentPage < totalPages) {
-                  paginate(currentPage + 1);
-                }
-              }}
+              onClick={() => currentPage < totalPages && paginate(currentPage + 1)}
               disabled={currentPage === totalPages}
               className="mx-0.5 p-2 bg-Dark-Blue text-white rounded"
             >
