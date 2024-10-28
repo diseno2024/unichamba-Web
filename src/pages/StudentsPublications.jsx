@@ -6,6 +6,20 @@ import TarjetaPublicacion from "../components/TarjetaPublicacion";
 import { NavLink } from "react-router-dom";
 import axios from "axios";
 
+const Modal = ({ message, onClose }) => {
+  return (
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+      <div className="bg-white p-4 rounded shadow-lg">
+        <h2 className="text-lg font-bold">Información</h2>
+        <p>{message}</p>
+        <button onClick={onClose} className="mt-4 p-2 bg-Dark-Blue text-white rounded">
+          Cerrar
+        </button>
+      </div>
+    </div>
+  );
+};
+
 const StudentsPublications = () => {
   const [dataStd, setDataStd] = useState([]);
   const [carreraSeleccionadaNav, setCarreraSeleccionadaNav] = useState(null);
@@ -13,6 +27,8 @@ const StudentsPublications = () => {
   const [carreraSeleccionada, setCarreraSeleccionada] = useState(null);
   const [trabajoSeleccionado, setTrabajoSeleccionado] = useState(null);
   const [menuAbierto, setMenuAbierto] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
 
   // Paginación
   const [currentPage, setCurrentPage] = useState(1);
@@ -80,11 +96,16 @@ const StudentsPublications = () => {
       }
 
       setDataStd(estudiantesSeleccionados);
+
+      // Mostrar modal si no hay registros
+      if (estudiantesSeleccionados.length === 0) {
+        setModalMessage("No hay registros que coincidan con los filtros seleccionados.");
+        setModalVisible(true);
+      }
     } catch (error) {
       console.error("Error al obtener los estudiantes:", error);
     }
   };
-
 
   useEffect(() => {
     fetchNavData();
@@ -127,6 +148,13 @@ const StudentsPublications = () => {
     }
   };
 
+  const handleCloseModal = () => {
+    setModalVisible(false);
+    setCarreraSeleccionada(null); // Reiniciar filtro de carrera
+    setTrabajoSeleccionado(null); // Reiniciar filtro de trabajo
+    fetchNavData(); // Volver a cargar los datos sin filtros
+  };
+
   return (
     <>
       <header>
@@ -137,8 +165,6 @@ const StudentsPublications = () => {
       </header>
       <br />
       <main className="flex flex-col md:flex-row h-auto mt-[70px] relative space-y-0 md:space-y-0 md:space-x-7">
-
-
         <section className="px-5 h-max w-full md:min-w-[225px] md:max-w-[250px] border-r-2 flex-col space-y-4">
           <div className={`lg:block md:block md:pl-2 ${menuAbierto ? 'block' : 'hidden'}`}>
             <div className="flex justify-end px-2 pt-2 md:hidden">
@@ -246,10 +272,13 @@ const StudentsPublications = () => {
               {`>>`}
             </button>
           </div>
-
-
         </div>
       </main>
+
+      {/* Modal para no hay registros */}
+      {modalVisible && (
+        <Modal message={modalMessage} onClose={handleCloseModal} />
+      )}
     </>
   );
 };
