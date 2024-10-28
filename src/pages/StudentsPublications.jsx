@@ -32,7 +32,7 @@ const StudentsPublications = () => {
 
   // Paginación
   const [currentPage, setCurrentPage] = useState(1);
-  const [studentsPerPage] = useState(6);
+  const [studentsPerPage] = useState(25);
   const [pageRange, setPageRange] = useState({ start: 1, end: 5 });
 
   const fetchData = useCallback(async () => {
@@ -186,17 +186,17 @@ const StudentsPublications = () => {
             </div>
           </section>
 
-          <section className={`grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 ${menuAbierto ? 'hidden' : 'grid'}`}>
-            {currentStudents.length > 0 ? (
-              currentStudents.map(student => (
-                <TarjetaPublicacion listStudent={student} key={student.id} />
-              ))
-            ) : (
-              <div className="flex justify-center items-center h-full">
-                <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent border-solid rounded-full animate-spin"></div>
-              </div>
-            )}
-          </section>
+            <section className={`grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 ${menuAbierto ? 'hidden' : 'grid'}`}>
+              {currentStudents.length > 0 ? (
+                currentStudents.map(student => (
+                  <TarjetaPublicacion listStudent={student} key={student.id} />
+                ))
+              ) : (
+                <div className="grid justify-center items-center col-span-full w-screen h-screen md:w-[80vw] md:h-[80vh]">
+      <div className="animate-spin rounded-full h-32 w-32 border-t-8 border-blue-900"></div>
+    </div>
+              )}
+            </section>
 
           {/* Paginador */}
           <div className="md:absolute md:top-0 md:right-0 lg:absolute lg:top-0 lg:right-0 flex justify-center my-4">
