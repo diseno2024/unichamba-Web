@@ -27,8 +27,11 @@ const StudentsPublications = () => {
       };
 
       const response = await axios.get(
-        "https://couchdbbackend.esaapp.com/unichamba-estudiantes/_all_docs?include_docs=true",
-        { auth }
+        "https://couchdbbackend.esaapp.com/unichamba-estudiantes/_design/cuenta-reciente/_view/cuenta-reciente?descending=true",
+        { auth,
+          params: {
+              include_docs: true // Incluir documentos completos en la respuesta
+          } },
       );
 
       let estudiantes = response.data.rows.map(row => ({ ...row.doc, id: row.id }));
@@ -42,9 +45,6 @@ const StudentsPublications = () => {
           estudiante.trabajos.some(trabajo => trabajo.icono === trabajoSeleccionadoNav)
         );
       }
-
-      // Ordenar por fecha de registro (fecRegistro) del más reciente al más antiguo
-      estudiantes.sort((a, b) => new Date(b.fecRegistro) - new Date(a.fecRegistro));
 
       setDataStd(estudiantes);
     } catch (error) {
@@ -60,8 +60,11 @@ const StudentsPublications = () => {
       };
 
       const response = await axios.get(
-        "https://couchdbbackend.esaapp.com/unichamba-estudiantes/_all_docs?include_docs=true",
-        { auth }
+        "https://couchdbbackend.esaapp.com/unichamba-estudiantes/_design/cuenta-reciente/_view/cuenta-reciente?descending=true",
+        { auth, 
+          params: {
+              include_docs: true // Incluir documentos completos en la respuesta
+          }}
       );
 
       let estudiantesSeleccionados = response.data.rows.map(row => ({ ...row.doc, id: row.id }));
@@ -75,9 +78,6 @@ const StudentsPublications = () => {
           estudiante.trabajos.some(trabajo => trabajo.nombre === trabajoSeleccionado)
         );
       }
-
-      // Ordenar por fecha de registro (fecRegistro) del más reciente al más antiguo
-      estudiantesSeleccionados.sort((a, b) => new Date(b.fecRegistro) - new Date(a.fecRegistro));
 
       setDataStd(estudiantesSeleccionados);
     } catch (error) {
@@ -195,7 +195,7 @@ const StudentsPublications = () => {
             </div>
           </section>
 
-          <section className={`grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 ${menuAbierto ? 'hidden' : 'grid'}`}>
+          <section className={`grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 ${menuAbierto ? 'hidden' : 'grid'}`}>
             {currentStudents.length > 0 ? (
               currentStudents.map(student => (
                 <TarjetaPublicacion listStudent={student} key={student.id} />
@@ -227,7 +227,7 @@ const StudentsPublications = () => {
                 <button
                   key={pageNumber}
                   onClick={() => paginate(pageNumber)}
-                  className={`mx-0.5 p-2 rounded ${currentPage === pageNumber ? 'bg-Dark-Blue text-white' : 'bg-green-500 text-white'}`}
+                  className={`mx-0.5 p-2 rounded ${currentPage === pageNumber ? 'bg-green-500 text-white' : 'bg-Dark-Blue text-white'}`}
                 >
                   {pageNumber}
                 </button>

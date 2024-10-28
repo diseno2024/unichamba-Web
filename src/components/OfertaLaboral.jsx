@@ -13,7 +13,7 @@ const OfertaLaboral = ({ carrerasSeleccionadas, carreraSeleccionadaNav }) => {
     // Función para cargar las ofertas laborales desde CouchDB
     const fetchOfertasLaborales = async () => {
         try {
-            const response = await axios.get("https://couchdbbackend.esaapp.com/unichamba-anuncios/_all_docs", {
+            const response = await axios.get("https://couchdbbackend.esaapp.com/unichamba-anuncios/_design/anuncio-reciente/_view/anuncio-reciente?descending=true", {
                 auth: {
                     username: "unichamba",
                     password: "S3pt13mbre#2024Work"

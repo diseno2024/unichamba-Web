@@ -19,7 +19,7 @@ const OfferExploreStudent = () => {
   useEffect(() => {
     const fetchNavData = async () => {
       try {
-        const response = await axios.get("https://couchdbbackend.esaapp.com/unichamba-anuncios/_all_docs", {
+        const response = await axios.get("https://couchdbbackend.esaapp.com/unichamba-anuncios/_design/anuncio-reciente/_view/anuncio-reciente?descending=true", {
           auth: {
             username: "unichamba",
             password: "S3pt13mbre#2024Work"
@@ -32,6 +32,8 @@ const OfferExploreStudent = () => {
         let anuncios = response.data.rows.map(row => ({...row.doc, id: row.id}));
 
 
+        // console.log("respuesta: ",  response.data.rows)
+        // console.log(anuncios)
         // Filtrar según carreraSeleccionadaNav si está seleccionada
         if (carreraSeleccionadaNav) {
           anuncios = anuncios.filter(anuncio => anuncio.carrera.includes(carreraSeleccionadaNav));

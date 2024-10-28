@@ -1,9 +1,8 @@
 import React from 'react'
 
-export const Slice = ({card, fading, estudianteAleatorio, ultimaOferta}) => {
+export const Slice = ({card, fading, ultimoEstudiante, ultimaOferta}) => {
     const {id, titulo, texto, type} = card
 
-    // console.log(ultimaOferta)
   return (
     <div className={`w-[400px] md:w-[700px] mx-[3px] h-full flex-shrink-0 cursor-pointer relative ${type === 'estudiante' ? 'bg-banner bg-left' : 'bg-bannerOferta phone:bg-left'} bg-cover bg-center rounded-xl`}>
         {/* <img src="public/bg_banner.png" alt=""/> */}
@@ -36,17 +35,17 @@ export const Slice = ({card, fading, estudianteAleatorio, ultimaOferta}) => {
 
                 <div className={`flex justify-center items-center h-full gap-5 relative transition-transform duration-500 ${fading ? 'translate-x-full' : 'translate-x-0'}`}>
                     <figure className=' overflow-hidden w-[165px] h-[165px] md:w-[195px] md:h-[195px] bg-cover bg-center rounded-full'>
-                        <img src={estudianteAleatorio.imageUrl} alt="perfil-aleatorio" className='-z-50'/>
+                        <img src={ultimoEstudiante.imageUrl} alt="perfil-aleatorio" className='-z-50'/>
                     </figure>
 
                     <div className='w-[60%] h-[60%] overflow-hidden whitespace-normal'>
-                        <h3 className='text-[22px] font-normal'>{estudianteAleatorio.nombre}</h3>
-                        <p className='text-sm font-light'>{estudianteAleatorio.carrera}</p>
-                        <p className='font-normal py-3 h-[110px] overflow-hidden mt-1 px-1'>{estudianteAleatorio.acercaDe}</p>
+                        <h3 className='text-[22px] font-normal'>{ultimoEstudiante.nombre}</h3>
+                        <p className='text-sm font-light'>{ultimoEstudiante.carrera}</p>
+                        <p className='font-normal py-3 h-[110px] overflow-hidden mt-1 px-1'>{ultimoEstudiante.acercaDe}</p>
                     </div>
                     <div className='absolute md:left-[85px] md:bottom-[35px] bottom-16 left-5'>
 
-                    {estudianteAleatorio.trabajos.map( trabajo => 
+                    {ultimoEstudiante.trabajos.map( trabajo => 
                         <span className="material-symbols-outlined text-3xl" key={trabajo.nombre}>{trabajo.icono}</span>
                     )}
                         
@@ -63,7 +62,8 @@ export const Slice = ({card, fading, estudianteAleatorio, ultimaOferta}) => {
                     </figure>
                  <div className='w-[60%] h-[60%] overflow-hidden whitespace-normal hidden md:block'>
                     <p className='font-normal text-lg px-1'>{
-                        ultimaOferta.description.length > 300 ? `${ultimaOferta.description.slice(0, 200)}...` : ultimaOferta.description
+                        ultimaOferta.description
+                        // ultimaOferta.description.length > 300 ? `${ultimaOferta.description.slice(0, 200)}...` : ultimaOferta.description
                     }</p>
                 </div>
 
