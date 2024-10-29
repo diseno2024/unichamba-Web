@@ -26,7 +26,7 @@ export const AuthContextProvider = ({children}) => {
         const suscribed = onAuthStateChanged( auth, (currentUser) => {
             if(!currentUser){
                 console.log("no hay usuario suscrito")
-                setUser("")
+                setUser('')
             }else{
                 setUser(currentUser)
             }

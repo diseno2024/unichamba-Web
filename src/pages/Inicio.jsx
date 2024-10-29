@@ -102,8 +102,9 @@ const Inicio = () => {
         console.log("Administrador encontrado:", adminsResponse.data.docs[0]); 
       } else {
         console.log("No se encontró el administrador, redirigiendo a crear cuenta...");
-        navigate("/createAccountStd"); // Navegar a crear cuenta si no existe
-
+        if(!cuentaExterna || !result){
+          navigate("/createAccountStd"); // Navegar a crear cuenta si no existe
+        }
       }
     } catch (error) {
       console.error('Error al consultar el usuario en administradores:', error.response ? error.response.data : error.message);
@@ -114,8 +115,10 @@ const Inicio = () => {
   useEffect(() => {
     if (Object.keys(user).length !== 0) {
       setLogin(true);
-      if (!cuentaExterna || !result) { // Si no es una cuenta externa o empleado ues
-        checkUserExists(user.email); // Verifica si el usuario existe
+      if (!cuentaExterna) {
+        if(!result){
+          checkUserExists(user.email); // Verifica si el usuario existe
+        } // Si no es una cuenta externa o empleado ues
       }
     }
   }, [user]);
@@ -137,7 +140,6 @@ const Inicio = () => {
 
         <div className="z-40 bg-gradient-to-b from-Dark-Blue  to-[#19376D] fixed inset-0 translate-x-full peer-checked:translate-x-0 transition-transform lg:hidden">
 
-        {/* logica */}
         {
               !login
 
@@ -161,7 +163,7 @@ const Inicio = () => {
               </div>
              
 
-              : login && !admin?
+              : login && cuentaUes && !admin ?
               // logueado y cuenta estudiante
               <div className="flex flex-col items-center gap-4 w-[90%] mx-auto py-5 mt-20">
 
@@ -195,8 +197,8 @@ const Inicio = () => {
 
               </div>
 
-              : login && admin ?
-              // logueado y cuenta administrador 
+              : login && admin && !cuentaUes ?
+              // logueado y cuenta administrador
               <div className="w-[90%] mx-auto mt-14 h-screen flex flex-col items-center space-y-10 pt-20">
 
                 <NavLink to="/userAdmin" className="space-y-5">
@@ -218,10 +220,6 @@ const Inicio = () => {
                 >
                   Cerrar Sesión
                 </button>
-
-                <figure className="absolute bottom-5">
-                    <img src="/LOGO.svg" alt="logo" className="w-full h-full"/>
-                </figure>
 
               </div>
 
@@ -254,30 +252,28 @@ const Inicio = () => {
                     Cerrar Sesión
                 </button> 
 
-                <figure className="absolute bottom-5">
-                    <img src="/LOGO.svg" alt="logo" className="w-full h-full"/>
-                </figure>
               </div>
 
 
               :
+              ''
 
-              <div className="w-[90%] mx-auto mt-20 flex flex-col h-screen items-center py-5">
-                <button
-                className="text-white font-semibold flex items-center gap-4 bg-Malachite h-[55px] justify-between pl-3 pr-[2px] rounded-[8px]"
-                onClick={handleGoogleSingIn}
-              >
-                Iniciar sesion con Google
-                <img
-                  src="/google 2.svg"
-                  alt="google-icon"
-                  className="bg-white py-[13px] px-[13px] rounded-lg"
-                />
-              </button>
-              <figure className="absolute bottom-5">
-                    <img src="/LOGO.svg" alt="logo" className="w-full h-full"/>
-                  </figure>
-              </div>
+              //<div className="w-[90%] mx-auto mt-20 flex flex-col h-screen items-center py-5">
+              //   <button
+              //   className="text-white font-semibold flex items-center gap-4 bg-Malachite h-[55px] justify-between pl-3 pr-[2px] rounded-[8px]"
+              //   onClick={handleGoogleSingIn}
+              // >
+              //   Iniciar sesion con Google
+              //   <img
+              //     src="/google 2.svg"
+              //     alt="google-icon"
+              //     className="bg-white py-[13px] px-[13px] rounded-lg"
+              //   />
+              // </button>
+              // <figure className="absolute bottom-5">
+              //       <img src="/LOGO.svg" alt="logo" className="w-full h-full"/>
+              //     </figure>
+              // </div>
             }
 
         </div>
@@ -286,14 +282,11 @@ const Inicio = () => {
         <div className="flex gap-5 items-center phone:hidden lg:block">
 
             {
-              !login  
-                
-              ?
-
+              !login ?
+              // inicio de sesion
               <button
                 className="relative text-white font-semibold flex items-center gap-4 bg-Malachite h-[55px] justify-between pl-3 pr-[2px] rounded-[8px]"
-                onClick={handleGoogleSingIn}
-              >
+                onClick={handleGoogleSingIn}>
                 Iniciar sesion con Google
                 <img
                   src="/google 2.svg"
@@ -302,8 +295,8 @@ const Inicio = () => {
                 />
               </button>
 
-              : login && !admin ?
-
+              : login && cuentaUes && !admin ?
+              // logueado con cuenta ues y no es admin
               <div className="flex items-center gap-4">
                 <button
                   className="relative text-white font-semibold flex items-center gap-4 bg-Malachite h-[55px] justify-between px-4 rounded-[8px]"
@@ -326,33 +319,42 @@ const Inicio = () => {
                 </NavLink>
               </div>
 
-              : login && admin ?
-
+              : login && admin && !cuentaUes?
+              // logueado con cuenta admin y no es ues
               <div className="flex items-center gap-4">
-                <button
-                  className="relative text-white font-semibold flex items-center gap-4 bg-Malachite h-[55px] justify-between px-4 rounded-[8px]"
-                  onClick={handleGoogleSingOut}
-                >
-                  Cerrar Sesión
-                </button>
+              <button
+                className="relative text-white font-semibold flex items-center gap-4 bg-Malachite h-[55px] justify-between px-4 rounded-[8px]"
+                onClick={handleGoogleSingOut}
+              >
+                Cerrar Sesión
+              </button>
 
-                <NavLink to="/userAdmin" className="flex items-center">
-                  <h1 className="text-2xl font-normal text-white mr-3">
-                    Admin
-                  </h1>
-                  <div className="h-[55px] w-[55px] rounded-full">
-                    <img
-                      src={URLphoto}
-                      alt="imagen-estudiante"
-                      className="w-full h-full rounded-full"
-                    />
-                  </div>
-                </NavLink>
-              </div>
+              <NavLink to="/userAdmin" className="flex items-center">
+                <h1 className="text-2xl font-normal text-white mr-3">
+                  Admin
+                </h1>
+                <div className="h-[55px] w-[55px] rounded-full">
+                  <img
+                    src={URLphoto}
+                    alt="imagen-estudiante"
+                    className="w-full h-full rounded-full"
+                  />
+                </div>
+              </NavLink>
+            </div>
 
-              : login && result && !admin ? 
-              
-              <div className="flex space-x-3">
+            : login && cuentaExterna ?
+              // cuenta gmail
+            <button
+              className="relative text-white font-semibold flex items-center gap-4 bg-Malachite h-[55px] justify-between px-4 rounded-[8px]"
+              onClick={handleGoogleSingOut}>
+                Cerrar Sesión
+            </button>
+
+
+            : login && result && !admin ?
+              // cuenta empleado pero no es la cuenta del ing
+            <div className="flex space-x-3">
                 <NavLink to='/createOffer' className='bg-Malachite text-white h-[55px] px-10 flex items-center rounded-[8px] space-x-2 font-semibold'>
                   <h2>Publicar oferta</h2>
                   <span className="material-symbols-outlined">work</span>
@@ -367,31 +369,9 @@ const Inicio = () => {
                   </button>
                 </div>
               </div>
-
-              : cuentaExterna ?
-
-              <button
-                    className="relative text-white font-semibold flex items-center gap-4 bg-Malachite h-[55px] justify-between px-4 rounded-[8px]"
-                    onClick={handleGoogleSingOut}
-                  >
-                    Cerrar Sesión
-              </button>
-
-              
-
               :
 
-              <button
-                className="relative text-white font-semibold flex items-center gap-4 bg-Malachite h-[55px] justify-between pl-3 pr-[2px] rounded-[8px]"
-                onClick={handleGoogleSingIn}
-              >
-                Iniciar sesion con Google
-                <img
-                  src="/google 2.svg"
-                  alt="google-icon"
-                  className="bg-white py-[13px] px-[13px] rounded-lg"
-                />
-              </button>
+              ''
             }
           </div>
 
