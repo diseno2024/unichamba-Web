@@ -126,13 +126,6 @@ const CreateStudentAccount = () => {
           text: "Por favor, sube un archivo en formato PDF.",
         });
         e.target.value = null; // Limpiar el campo de archivo
-      } else if (!noSpacesInName.test(file.name)) {
-        Swal.fire({
-          icon: "error",
-          title: "Nombre no válido",
-          text: "El nombre del archivo PDF no debe contener espacios.",
-        });
-        e.target.value = null; // Limpiar el campo de archivo
       } else {
         const reader = new FileReader();
   
@@ -195,13 +188,6 @@ const handleImageChange = (e) => {
                 text: "Por favor, sube una imagen en formato png, jpg o jpeg.",
             });
             e.target.value = null; // Limpiar el campo de archivo
-        } else if (!noSpacesInName.test(file.name)) {
-            Swal.fire({
-                icon: "error",
-                title: "Imagen no válida",
-                text: "El nombre de la imagen no debe contener espacios.",
-            });
-            e.target.value = null; // Limpiar el campo de archivo
         } else {
             const reader = new FileReader();
             reader.onloadend = async () => {
@@ -244,21 +230,25 @@ const handleImageChange = (e) => {
         const studentId = studentResponse.data.id;
         console.log('ID del estudiante generado:', studentId); // Verificar el ID
 
-        // 2. Preparar los datos para el almacenamiento
+        // 2. Preparar los datos para el almacenamiento, incluyendo solo el PDF si se ha subido
         const attachments = {
             _attachments: {
                 "imagen.jpg": {
                     content_type: "image/jpeg", // Ajusta el tipo de contenido según sea necesario
                     data: values.imageUrl.split(",")[1], // Base64 sin el prefijo de tipo de archivo
-                },
-                "curriculum.pdf": {
-                    content_type: "application/pdf",
-                    data: values.hojadevida.split(",")[1], // Base64 sin el prefijo de tipo de archivo
                 }
             }
         };
 
-        // 3. Guardar la imagen y el PDF en la base de datos de almacenamiento
+        // Solo agregar el PDF si está presente
+        if (values.hojadevida) {
+            attachments._attachments["curriculum.pdf"] = {
+                content_type: "application/pdf",
+                data: values.hojadevida.split(",")[1], // Base64 sin el prefijo de tipo de archivo
+            };
+        }
+
+        // 3. Guardar la imagen (y el PDF si existe) en la base de datos de almacenamiento
         await axios.put(
             `https://couchdbbackend.esaapp.com/unichamba-estudiantes-storage/${studentId}`,
             attachments,
@@ -270,7 +260,7 @@ const handleImageChange = (e) => {
             }
         );
 
-        console.log('Imagen y PDF guardados.');
+        console.log('Imagen y, si existe, PDF guardados.');
 
         // 4. Obtener el documento del estudiante para actualizarlo
         const studentDoc = await axios.get(
@@ -283,14 +273,19 @@ const handleImageChange = (e) => {
             }
         );
 
-        // 5. Actualizar el documento del estudiante con las URLs de la imagen y PDF
+        // 5. Actualizar el documento del estudiante con las URLs de la imagen y el PDF si existe
+        const updatedData = {
+            ...studentDoc.data, // Incluye el documento actual con _rev para evitar conflictos
+            imageUrl: `https://couchdbbackend.esaapp.com/unichamba-estudiantes-storage/${studentId}/imagen.jpg`, // Enlace directo a la imagen
+        };
+
+        if (values.hojadevida) {
+            updatedData.pdfUrl = `https://couchdbbackend.esaapp.com/unichamba-estudiantes-storage/${studentId}/curriculum.pdf`; // Enlace directo al PDF
+        }
+
         await axios.put(
             `https://couchdbbackend.esaapp.com/unichamba-estudiantes/${studentId}`,
-            {
-                ...studentDoc.data, // Incluye el documento actual con _rev para evitar conflictos
-                imageUrl: `https://couchdbbackend.esaapp.com/unichamba-estudiantes-storage/${studentId}/imagen.jpg`, // Enlace directo a la imagen
-                pdfUrl: `https://couchdbbackend.esaapp.com/unichamba-estudiantes-storage/${studentId}/curriculum.pdf`, // Enlace directo al PDF
-            },
+            updatedData,
             {
                 auth: {
                     username: 'unichamba',
@@ -407,9 +402,6 @@ const handleImageChange = (e) => {
                 <h6 className="text-sm text-gray-500 mt-2 ml-1 font-normal">
                   La imagen debe estar en formato .png .jpg .jpeg 
                 </h6>
-                <h6 className="text-sm text-gray-500 mt-2 ml-1 font-normal">
-                  La imagen no debe contener espacios 
-                </h6>
               </div>
 
               <div className="ml-9">
@@ -425,7 +417,7 @@ const handleImageChange = (e) => {
                   id="apellidoInput"
                   className="rounded-lg border border-black p-3 w-80 mt-4 font-normal"
                   name="apellido"
-                  pattern="^[A-Za-záéíóúÁÉÍÓÚ]+\s[A-Za-záéíóúÁÉÍÓÚ]+$"
+                  pattern="^[A-Za-záéíóúÁÉÍÓÚ]+(?:\s[A-Za-záéíóúÁÉÍÓÚ]+)?$"
                   title="Por favor introduce entre 5 y 30 dígitos."
                   value={values.apellido}  // conectar al estado
                   onChange={handleInputChange}  // actualizar el estado
@@ -481,14 +473,12 @@ const handleImageChange = (e) => {
                     // conectar al estado
                   onChange={handleFileChange}  // actualizar el estado
                   title="El archivo debe estar en formato PDF"
-                  required
+                  
                 />
                 <h6 className="text-sm text-gray-500 mt-2 ml-1 font-normal">
                   El archivo debe estar en formato .pdf
                 </h6>
-                <h6 className="text-sm text-gray-500 mt-2 ml-1 font-normal">
-                  El archivo no debe contener espacios 
-                </h6>
+              
               </div>
 
               {/* imagen svg */}
@@ -608,7 +598,7 @@ const handleImageChange = (e) => {
                       name="apellido"
                       value={values.apellido}  // conectar al estado
                       onChange={handleInputChange}  // actualizar el estado
-                      pattern="^[A-Za-záéíóúÁÉÍÓÚ]+\s[A-Za-záéíóúÁÉÍÓÚ]+$"
+                      pattern="^[A-Za-záéíóúÁÉÍÓÚ]+(?:\s[A-Za-záéíóúÁÉÍÓÚ]+)?$"
                       title="Por favor introduce entre 5 y 30 dígitos."
                      
                       required
@@ -659,9 +649,7 @@ const handleImageChange = (e) => {
                     <h6 className="text-sm text-gray-500 mt-2 ml-1 font-normal w-[87%]">
                       La imagen debe estar en formato .png .jpg .jpeg
                     </h6>
-                    <h6 className="text-sm text-gray-500 mt-2 ml-1 font-normal">
-                  La imagen no debe contener espacios 
-                </h6>
+                   
                     
                   </div>
 
@@ -716,14 +704,12 @@ const handleImageChange = (e) => {
                       name="curriculum"
                       onChange={handleFileChange}  // actualizar el estado
                       title="El archivom debe estar en formato PDF"
-                      required
+                      
                     />
                     <h6 className="text-sm text-gray-500 mt-2 ml-1 font-normal">
                       El archivo debe estar en formato .pdf
                     </h6>
-                    <h6 className="text-sm text-gray-500 mt-2 ml-1 font-normal">
-                  El archivo no debe contener espacios 
-                </h6>
+                   
                     <br />
                     <label htmlFor="trabajoInput" className=" font-normal">
                       Trabajos
