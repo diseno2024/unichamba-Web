@@ -70,6 +70,13 @@ const DetailsOffer = () => {
                         />
                     </div>
                     <div className='mx-4 md:mx-2 my-2 min-w-[300px] max-w-full'>
+                        
+                        <div className='flex items-center'>
+                            <span className="material-symbols-outlined">pill</span>
+                            <span className='text-xl md:text-2xl mx-2 font-[420]'>Descripción del empleo</span>
+                        </div>
+                        <p className='mx-[40px] my-4 font-light text-lg'>{oferta.description}</p>
+
                         <div className='flex items-center'>
                             <span className="material-symbols-outlined">person</span>
                             <span className='text-xl md:text-2xl mx-2 font-[420]'>Publicado por:</span>
@@ -77,11 +84,6 @@ const DetailsOffer = () => {
                         <p className='mx-[40px] my-4 font-light text-lg'>
                             {oferta.quienPublica}
                         </p>
-                        <div className='flex items-center'>
-                            <span className="material-symbols-outlined">pill</span>
-                            <span className='text-xl md:text-2xl mx-2 font-[420]'>Descripción del empleo</span>
-                        </div>
-                        <p className='mx-[40px] my-4 font-light text-lg'>{oferta.description}</p>
 
                         <div className='flex items-center'>
                             <span className="material-symbols-outlined">school</span>
