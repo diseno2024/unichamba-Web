@@ -349,7 +349,7 @@ const handleImageChange = (e) => {
                   id="nombreInput"
                   className="rounded-lg border border-black p-3 w-80 mt-4 font-normal"
                   name="nombre"
-                  pattern="^[A-Za-záéíóúÁÉÍÓÚ]+\s[A-Za-záéíóúÁÉÍÓÚ]+$"
+                  pattern="^[A-Za-záéíóúÁÉÍÓÚ]+(\s[A-Za-záéíóúÁÉÍÓÚ]+)*$"
                   title="Por favor introduce tus nombres adecuadamente"
                   value={values.nombre}  // conectar al estado
                   onChange={handleInputChange}  // actualizar el estado
@@ -394,7 +394,7 @@ const handleImageChange = (e) => {
                   id="imagenInput"
                   className="rounded-lg border border-black p-3 w-80 mt-4 font-normal"
                   name="imagen"
-               
+                  accept="image/jpeg, image/png, image/jpg"
                   onChange={handleImageChange}  // actualizar el estado
                   title="Las fotos deben subirse en formato png, jpg, jpeg"
                   required
@@ -417,7 +417,7 @@ const handleImageChange = (e) => {
                   id="apellidoInput"
                   className="rounded-lg border border-black p-3 w-80 mt-4 font-normal"
                   name="apellido"
-                  pattern="^[A-Za-záéíóúÁÉÍÓÚ]+(?:\s[A-Za-záéíóúÁÉÍÓÚ]+)?$"
+                  pattern="^[A-Za-záéíóúÁÉÍÓÚ]+(\s[A-Za-záéíóúÁÉÍÓÚ]+)*$"
                   title="Por favor introduce entre 5 y 30 dígitos."
                   value={values.apellido}  // conectar al estado
                   onChange={handleInputChange}  // actualizar el estado
@@ -473,6 +473,7 @@ const handleImageChange = (e) => {
                     // conectar al estado
                   onChange={handleFileChange}  // actualizar el estado
                   title="El archivo debe estar en formato PDF"
+                  accept=".pdf"
                   
                 />
                 <h6 className="text-sm text-gray-500 mt-2 ml-1 font-normal">
@@ -578,7 +579,7 @@ const handleImageChange = (e) => {
                       id="nombreInput"
                       className="rounded-lg border border-black p-3 w-[87%] mt-4 font-normal"
                       name="nombre"
-                      pattern="^[A-Za-záéíóúÁÉÍÓÚ]+\s[A-Za-záéíóúÁÉÍÓÚ]+$"
+                     pattern="^[A-Za-záéíóúÁÉÍÓÚ]+(\s[A-Za-záéíóúÁÉÍÓÚ]+)*$"
                       title="Por favor introduce tus nombres adecuadamente"
                       value={values.nombre}  // conectar al estado
                       onChange={handleInputChange}  // actualizar el estado
@@ -598,7 +599,7 @@ const handleImageChange = (e) => {
                       name="apellido"
                       value={values.apellido}  // conectar al estado
                       onChange={handleInputChange}  // actualizar el estado
-                      pattern="^[A-Za-záéíóúÁÉÍÓÚ]+(?:\s[A-Za-záéíóúÁÉÍÓÚ]+)?$"
+                     pattern="^[A-Za-záéíóúÁÉÍÓÚ]+(\s[A-Za-záéíóúÁÉÍÓÚ]+)*$"
                       title="Por favor introduce entre 5 y 30 dígitos."
                      
                       required
@@ -644,6 +645,7 @@ const handleImageChange = (e) => {
                       name="imagen"
                       onChange={handleImageChange}  // actualizar el estado
                       title="Las fotos deben subirse en formato png, jpg, jpeg"
+                      accept="image/jpeg, image/png, image/jpg"
                       required
                     />
                     <h6 className="text-sm text-gray-500 mt-2 ml-1 font-normal w-[87%]">
@@ -704,6 +706,7 @@ const handleImageChange = (e) => {
                       name="curriculum"
                       onChange={handleFileChange}  // actualizar el estado
                       title="El archivom debe estar en formato PDF"
+                      accept=".pdf"
                       
                     />
                     <h6 className="text-sm text-gray-500 mt-2 ml-1 font-normal">
