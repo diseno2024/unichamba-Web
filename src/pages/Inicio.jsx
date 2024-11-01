@@ -4,7 +4,6 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { Carrusel } from "../components/Carrusel";
 import { cardsEstudiantes } from '../data/dataSlices'
 import { cardsOfertas } from '../data/dataSliceOferta'
-import { useFetch } from "../hooks/useFetch";
 import axios from "axios";
 
 const Inicio = () => {
@@ -197,20 +196,14 @@ const Inicio = () => {
 
               </div>
 
-              : login && admin && !cuentaUes ?
+              : login && admin ?
               // logueado y cuenta administrador
               <div className="w-[90%] mx-auto mt-14 h-screen flex flex-col items-center space-y-10 pt-20">
 
-                <NavLink to="/userAdmin" className="space-y-5">
-                  <div className="h-[55px] w-[55px] rounded-full">
-                    <img
-                      src={URLphoto}
-                      alt="imagen-admin"
-                      className="w-full h-full rounded-full"
-                    />
-                  </div>
-                  <h1 className="text-2xl font-normal text-white mr-3">
-                    Admin
+                <NavLink to="/userAdmin" className="space-y-5 flex flex-col items-center justify-center">
+                <span class="material-symbols-outlined text-white" style={{fontSize:'75px'}}>admin_panel_settings</span>
+                  <h1 className="text-2xl font-normal text-white">
+                    ADMINISTRADOR
                   </h1>
                 </NavLink>
 
@@ -319,7 +312,7 @@ const Inicio = () => {
                 </NavLink>
               </div>
 
-              : login && admin && !cuentaUes?
+              : login && admin?
               // logueado con cuenta admin y no es ues
               <div className="flex items-center gap-4">
               <button
@@ -329,18 +322,13 @@ const Inicio = () => {
                 Cerrar Sesión
               </button>
 
-              <NavLink to="/userAdmin" className="flex items-center">
-                <h1 className="text-2xl font-normal text-white mr-3">
-                  Admin
-                </h1>
-                <div className="h-[55px] w-[55px] rounded-full">
-                  <img
-                    src={URLphoto}
-                    alt="imagen-estudiante"
-                    className="w-full h-full rounded-full"
-                  />
-                </div>
-              </NavLink>
+              <NavLink to="/userAdmin" className="space-y-5 flex items-center">
+                  <h1 className="text-xl font-normal text-white">
+                    ADMINISTRADOR
+                  </h1>
+                  <span class="material-symbols-outlined text-white pb-5 px-1" style={{fontSize:'35px'}}>admin_panel_settings</span>
+                </NavLink>
+
             </div>
 
             : login && cuentaExterna ?
