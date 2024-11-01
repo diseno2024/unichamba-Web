@@ -7,11 +7,11 @@ import withReactContent from "sweetalert2-react-content";
 import WhatsAppButton from "../components/WhatsAppButton";
 import { UserAuth } from "../context/AuthContext";
 import axios from "axios";
-
+import { createRoot } from "react-dom/client";
 const StudentProfile = () => {
   const location = useLocation();
   const { idPerfil } = useParams();
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
   const [estudiante, setEstudiante] = useState([]);
   const { user } = UserAuth();
   const initialpdf = { hojadevida: "" };
@@ -22,11 +22,11 @@ const StudentProfile = () => {
   let telefonoActualizado = {};
   let whatsappActualizado = {};
   let acercaDeActualizado = {};
-
+  const [archivoSeleccionado, setArchivoSeleccionado] = useState(null);
   const [value, setValue] = useState(initialpdf);
   let trabajosInicial = [];
   let carreraActualizada = {};
-
+  let archivo;
   let students = [];
   let pdf = {};
   let fotoPerfil = {};
@@ -35,19 +35,27 @@ const StudentProfile = () => {
   const [carrerasList, setCarrerasOptions] = useState([]);
 
   const fetchData = async () => {
-    setLoading(true)
-    const getRequest = "https://couchdbbackend.esaapp.com/unichamba-estudiantes/_all_docs?include_docs=True";
-    const findRequest = "https://couchdbbackend.esaapp.com/unichamba-estudiantes/_find"
+    setLoading(true);
+    const getRequest =
+      "https://couchdbbackend.esaapp.com/unichamba-estudiantes/_all_docs?include_docs=True";
+    const findRequest =
+      "https://couchdbbackend.esaapp.com/unichamba-estudiantes/_find";
 
-    const studentsSnapshot = await axios.get(getRequest, {auth:{username: "unichamba", password: "S3pt13mbre#2024Work"}});
+    const studentsSnapshot = await axios.get(getRequest, {
+      auth: { username: "unichamba", password: "S3pt13mbre#2024Work" },
+    });
     const rawStudents = studentsSnapshot.data.rows;
     const estudiantes = rawStudents.map((document) => ({
       ...document.doc,
       id: document.id,
-      rev: document.value.rev
+      rev: document.value.rev,
     }));
-    
-    const perfilSeleccionado = await axios.post(findRequest, {selector: {_id: idPerfil}, limit: 1}, {auth:{username: "unichamba", password: "S3pt13mbre#2024Work"}})
+
+    const perfilSeleccionado = await axios.post(
+      findRequest,
+      { selector: { _id: idPerfil }, limit: 1 },
+      { auth: { username: "unichamba", password: "S3pt13mbre#2024Work" } }
+    );
     students = estudiantes;
     if (location.pathname === "/studentProfile") {
       students.map((perfil) => {
@@ -62,14 +70,15 @@ const StudentProfile = () => {
       setEstudiante(perfilSeleccionado.data.docs[0]);
     }
 
-    setLoading(false)
+    setLoading(false);
   };
 
-
-
   const fetchTrabajos = async () => {
-    const getTrabajos = "https://couchdbbackend.esaapp.com/unichamba-trabajos/_all_docs?include_docs=True"
-    const trabajosCollection = await axios.get(getTrabajos, {auth: {username: "unichamba", password: "S3pt13mbre#2024Work"}})
+    const getTrabajos =
+      "https://couchdbbackend.esaapp.com/unichamba-trabajos/_all_docs?include_docs=True";
+    const trabajosCollection = await axios.get(getTrabajos, {
+      auth: { username: "unichamba", password: "S3pt13mbre#2024Work" },
+    });
     const rawTrabajos = trabajosCollection.data.rows;
     const trabajosList = rawTrabajos.map((document) => ({
       value: document.id,
@@ -81,8 +90,11 @@ const StudentProfile = () => {
   };
 
   const fetchCarreras = async () => {
-    const getCarreras = "https://couchdbbackend.esaapp.com/unichamba-carreras/_all_docs?include_docs=True"
-    const carrerasCollection = await axios.get(getCarreras, {auth: {username: "unichamba", password: "S3pt13mbre#2024Work"}});
+    const getCarreras =
+      "https://couchdbbackend.esaapp.com/unichamba-carreras/_all_docs?include_docs=True";
+    const carrerasCollection = await axios.get(getCarreras, {
+      auth: { username: "unichamba", password: "S3pt13mbre#2024Work" },
+    });
     const rawCarreras = carrerasCollection.data.rows;
     const carrerasList = rawCarreras.map((document) => ({
       value: document.id,
@@ -95,116 +107,126 @@ const StudentProfile = () => {
   const { trabajos } = estudiante;
 
   const handlePDFChange = (e) => {
-    let archivo = document.getElementById("archivo");
-    let archivoRuta = archivo.value;
-    let extPermitidas = /(.pdf)$/i;
-
-    if (!extPermitidas.exec(archivoRuta)) {
-      Swal.fire({
-        title: "Error",
-        icon: "error",
-        text: "Asegúrate de subir un PDF",
-      });
-      archivo.value = "";
-      return false;
-    } else {
       pdf = e.target.files[0];
 
-      const reader = new FileReader();
-      
-      reader.onloadend = () => {
-        const base64String = reader.result;
-        estudiante.hojadevida = base64String;
-      }
+      if(pdf){
+        setArchivoSeleccionado(pdf);
+        const reader = new FileReader();
 
-      reader.readAsDataURL(pdf);
-    }
+        reader.onloadend = () => {
+          const base64String = reader.result;
+          estudiante.hojadevida = base64String;
+        };
+  
+        reader.readAsDataURL(pdf);  
+      }else{
+        setArchivoSeleccionado();
+        estudiante.hojadevida = ""
+      }
   };
 
   const addOrEdit = async (link) => {
-
-    const getStorage = `https://couchdbbackend.esaapp.com/unichamba-estudiantes-storage/${estudiante.id}`
-    const storageStudent = await axios.get(getStorage, {auth: {username: "unichamba", password: "S3pt13mbre#2024Work"}});
+    const getStorage = `https://couchdbbackend.esaapp.com/unichamba-estudiantes-storage/${estudiante.id}`;
+    const storageStudent = await axios.get(getStorage, {
+      auth: { username: "unichamba", password: "S3pt13mbre#2024Work" },
+    });
 
     const storagePdf = {
       data: storageStudent.data,
-    }
+      rev: storageStudent.data._rev,
+    };
 
     const attachments = {
       _attachments: {
-          "curriculum.pdf": {
-              content_type: "application/pdf",
-              data: estudiante.hojadevida.split(",")[1],
-          }
-        }
+        "curriculum.pdf": {
+          content_type: "application/pdf",
+          data: estudiante.hojadevida.split(",")[1],
+        },
+      },
     };
 
-    storagePdf.data._attachments["curriculum.pdf"] = attachments._attachments["curriculum.pdf"]
+    storagePdf.data._attachments["curriculum.pdf"] =
+      attachments._attachments["curriculum.pdf"];
 
-    await axios.put(`https://couchdbbackend.esaapp.com/unichamba-estudiantes-storage/${estudiante.id}`, storagePdf.data, {
-      auth: {
-        username: "unichamba",
-        password: "S3pt13mbre#2024Work"
-      },
-      params:{"rev":storagePdf.rev},
-    })
-
-      estudiante.pdfNombre = pdf.name;
-      estudiante.pdfUrl = `https://couchdbbackend.esaapp.com/unichamba-estudiantes-storage/${estudiante.id}/curriculum.pdf`
-
-      await axios.put(`https://couchdbbackend.esaapp.com/unichamba-estudiantes/${estudiante.id}`, estudiante, {
+    await axios.put(
+      `https://couchdbbackend.esaapp.com/unichamba-estudiantes-storage/${estudiante.id}`,
+      storagePdf.data,
+      {
         auth: {
           username: "unichamba",
-          password: "S3pt13mbre#2024Work"
+          password: "S3pt13mbre#2024Work",
         },
-        params:{"rev":estudiante.rev},
-        headers:{
-          "Content-Type":"application/json"
-        }
-      })
+        params: { rev: storagePdf.rev },
+      }
+    );
 
+    estudiante.pdfNombre = pdf.name;
+    estudiante.pdfUrl = `https://couchdbbackend.esaapp.com/unichamba-estudiantes-storage/${estudiante.id}/curriculum.pdf`;
 
-      Swal.fire({
-        title: "PDF agregado",
-        icon: "success",
-        text: "El PDF se agregó correctamente",
-      });
-      fetchData();
+    await axios.put(
+      `https://couchdbbackend.esaapp.com/unichamba-estudiantes/${estudiante.id}`,
+      estudiante,
+      {
+        auth: {
+          username: "unichamba",
+          password: "S3pt13mbre#2024Work",
+        },
+        params: { rev: estudiante.rev },
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    Swal.fire({
+      title: "PDF agregado",
+      icon: "success",
+      text: "El PDF se agregó correctamente",
+    });
+    fetchData();
+    setArchivoSeleccionado(null);
   };
 
   const deletePdf = async () => {
     estudiante.pdfUrl = "";
-
-    await axios.put(`https://couchdbbackend.esaapp.com/unichamba-estudiantes/${estudiante.id}`, estudiante, {
-      auth: {
-        username: "unichamba",
-        password: "S3pt13mbre#2024Work"
-      },
-      params:{"rev":estudiante.rev},
-      headers:{
-        "Content-Type":"application/json"
+    estudiante.hojadevida = "";
+    await axios.put(
+      `https://couchdbbackend.esaapp.com/unichamba-estudiantes/${estudiante.id}`,
+      estudiante,
+      {
+        auth: {
+          username: "unichamba",
+          password: "S3pt13mbre#2024Work",
+        },
+        params: { rev: estudiante.rev },
+        headers: {
+          "Content-Type": "application/json",
+        },
       }
-    })
-      Swal.fire({
-        title: "PDF eliminado",
-        icon: "success",
-        text: "El PDF se elimino correctamente",
-      });
-      fetchData();
+    );
+    Swal.fire({
+      title: "PDF eliminado",
+      icon: "success",
+      text: "El PDF se elimino correctamente",
+    });
+    fetchData();
+    setArchivoSeleccionado(null);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    addOrEdit(value);
+
+    if(archivoSeleccionado){
+      addOrEdit(value);
+      setArchivoSeleccionado(null);
+      e.target.reset();
+    }
+
   };
 
   // CAPTURA LOS INPUTS PARA EDITAR
   const handleNombreChange = (e) => {
-    const name = {
-      nombre: e.target.value,
-    };
-
-    nombreActualizado = name;
+    nombreActualizado = { nombre: e.target.value };
   };
 
   const handleApellidoChange = (e) => {
@@ -244,44 +266,47 @@ const StudentProfile = () => {
     e.preventDefault();
     const isEmpty = (obj) => Object.keys(obj).length === 0;
 
-
     if (!isEmpty(nombreActualizado)) {
-      estudiante.nombre = nombreActualizado.nombre
-    }    
+      estudiante.nombre = nombreActualizado.nombre;
+    }
 
     if (!isEmpty(apellidoActualizado)) {
-      estudiante.apellido = apellidoActualizado.apellido
+      estudiante.apellido = apellidoActualizado.apellido;
     }
 
     if (!isEmpty(telefonoActualizado)) {
-      estudiante.telefono = telefonoActualizado.telefono
+      estudiante.telefono = telefonoActualizado.telefono;
     }
 
     if (!isEmpty(whatsappActualizado)) {
-      estudiante.whatsapp = whatsappActualizado.whatsapp
+      estudiante.whatsapp = whatsappActualizado.whatsapp;
     }
 
     if (!isEmpty(acercaDeActualizado)) {
-      estudiante.acercaDe = acercaDeActualizado.acercaDe
+      estudiante.acercaDe = acercaDeActualizado.acercaDe;
     }
 
     if (!isEmpty(carreraActualizada)) {
-      estudiante.carrera = carreraActualizada.carrera
+      estudiante.carrera = carreraActualizada.carrera;
     }
 
     if (trabajosInicial.length > 0) {
-      estudiante.trabajos = trabajosInicial
+      estudiante.trabajos = trabajosInicial;
     }
-    await axios.put(`https://couchdbbackend.esaapp.com/unichamba-estudiantes/${estudiante.id}`, estudiante, {
-      auth: {
-        username: "unichamba",
-        password: "S3pt13mbre#2024Work"
-      },
-      params:{"rev":estudiante.rev},
-      headers:{
-        "Content-Type":"application/json"
+    await axios.put(
+      `https://couchdbbackend.esaapp.com/unichamba-estudiantes/${estudiante.id}`,
+      estudiante,
+      {
+        auth: {
+          username: "unichamba",
+          password: "S3pt13mbre#2024Work",
+        },
+        params: { rev: estudiante.rev },
+        headers: {
+          "Content-Type": "application/json",
+        },
       }
-    })
+    );
 
     Swal.fire({
       title: "Edicion exitosa",
@@ -312,97 +337,14 @@ const StudentProfile = () => {
       customClass: {
         container: "my-custom-modal",
       },
-      html: (
-        <form onSubmit={editSubmit}>
-          <div className="md:flex w-full">
-            {/* <label htmlFor="nombreInput" className="mt-7 font-normal">
-                Nombre(s)*
-              </label> */}
-            <div className="md:px-5 space-y-3 ">
-              <input
-                placeholder="Nombres"
-                type="text"
-                id="nombreInput"
-                className="rounded-lg border border-black font-normal py-4 w-[270px] md:w-[600px] px-5"
-                name="nombre"
-                onChange={handleNombreChange}
-                pattern="^[A-Za-záéíóúÁÉÍÓÚ]+\s[A-Za-záéíóúÁÉÍÓÚ]+$"
-              />
-
-              <input
-                placeholder="Apellidos"
-                type="text"
-                id="apellidoInput"
-                className="rounded-lg border border-black font-normal py-4  w-[270px] md:w-[600px] px-5"
-                name="apellido"
-                onChange={handleApellidoChange}
-                pattern="^[A-Za-záéíóúÁÉÍÓÚ]+\s[A-Za-záéíóúÁÉÍÓÚ]+$"
-                
-              />
-
-              <input
-                placeholder="Telefono"
-                type="text"
-                id="telefonoInput"
-                className="rounded-lg border border-black font-normal py-4  w-[270px] md:w-[600px] px-5"
-                name="telefono"
-                pattern="[0-9]{8}"
-                onChange={handleTelefonoChange}
-              />
-            </div>
-
-            <div className="w-full px-5 flex flex-col items-center justify-start space-y-3 mt-3 md:mt-0">
-              <input
-                placeholder="WhatsApp"
-                type="text"
-                id="whatsappInput"
-                className="rounded-lg border border-black font-normal py-4  w-[270px] md:w-[600px] px-5"
-                name="whatsapp"
-                onChange={handleWhatsappChange}
-                pattern="[0-9]{8}"
-              />
-
-              <Select
-                placeholder="Seleccione una carrera"
-                closeMenuOnSelect={false}
-                components={animatedComponents}
-                onChange={handleCarreraChange}
-                isMulti={false}
-                options={carrerasList}
-                className="rounded-lg border border-black  mt-4 font-light  w-[270px] md:w-[600px] px-5 py-2"
-              />
-
-              <Select
-                placeholder="Seleccione los trabajos"
-                closeMenuOnSelect={false}
-                components={animatedComponents}
-                options={trabajosOptions}
-                isMulti
-                onChange={handleTrabajosChange}
-                className="rounded-lg border border-black  mt-4 font-light  w-[270px] md:w-[600px] px-5 py-2"
-              />
-            </div>
-          </div>
-
-          <div className="py-5 px-5 mx-auto flex items-center justify-center">
-            <textarea
-              placeholder="Puedes hablar acerca de tus conocimientos o sobre tus aptitudes"
-              name="acercaDe"
-              id=""
-              cols="79"
-              rows="4"
-              onChange={handleAcercaDeChange}
-              maxLength={500}
-              className="rounded-lg border border-black  mt-4 font-light w-[1250px] py-5 px-3 h-[180px]"
-            />
-          </div>
-          <button className="py-4 px-5 border-[1px] border-Space-cadet rounded-md">
-            Enviar
-          </button>
-        </form>
-      ),
-      showConfirmButton: false,
+      html: `<div id="modal-form-container"></div>`, // Contenedor donde React montará el formulario
+      didOpen: () => {
+        const formContainer = document.getElementById("modal-form-container");
+        const root = createRoot(formContainer);
+        root.render(<FormularioCompleto />); // Renderiza el formulario dentro del modal
+      },
       showCancelButton: true,
+      showConfirmButton: false, // Controla el envío con React
     }).then((result) => {
       if (result.dismiss === Swal.DismissReason.cancel) {
         // Si se cancela, restablece el valor del select al inicial
@@ -417,6 +359,123 @@ const StudentProfile = () => {
     });
   };
 
+  const FormularioCompleto = () => {
+    return (
+      <form onSubmit={editSubmit}>
+        <div className="md:flex w-full">
+          <div className="md:px-5 space-y-4 ">
+            
+            <div  className="w-full px-5 flex flex-col items-center justify-start space-y-3 mt-3 md:mt-0">
+            <label htmlFor="nombreInput">
+              Nombre(s)*
+            </label>
+            <input
+              placeholder={estudiante.nombre}
+              type="text"
+              id="nombreInput"
+              className="rounded-lg border border-black font-normal py-4 w-[270px] md:w-[600px] px-5"
+              name="nombre"
+              onChange={handleNombreChange}
+              pattern="^[A-Za-záéíóúÁÉÍÓÚ]+(\s[A-Za-záéíóúÁÉÍÓÚ]+)*$"
+            />
+
+            <label htmlFor="apellidoInput">
+              Apellido(s)*
+            </label>
+            <input
+              placeholder={estudiante.apellido}
+              type="text"
+              id="apellidoInput"
+              className="rounded-lg border border-black font-normal py-4  w-[270px] md:w-[600px] px-5"
+              name="apellido"
+              onChange={handleApellidoChange}
+              pattern="^[A-Za-záéíóúÁÉÍÓÚ]+(\s[A-Za-záéíóúÁÉÍÓÚ]+)*$"
+            />
+
+
+            <label htmlFor="telefonoInput">
+              Telefono*
+            </label>
+            <input
+              placeholder={estudiante.telefono}
+              type="text"
+              id="telefonoInput"
+              className="rounded-lg border border-black font-normal py-4  w-[270px] md:w-[600px] px-5"
+              name="telefono"
+              pattern="[0-9]{8}"
+              onChange={handleTelefonoChange}
+            />
+            </div>
+          </div>
+          
+          <div className="w-full px-5 flex flex-col items-center justify-start space-y-3 mt-3 md:mt-0">
+            <label htmlFor="whatsappInput">
+              Whatsapp*
+            </label>
+            <input
+              placeholder={estudiante.whatsapp}
+              type="text"
+              id="whatsappInput"
+              className="rounded-lg border border-black font-normal py-4  w-[270px] md:w-[600px] px-5"
+              name="whatsapp"
+              onChange={handleWhatsappChange}
+              pattern="[0-9]{8}"
+            />
+
+
+            <label htmlFor="carreraInput">
+              Carrera*
+            </label>
+            <Select
+              id="carreraInput"
+              placeholder={estudiante.carrera}
+              closeMenuOnSelect={false}
+              components={animatedComponents}
+              onChange={handleCarreraChange}
+              isMulti={false}
+              options={carrerasList}
+              className="rounded-lg border border-black  mt-4 font-light  w-[270px] md:w-[600px] px-5 py-2"
+            />
+
+            <label htmlFor="trabajosInput">
+              Trabajo(s)*
+            </label>
+            <Select
+              id="trabajosInput"
+              placeholder={trabajos.map(trabajo => (trabajo.nombre+", " ))}
+              closeMenuOnSelect={false}
+              components={animatedComponents}
+              options={trabajosOptions}
+              isMulti
+              onChange={handleTrabajosChange}
+              className="rounded-lg border border-black  mt-4 font-light  w-[270px] md:w-[600px] px-5 py-2"
+            />
+          </div>
+        </div>
+        <br />
+        <label htmlFor="AcercaDe" className=" space-y-3 mt-3">
+          Acerca de*
+        </label>
+        <div className=" px-5 mx-auto flex items-center justify-center">
+          <textarea
+            placeholder={estudiante.acercaDe}
+            name="acercaDe"
+            id="AcercaDe"
+            cols="79"
+            rows="4"
+            onChange={handleAcercaDeChange}
+            maxLength={500}
+            className="rounded-lg border border-black  mt-4 font-light w-[1250px] py-5 px-3 h-[180px]"
+          />
+        </div>
+        <br />
+        <button className="py-4 px-5 border-[1px] border-Space-cadet rounded-md">
+          Enviar
+        </button>
+      </form>
+    );
+  };
+
   const actualizarFoto = () => {
     MySwal.fire({
       title: "Actualizar Foto",
@@ -426,12 +485,13 @@ const StudentProfile = () => {
           <input
             type="file"
             id="fileInput"
+            accept=".jpeg, .png, .jpg"
             className="hidden"
             onChange={handleImageChange}
-            accept="image/jpeg, image/png, image/jpg"
           />
           <label
             htmlFor="fileInput"
+            accept=".jpeg, .png, .jpg"
             className="bg-white border border-black text-black px-4 py-2 rounded-lg cursor-pointer hover:bg-gray-200 transition duration-300"
           >
             Actualizar imagen de perfil
@@ -447,63 +507,73 @@ const StudentProfile = () => {
     fotoPerfil = e.target.files[0];
 
     const reader = new FileReader();
-    
+
     reader.onloadend = () => {
       const base64String = reader.result;
       estudiante.imageUrl = base64String;
-    }
+    };
 
     reader.readAsDataURL(fotoPerfil);
 
-    const getStorage = `https://couchdbbackend.esaapp.com/unichamba-estudiantes-storage/${estudiante.id}`
-    const storageStudent = await axios.get(getStorage, {auth: {username: "unichamba", password: "S3pt13mbre#2024Work"}});
+    const getStorage = `https://couchdbbackend.esaapp.com/unichamba-estudiantes-storage/${estudiante.id}`;
+    const storageStudent = await axios.get(getStorage, {
+      auth: { username: "unichamba", password: "S3pt13mbre#2024Work" },
+    });
 
     const storageImage = {
       data: storageStudent.data,
-    }
+      rev: storageStudent.data._rev,
+    };
 
     const attachments = {
       _attachments: {
-          "imagen.jpg": {
-              content_type: "image/jpeg",
-              data: estudiante.imageUrl.split(",")[1],
-          }
-        }
+        "imagen.jpg": {
+          content_type: "image/jpeg",
+          data: estudiante.imageUrl.split(",")[1],
+        },
+      },
     };
 
-    storageImage.data._attachments["imagen.jpg"] = attachments._attachments["imagen.jpg"]
+    storageImage.data._attachments["imagen.jpg"] =
+      attachments._attachments["imagen.jpg"];
 
-    await axios.put(`https://couchdbbackend.esaapp.com/unichamba-estudiantes-storage/${estudiante.id}`, storageImage.data, {
-      auth: {
-        username: "unichamba",
-        password: "S3pt13mbre#2024Work"
-      },
-      params:{"rev":storageImage.rev},
-    })
-
-      estudiante.imageUrl = `https://couchdbbackend.esaapp.com/unichamba-estudiantes-storage/${estudiante.id}/imagen.jpg`
-
-      await axios.put(`https://couchdbbackend.esaapp.com/unichamba-estudiantes/${estudiante.id}`, estudiante, {
+    await axios.put(
+      `https://couchdbbackend.esaapp.com/unichamba-estudiantes-storage/${estudiante.id}`,
+      storageImage.data,
+      {
         auth: {
           username: "unichamba",
-          password: "S3pt13mbre#2024Work"
+          password: "S3pt13mbre#2024Work",
         },
-        params:{"rev":estudiante.rev},
-        headers:{
-          "Content-Type":"application/json"
-        }
-      })
+        params: { rev: storageImage.rev },
+      }
+    );
 
+    estudiante.imageUrl = `https://couchdbbackend.esaapp.com/unichamba-estudiantes-storage/${estudiante.id}/imagen.jpg`;
 
-      Swal.fire({
-        title: "Imagen actualizada",
-        icon: "success",
-        text: "La imagen se actualizó correctamente",
-      });
+    await axios.put(
+      `https://couchdbbackend.esaapp.com/unichamba-estudiantes/${estudiante.id}`,
+      estudiante,
+      {
+        auth: {
+          username: "unichamba",
+          password: "S3pt13mbre#2024Work",
+        },
+        params: { rev: estudiante.rev },
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
-      fotoPerfil = {}
-      fetchData();
-    
+    Swal.fire({
+      title: "Imagen actualizada",
+      icon: "success",
+      text: "La imagen se actualizó correctamente",
+    });
+
+    fotoPerfil = {};
+    fetchData();
   };
 
   useEffect(() => {
@@ -602,9 +672,7 @@ const StudentProfile = () => {
           </div>
 
           <div className="w-[95%] pt-5 md:w-[80%]">
-            <h3 className=" ml-5 text-2xl font-normal">
-              Acerca de
-            </h3>
+            <h3 className=" ml-5 text-2xl font-normal">Acerca de</h3>
             <div className=" w-[100%] ml-5 font-light text-lg">
               <p>{estudiante.acercaDe}</p>
             </div>
@@ -617,9 +685,11 @@ const StudentProfile = () => {
                   {trabajos &&
                     trabajos.map((trabajo) => (
                       <li key={trabajo.id}>
-                        <span className="material-symbols-outlined mr-2">{trabajo.icono}</span>
+                        <span className="material-symbols-outlined mr-2">
+                          {trabajo.icono}
+                        </span>
                         {trabajo.nombre}
-                        </li>
+                      </li>
                     ))}
                 </ul>
               </div>
@@ -631,22 +701,31 @@ const StudentProfile = () => {
                       <input
                         type="file"
                         id="archivo"
+                        accept=".pdf"
                         className="px-1"
                         onChange={handlePDFChange}
                       />
-                      <button className="bg-Space-cadet text-white font-normal py-2 px-6 rounded-lg block mt-3">
-                        Subir un archivo nuevo
+                      <button
+                        type="submit"
+                        disabled={!archivoSeleccionado}
+                        className={`font-normal py-2 px-6 rounded-lg block mt-3 ${
+                          archivoSeleccionado
+                            ? "bg-Space-cadet text-white"
+                            : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                        }`}
+                      >
+                        Subir Archivo
                       </button>
                     </form>
                     <div>
-                      {estudiante.pdfUrl ? (
+                      {estudiante.hojadevida != "" ? (
                         <>
                           <a
                             href={estudiante.pdfUrl}
                             target="_blank"
                             className="font-bold mt-5 pl-2 block"
                           >
-                            <img src="../../public/pdf.png" className=" w-20 ml-5"/>
+                            <img src="/pdf.png" className=" w-20 ml-5" />
                           </a>
                           <button
                             className=" bg-red-600 text-white font-normal p-2 rounded-lg block mt-3"
@@ -660,13 +739,16 @@ const StudentProfile = () => {
                   </div>
                 ) : (
                   <div>
-                    {estudiante.hojadevida ? (
+                    {estudiante.hojadevida != "" ? (
                       <a
                         href={estudiante.pdfUrl}
                         target="_blank"
                         className="font-bold mt-2 block"
                       >
-                        <img src="../../public/pdf.png" className=" w-20 ml-5"/>
+                        <img
+                          src="../../public/pdf.png"
+                          className=" w-20 ml-5"
+                        />
                       </a>
                     ) : null}
                   </div>
@@ -678,25 +760,25 @@ const StudentProfile = () => {
       </main>
 
       {loading && (
-         <div className="fixed top-0 left-0 w-full h-full bg-white flex justify-center items-center z-50">
+        <div className="fixed top-0 left-0 w-full h-full bg-white flex justify-center items-center z-50">
           <div className="spinner">
             <div class="grid min-h-[140px] w-full place-items-center overflow-x-scroll rounded-lg p-6 lg:overflow-visible">
-            <div className="animate-spin rounded-full h-32 w-32 border-t-8 border-blue-900"></div>
-                <path
-                  d="M32 3C35.8083 3 39.5794 3.75011 43.0978 5.20749C46.6163 6.66488 49.8132 8.80101 52.5061 11.4939C55.199 14.1868 57.3351 17.3837 58.7925 20.9022C60.2499 24.4206 61 28.1917 61 32C61 35.8083 60.2499 39.5794 58.7925 43.0978C57.3351 46.6163 55.199 49.8132 52.5061 52.5061C49.8132 55.199 46.6163 57.3351 43.0978 58.7925C39.5794 60.2499 35.8083 61 32 61C28.1917 61 24.4206 60.2499 20.9022 58.7925C17.3837 57.3351 14.1868 55.199 11.4939 52.5061C8.801 49.8132 6.66487 46.6163 5.20749 43.0978C3.7501 39.5794 3 35.8083 3 32C3 28.1917 3.75011 24.4206 5.2075 20.9022C6.66489 17.3837 8.80101 14.1868 11.4939 11.4939C14.1868 8.80099 17.3838 6.66487 20.9022 5.20749C24.4206 3.7501 28.1917 3 32 3L32 3Z"
-                  stroke="currentColor"
-                  stroke-width="5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                ></path>
-                <path
-                  d="M32 3C36.5778 3 41.0906 4.08374 45.1692 6.16256C49.2477 8.24138 52.7762 11.2562 55.466 14.9605C58.1558 18.6647 59.9304 22.9531 60.6448 27.4748C61.3591 31.9965 60.9928 36.6232 59.5759 40.9762"
-                  stroke="currentColor"
-                  stroke-width="5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="text-gray-900"
-                ></path>
+              <div className="animate-spin rounded-full h-32 w-32 border-t-8 border-blue-900"></div>
+              <path
+                d="M32 3C35.8083 3 39.5794 3.75011 43.0978 5.20749C46.6163 6.66488 49.8132 8.80101 52.5061 11.4939C55.199 14.1868 57.3351 17.3837 58.7925 20.9022C60.2499 24.4206 61 28.1917 61 32C61 35.8083 60.2499 39.5794 58.7925 43.0978C57.3351 46.6163 55.199 49.8132 52.5061 52.5061C49.8132 55.199 46.6163 57.3351 43.0978 58.7925C39.5794 60.2499 35.8083 61 32 61C28.1917 61 24.4206 60.2499 20.9022 58.7925C17.3837 57.3351 14.1868 55.199 11.4939 52.5061C8.801 49.8132 6.66487 46.6163 5.20749 43.0978C3.7501 39.5794 3 35.8083 3 32C3 28.1917 3.75011 24.4206 5.2075 20.9022C6.66489 17.3837 8.80101 14.1868 11.4939 11.4939C14.1868 8.80099 17.3838 6.66487 20.9022 5.20749C24.4206 3.7501 28.1917 3 32 3L32 3Z"
+                stroke="currentColor"
+                stroke-width="5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              ></path>
+              <path
+                d="M32 3C36.5778 3 41.0906 4.08374 45.1692 6.16256C49.2477 8.24138 52.7762 11.2562 55.466 14.9605C58.1558 18.6647 59.9304 22.9531 60.6448 27.4748C61.3591 31.9965 60.9928 36.6232 59.5759 40.9762"
+                stroke="currentColor"
+                stroke-width="5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="text-gray-900"
+              ></path>
             </div>
           </div>
         </div>
