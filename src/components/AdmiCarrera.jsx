@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { db } from '../data/firebase';
 import { collection, addDoc, deleteDoc, doc, updateDoc, getDocs } from 'firebase/firestore';
 import Swal from 'sweetalert2';
+import axios from 'axios';
 
 const AdmiCarrera = () => {
     const [carreras, setCarreras] = useState([]);
@@ -13,15 +14,26 @@ const AdmiCarrera = () => {
 
     const cargarCarreras = async () => {
         try {
-            const carrerasSnapshot = await getDocs(collection(db, 'carreras'));
-            const carrerasData = carrerasSnapshot.docs.map(doc => ({ id: doc.id, nombre: doc.data().carrera }));
-
-            // Ordenar carreras alfabéticamente
+            const auth = {
+                username: 'unichamba', // Cambia por tu usuario
+                password: 'S3pt13mbre#2024Work' // Cambia por tu contraseña
+            };
+    
+            const response = await axios.get(
+                'https://couchdbbackend.esaapp.com/unichamba-carreras/_all_docs?include_docs=true',
+                { auth } // Incluir autenticación
+            );
+    
+            // Obtener tanto 'id' como 'carrera'
+            const carrerasData = response.data.rows.map(row => ({
+                id: row.doc._id,  // Asegúrate de usar el campo correcto que representa el id
+                nombre: row.doc.carrera,
+                rev:row.doc._rev
+            }));
             const carrerasOrdenadas = carrerasData.sort((a, b) => a.nombre.localeCompare(b.nombre));
-
             setCarreras(carrerasOrdenadas);
         } catch (error) {
-            console.error("Error al cargar carreras:", error);
+            console.error("Error al cargar carreras :/:", error);
             Swal.fire("Error", "Hubo un error al cargar las carreras", "error");
         }
     };
@@ -35,9 +47,17 @@ const AdmiCarrera = () => {
                 if (carreraExistente) {
                     Swal.fire("Error", "La carrera ya existe", "error");
                 } else {
-                    await addDoc(collection(db, 'carreras'), { carrera: nuevaCarrera });
+                    await axios.post("https://couchdbbackend.esaapp.com/unichamba-carreras", {
+                        carrera: nuevaCarrera
+                    }, {
+                        auth: {
+                            username: 'unichamba',
+                            password: 'S3pt13mbre#2024Work'
+                        }
+                    });
+                    await cargarCarreras();
                     Swal.fire("Agregado", "La carrera ha sido agregada", "success");
-                    cargarCarreras();
+                    
                 }
                 // Vaciar el input después de intentar agregar
                 setNuevaCarrera('');
@@ -50,25 +70,44 @@ const AdmiCarrera = () => {
 
     const eliminarCarrera = async (carrera) => {
         try {
-            await deleteDoc(doc(db, 'carreras', carrera.id));
-            cargarCarreras();
+            // Asegúrate de tener el campo _rev en el objeto carrera
+            await axios.delete(`https://couchdbbackend.esaapp.com/unichamba-carreras/${carrera.id}?rev=${carrera.rev}`, {
+                auth: {
+                    username: 'unichamba',
+                    password: 'S3pt13mbre#2024Work'
+                }
+            });
+            await cargarCarreras();
             Swal.fire("Eliminado", `${carrera.nombre} ha sido eliminado`, "success");
         } catch (error) {
             console.error("Error al eliminar carrera:", error);
             Swal.fire("Error", "Hubo un error al eliminar la carrera", "error");
         }
     };
+    
 
     const modificarCarrera = async (carrera, nuevoNombre) => {
         try {
-            await updateDoc(doc(db, 'carreras', carrera.id), { carrera: nuevoNombre });
-            cargarCarreras();
-            Swal.fire("Modificado", `${carrera.nombre} fue cambiado con éxito`, "success");
+            await axios.put(`https://couchdbbackend.esaapp.com/unichamba-carreras/${carrera.id}`, {
+                // Mantener todos los datos originales y actualizar solo el campo de "carrera"
+                _id: carrera.id,        // Incluye el ID
+                _rev: carrera.rev,      // Incluye la revisión actual
+                carrera: nuevoNombre    // Actualizar solo el campo de "carrera"
+            }, {
+                auth: {
+                    username: 'unichamba',
+                    password: 'S3pt13mbre#2024Work'
+                }
+            });
+    
+            await cargarCarreras(); // Recargar la lista completa de carreras desde la base de datos
+            Swal.fire("Modificado", `${carrera.nombre} ha sido actualizado a ${nuevoNombre}`, "success");
         } catch (error) {
-            console.error("Error al modificar carrera:", error);
-            Swal.fire("Error", "Hubo un error al modificar la carrera", "error");
+            console.error('Error al modificar la carrera:', error.response ? error.response.data : error.message);
+            Swal.fire("Error", "No se pudo modificar la carrera", "error");
         }
     };
+    
 
     const handleChange = (e) => {
         setNuevaCarrera(e.target.value);
@@ -138,95 +177,3 @@ const AdmiCarrera = () => {
 };
 
 export default AdmiCarrera;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// import React, {useState, useEffect} from 'react'
-// import {collection, getDocs, getDoc, deleteDoc} from 'firebase/firestore';
-// import {db} from '../data/firebase'
-
-// import Swal from 'sweetalert2';
-// import withReactContent from 'sweetalert2-react-content'
-
-// const MySwal = withReactContent(Swal)
-
-// import React from 'react'
-
-// const AdmiCarrera = () => {
-
-//     //1- configuramos los hooks
-//     const [carreras, setCarreras] = useState([])
-
-//     //2 referenciamos a la DB firestore
-//     const carrerasCollection = collection(db, 'carreras')
-//     //3 Funcion para mostrar TODOS los docs
-//     const getCarreras = async () => {
-//         const data = await getDocs(carrerasCollection)
-//         //  console.log(data.docs)
-//         setCarreras(
-//             data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
-//         )
-//         console.log(carreras)
-//     }
-//     //4 Funcion para eliminar un doc
-//     const deleteCarrera = async (id) => {
-//         const carreraDoc = doc(db, "carreras", id)
-//         await deleteDoc(carreraDoc)
-//         getCarreras()
-//     }
-//     //5 Funcion de confirmación para Sweet Alert 2
-
-//     //6 Usamos useEffect
-//     useEffect(() => {
-//         getCarreras()
-//     }, [])
-//     // devolvemos vista de nuestro componente
-
-
-
-
-
-//   return (
-//     <>
-    
-    
-    
-//     </>
-//   )
-// }
-
-
-// export default AdmiCarrera;
