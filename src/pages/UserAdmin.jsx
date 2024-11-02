@@ -19,10 +19,6 @@ const UserAdmin = () => {
         setVisibleComponent(component)
         setActiveButton(buttonID)
     }
-
-
-
-    const fullName = user.displayName; 
     
 
     return (
@@ -34,10 +30,8 @@ const UserAdmin = () => {
                 <section className='w-[475px] h-[700px] mx-[20px] justify-center rounded-lg bg-[#D9D9D9]'>
 
                     <div className='grid my-[20px] py-[10px] justify-center items-center'>
-                        <div className='flex justify-center items-center rounded-full border-[1px] border-black w-[140px] h-[140px] mx-auto'>
-                            <span class="material-symbols-outlined text-[70px]">
-                                person
-                            </span>
+                        <div className='flex justify-center items-center rounded-full border-[2px] border-black w-[140px] h-[140px] mx-auto'>
+                        <span class="material-symbols-outlined text-7xl">admin_panel_settings</span>
                         </div>
                         <h1 className='font-roboto font-medium text-2xl pt-[20px] text-center'>PANEL ADMINISTRATIVO</h1>
                     </div>
@@ -51,7 +45,7 @@ const UserAdmin = () => {
                             <span class="material-symbols-outlined text-[38px]">
                                 description
                             </span>
-                            <h1 className='font-roboto font-light text-[20px] mr-[50px]'>Ofertas Laborales</h1>
+                            <h1 className='font-roboto font-normal text-[20px] mr-[50px]'>Ofertas Laborales</h1>
                         </button>
 
                         <button 
@@ -59,7 +53,7 @@ const UserAdmin = () => {
                         onClick={() => showComponent(<AdminWorks/>, 'students')}
                         >
                             <span class="material-symbols-outlined text-[38px]">work</span>
-                            <h1 className='font-roboto font-light text-[20px] mr-[50px]'>Trabajos</h1>
+                            <h1 className='font-roboto font-normal text-[20px] mr-[50px]'>Trabajos</h1>
                         </button>
 
                         <button 
@@ -69,7 +63,7 @@ const UserAdmin = () => {
                             <span class="material-symbols-outlined text-[38px]">
                                 location_city
                             </span>
-                            <h1 className='font-roboto font-light text-[20px] mr-[50px]'>Municipios</h1>
+                            <h1 className='font-roboto font-normal text-[20px] mr-[50px]'>Municipios</h1>
                         </button>
 
                         <button 
@@ -79,7 +73,7 @@ const UserAdmin = () => {
                             <span class="material-symbols-outlined text-[38px]">
                                 auto_stories
                             </span>
-                            <h1 className='font-roboto font-light text-[20px] mr-[50px]'>Carreras</h1>
+                            <h1 className='font-roboto font-normal text-[20px] mr-[50px]'>Carreras</h1>
                         </button>
                         <button 
                         className={`grid grid-cols-2 rounded-md h-[55px] items-center pr-[30px] hover:bg-white ${activeButton === 'blacklist' ? 'bg-white' : ''}`}
@@ -88,7 +82,7 @@ const UserAdmin = () => {
                             <span class="material-symbols-outlined text-[38px]">
                                 person_off
                             </span>
-                            <h1 className='font-roboto font-light text-[20px] mr-[50px]'>Lista negra</h1>
+                            <h1 className='font-roboto font-normal text-[20px] mr-[50px]'>Lista negra</h1>
                         </button>
                         <button 
                         className={`grid grid-cols-2 rounded-md h-[55px] items-center pr-[30px] hover:bg-white ${activeButton === 'administrators' ? 'bg-white' : ''}`}
@@ -97,7 +91,7 @@ const UserAdmin = () => {
                             <span class="material-symbols-outlined text-[38px]">
                                 admin_panel_settings
                             </span>
-                            <h1 className='font-roboto font-light text-[20px] mr-[70px]'>Administradores</h1>
+                            <h1 className='font-roboto font-normal text-[20px] mr-[70px]'>Administradores</h1>
                         </button>
                     </div>
                     
@@ -107,7 +101,7 @@ const UserAdmin = () => {
                         <div className='grid grid-cols-3 grid-rows-2 gap-y-[20px] w-[750px] mx-auto'>   
                             <div className='flex items-center justify-between w-[225px] bg-[#D9D9D9] p-[12px] rounded-lg'>
                                 <div className='mr-[15px]'>
-                                    <h1 className='text-3xl font-medium font-roboto'><DocNumber name='estudiantes'/></h1>
+                                    <h1 className='text-3xl font-medium font-roboto'><DocNumber name='unichamba-estudiantes'/></h1>
                                     <h1 className='text-xl font-roboto font-medium'>Estudiantes</h1>
                                 </div>
                                 <span class="material-symbols-outlined text-[40px]">
@@ -116,16 +110,7 @@ const UserAdmin = () => {
                             </div>
                             <div className='flex items-center justify-between w-[225px] bg-[#D9D9D9] p-[12px] rounded-lg'>
                                 <div className='mr-[15px]'>
-                                    <h1 className='text-3xl font-medium font-roboto'><DocNumber name='usuarios'/></h1>
-                                    <h1 className='text-xl font-roboto font-medium'>Usuarios</h1>
-                                </div>
-                                <span class="material-symbols-outlined text-[40px]">
-                                    person
-                                </span>
-                            </div>
-                            <div className='flex items-center justify-between w-[225px] bg-[#D9D9D9] p-[12px] rounded-lg'>
-                                <div className='mr-[15px]'>
-                                    <h1 className='text-3xl font-medium font-roboto'><DocNumber name='anuncios'/></h1>
+                                    <h1 className='text-3xl font-medium font-roboto'><DocNumber name='unichamba-anuncios'/></h1>
                                     <h1 className='text-lg font-roboto font-medium'>Ofertas Laborales</h1>
                                 </div>
                                 <span class="material-symbols-outlined text-[40px]">
@@ -134,7 +119,7 @@ const UserAdmin = () => {
                             </div>
                             <div className='flex items-center justify-between w-[225px] bg-[#D9D9D9] p-[12px] rounded-lg'>
                                 <div className='mr-[15px]'>
-                                    <h1 className='text-3xl font-medium font-roboto'><DocNumber name='carreras'/></h1>
+                                    <h1 className='text-3xl font-medium font-roboto'><DocNumber name='unichamba-carreras'/></h1>
                                     <h1 className='text-xl font-roboto font-medium'>Carreras</h1>
                                 </div>
                                 <span class="material-symbols-outlined text-[40px]">
@@ -143,7 +128,7 @@ const UserAdmin = () => {
                             </div>
                             <div className='flex items-center justify-between w-[225px] bg-[#D9D9D9] p-[12px] rounded-lg'>
                                 <div className='mr-[15px]'>
-                                    <h1 className='text-3xl font-medium font-roboto'><DocNumber name='administradores'/></h1>
+                                    <h1 className='text-3xl font-medium font-roboto'><DocNumber name='unichamba-administradores'/></h1>
                                     <h1 className='text-xl font-roboto font-medium'>Administradores</h1>
                                 </div>
                                 <span class="material-symbols-outlined text-[40px]">

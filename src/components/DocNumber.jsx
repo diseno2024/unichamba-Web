@@ -1,30 +1,41 @@
+import axios from 'axios'
+import { collection } from 'firebase/firestore'
 import React, { useEffect, useState } from 'react'
-import { db } from '../data/firebase'
-import { collection, getDocs } from 'firebase/firestore'
+
 
 
 const DocNumber = ({ name }) => {
-    const [coleccion, setColeccion] = useState([])
 
-    const getDoc = async () => {
-        const collectionRef = collection(db, name)
-        await getDocs(collectionRef)
-            .then((resp) => {
-                setColeccion(resp.docs.map((doc) => {
-                    return { ...doc.data(), id: doc.id }
-                }))
-            })
-    }
+    const [coleccion, setcoleccion] = useState(0)
 
-    
+
     useEffect(() => {
-        getDoc();
-    
+        getDocsNumber();
+
         return () => {
-            getDoc();
+            getDocsNumber();
         }
     }, [])
-    
+
+    const getDocsNumber = async() => {
+    await axios.post(`https://couchdbbackend.esaapp.com/${name}/_find`,
+        {
+            selector: {
+              
+            }
+          },
+          {
+            auth: {
+              username: 'unichamba', 
+              password: 'S3pt13mbre#2024Work' 
+            }
+          },
+
+    )
+            .then((response) => {
+            setcoleccion(response.data.docs)
+        })
+    }
 
     return (
         <>
