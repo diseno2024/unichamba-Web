@@ -57,7 +57,7 @@ const AdministradoresUserAdmin = () => {
       <div>
         <p>Correo electrónico: ${admin.doc.email}</p>
       </div>
-      <hr class="my-4">
+      <hr className="my-4">
       <p>¿Estás seguro de que deseas eliminar a ${admin.doc.administrador}?</p> 
     `,
       icon: "warning",

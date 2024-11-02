@@ -42,7 +42,7 @@ const UserAdmin = () => {
                         className={`grid grid-cols-2 rounded-md h-[55px] items-center pr-[30px] hover:bg-white ${activeButton === 'jobOffers' ? 'bg-white' : ''}`}
                         onClick={() => showComponent(<TrabajosUserAdmin/>, 'jobOffers')}
                         >
-                            <span class="material-symbols-outlined text-[38px]">
+                            <span className="material-symbols-outlined text-[38px]">
                                 description
                             </span>
                             <h1 className='font-roboto font-normal text-[20px] mr-[50px]'>Ofertas Laborales</h1>
@@ -52,7 +52,7 @@ const UserAdmin = () => {
                         className={`grid grid-cols-2 rounded-md h-[55px] items-center pr-[30px] hover:bg-white ${activeButton === 'students' ? 'bg-white' : ''}`}
                         onClick={() => showComponent(<AdminWorks/>, 'students')}
                         >
-                            <span class="material-symbols-outlined text-[38px]">work</span>
+                            <span className="material-symbols-outlined text-[38px]">work</span>
                             <h1 className='font-roboto font-normal text-[20px] mr-[50px]'>Trabajos</h1>
                         </button>
 
@@ -60,7 +60,7 @@ const UserAdmin = () => {
                         className={`grid grid-cols-2 rounded-md h-[55px] items-center pr-[30px] hover:bg-white ${activeButton === 'municipalities' ? 'bg-white' : ''}`}
                         onClick={() => showComponent(<AdmiMunicipio/>, 'municipalities')}
                         >
-                            <span class="material-symbols-outlined text-[38px]">
+                            <span className="material-symbols-outlined text-[38px]">
                                 location_city
                             </span>
                             <h1 className='font-roboto font-normal text-[20px] mr-[50px]'>Municipios</h1>
@@ -70,7 +70,7 @@ const UserAdmin = () => {
                         className={`grid grid-cols-2 rounded-md h-[55px] items-center pr-[30px] hover:bg-white ${activeButton === 'careers' ? 'bg-white' : ''}`}
                         onClick={() => showComponent(<AdmiCarrera/>, 'careers')}
                         >
-                            <span class="material-symbols-outlined text-[38px]">
+                            <span className="material-symbols-outlined text-[38px]">
                                 auto_stories
                             </span>
                             <h1 className='font-roboto font-normal text-[20px] mr-[50px]'>Carreras</h1>
@@ -79,7 +79,7 @@ const UserAdmin = () => {
                         className={`grid grid-cols-2 rounded-md h-[55px] items-center pr-[30px] hover:bg-white ${activeButton === 'blacklist' ? 'bg-white' : ''}`}
                         onClick={() => showComponent(<BlacklistUserAdmin/>, 'blacklist')}
                         >
-                            <span class="material-symbols-outlined text-[38px]">
+                            <span className="material-symbols-outlined text-[38px]">
                                 person_off
                             </span>
                             <h1 className='font-roboto font-normal text-[20px] mr-[50px]'>Lista negra</h1>
@@ -88,7 +88,7 @@ const UserAdmin = () => {
                         className={`grid grid-cols-2 rounded-md h-[55px] items-center pr-[30px] hover:bg-white ${activeButton === 'administrators' ? 'bg-white' : ''}`}
                         onClick={() => showComponent(<AdministradoresUserAdmin/>, 'administrators')}
                         >
-                            <span class="material-symbols-outlined text-[38px]">
+                            <span className="material-symbols-outlined text-[38px]">
                                 admin_panel_settings
                             </span>
                             <h1 className='font-roboto font-normal text-[20px] mr-[70px]'>Administradores</h1>
@@ -104,7 +104,7 @@ const UserAdmin = () => {
                                     <h1 className='text-3xl font-medium font-roboto'><DocNumber name='unichamba-estudiantes'/></h1>
                                     <h1 className='text-xl font-roboto font-medium'>Estudiantes</h1>
                                 </div>
-                                <span class="material-symbols-outlined text-[40px]">
+                                <span className="material-symbols-outlined text-[40px]">
                                     school
                                 </span>
                             </div>
@@ -113,7 +113,7 @@ const UserAdmin = () => {
                                     <h1 className='text-3xl font-medium font-roboto'><DocNumber name='unichamba-anuncios'/></h1>
                                     <h1 className='text-lg font-roboto font-medium'>Ofertas Laborales</h1>
                                 </div>
-                                <span class="material-symbols-outlined text-[40px]">
+                                <span className="material-symbols-outlined text-[40px]">
                                     description
                                 </span>
                             </div>
@@ -122,7 +122,7 @@ const UserAdmin = () => {
                                     <h1 className='text-3xl font-medium font-roboto'><DocNumber name='unichamba-carreras'/></h1>
                                     <h1 className='text-xl font-roboto font-medium'>Carreras</h1>
                                 </div>
-                                <span class="material-symbols-outlined text-[40px]">
+                                <span className="material-symbols-outlined text-[40px]">
                                     auto_stories
                                 </span>
                             </div>
@@ -131,7 +131,7 @@ const UserAdmin = () => {
                                     <h1 className='text-3xl font-medium font-roboto'><DocNumber name='unichamba-administradores'/></h1>
                                     <h1 className='text-xl font-roboto font-medium'>Administradores</h1>
                                 </div>
-                                <span class="material-symbols-outlined text-[40px]">
+                                <span className="material-symbols-outlined text-[40px]">
                                     admin_panel_settings
                                 </span>
                             </div>

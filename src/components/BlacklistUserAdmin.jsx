@@ -152,7 +152,7 @@ export const BlacklistUserAdmin = () => {
 
                 <div className="flex justify-end">
                     <button onClick={() => modalEliminarCorreo(usuario.id)}>
-                        <span class="material-symbols-outlined text-3xl text-red-600">
+                        <span className="material-symbols-outlined text-3xl text-red-600">
                             delete
                         </span>
                     </button>

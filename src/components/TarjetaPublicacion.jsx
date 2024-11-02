@@ -5,7 +5,7 @@ import { NavLink, useLocation } from "react-router-dom";
 const TarjetaPublicacion = ({ listStudent }) => {
   const location = useLocation();
   const {nombre, carrera, acercaDe, trabajos, imageUrl, id} = listStudent;
-  
+  const taminiotrabajos= trabajos.slice(0,5);
   return (
     <>
       {/* foto del estudiante */}
@@ -33,7 +33,7 @@ const TarjetaPublicacion = ({ listStudent }) => {
 
           {/* Trabajos que el estudiante puede realizar */}
           <div className="text-bg-icon flex gap-x-2 justify-start px-5">
-          {trabajos.map( trabajo => 
+          {taminiotrabajos.map( trabajo => 
           <span className="material-symbols-outlined" style={{fontSize:35}} key={trabajo.nombre}>{trabajo.icono}</span>
             )}
           </div>
@@ -60,7 +60,7 @@ const TarjetaPublicacion = ({ listStudent }) => {
 
             {/* trabajos que el estudiante puede realizar */}
             <div className="text-bg-icon flex gap-x-2 justify-end px-5 pb-4">
-            {trabajos.map( trabajo => 
+            {taminiotrabajos.map( trabajo => 
           <span className="material-symbols-outlined" style={{fontSize:35}} key={trabajo.nombre}>{trabajo.icono}</span>
             )}
             </div>
