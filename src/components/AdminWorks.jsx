@@ -1,19 +1,26 @@
 import React, { useEffect, useState } from 'react';
-import { collection, deleteDoc, doc, getDocs, addDoc } from 'firebase/firestore';
-import { db } from '../data/firebase';
+import axios from 'axios';
 import Swal from 'sweetalert2';
 
 const AdminWorks = () => {
     const [works, setWorks] = useState([]);
+    const couchDBUrl = "https://couchdbbackend.esaapp.com/unichamba-trabajos";
+    const auth = { username: "unichamba", password: "S3pt13mbre#2024Work" };
 
     const fetchData = async () => {
-        const worksSnapshot = await getDocs(collection(db, 'trabajos'));
-        const workData = worksSnapshot.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data()
-        }));
-        setWorks(workData);
-    }
+        try {
+            const response = await axios.get(`${couchDBUrl}/_all_docs?include_docs=true`, { auth });
+            const workData = response.data.rows.map(row => ({
+                id: row.doc._id,
+                _rev: row.doc._rev,
+                nombre: row.doc.nombre,
+                icono: row.doc.icono,
+            }));
+            setWorks(workData);
+        } catch (error) {
+            console.error("Error al obtener trabajos:", error);
+        }
+    };
 
     useEffect(() => {
         fetchData();
@@ -21,70 +28,58 @@ const AdminWorks = () => {
 
     const eliminarTrabajo = async (work) => {
         try {
-            await deleteDoc(doc(db, 'trabajos', work.id));
-            console.log(work.id);
-            fetchData();
+            await axios.delete(`${couchDBUrl}/${work.id}?rev=${work._rev}`, { auth });
             Swal.fire("Eliminado", `${work.nombre} ha sido eliminado`, "success");
+            fetchData(); // Refresca la lista de trabajos
         } catch (error) {
             console.error("Error al eliminar trabajo:", error);
             Swal.fire("Error", "Hubo un error al eliminar el trabajo", "error");
         }
     };
 
-    // Aqui se agrega el trabajo a la BD
-    const agregarTrabajo = async ( trabajo, icono ) => {
-        await addDoc(collection(db, 'trabajos'), {nombre: trabajo, icono: icono})
-        fetchData()
-    }
+    const agregarTrabajo = async (nombre, icono) => {
+        try {
+            const nuevoTrabajo = { nombre, icono };
+            await axios.post(couchDBUrl, nuevoTrabajo, { auth });
+            Swal.fire("Trabajo agregado con éxito", "", "success");
+            fetchData(); // Refresca la lista de trabajos
+        } catch (error) {
+            console.error("Error al agregar trabajo:", error);
+            Swal.fire("Error", "No se pudo agregar el trabajo", "error");
+        }
+    };
 
     const modalAgregarTrabajo = () => {
         Swal.fire({
             title: "Agregar un trabajo",
             html: `
             <div style="padding-bottom: 20px;">
-            <label>Nombre del trabajo</label>
-            <input id="nombreTrabajo" name="nombreTrabajo" placeholder="Ingrese el nombre del trabajo" class="swal2-input" required>
+                <label>Nombre del trabajo</label>
+                <input id="nombreTrabajo" placeholder="Ingrese el nombre del trabajo" class="swal2-input" required>
             </div>
-
             <div style="padding-bottom: 20px;">
-            <label>Icono del trabajo</label>
-            <input id="iconoTrabajo" name="iconoTrabajo" placeholder="Ingrese el tag correspondiente" class="swal2-input" required>
-        <p style="margin-top: 15px; font-weight: 300;">Los iconos se extraen de <a href="https://fonts.google.com/icons" target="_blank" style="text-decoration: underline;">Google Icons</a></p>
+                <label>Icono del trabajo</label>
+                <input id="iconoTrabajo" placeholder="Ingrese el tag correspondiente" class="swal2-input" required>
+                <p style="margin-top: 15px; font-weight: 300;">Los iconos se extraen de <a href="https://fonts.google.com/icons" target="_blank" style="text-decoration: underline;">Google Icons</a></p>
             </div>
             `,
-
             showCancelButton: true,
             cancelButtonText: "Cancelar",
             cancelButtonColor: "#d33",
             confirmButtonText: "Agregar",
             confirmButtonColor: "#04061A",
-            preConfirm: async () => {
-                const nombre = document.getElementById('nombreTrabajo').value
-                const tag = document.getElementById('iconoTrabajo').value
-                try {
-                    const trabajoSnapshot= await getDocs(collection(db, 'trabajos'));
-
-                    const trabajoExiste = trabajoSnapshot.docs.find( doc => doc.data().nombre === nombre )
-
-                    if(trabajoExiste){
-                        Swal.fire({
-                            icon: "error",
-                            title: "Error",
-                            text: "Este trabajo ya existe"
-                        })
-                    } else {
-                        agregarTrabajo(nombre, tag)
-                        Swal.fire({
-                            title: "Trabajo agregado con exito",
-                            icon: "success"
-                        })
-                    }
-                } catch (error) {
-                    console.log(error)
-                }
+            preConfirm: () => {
+                const nombre = document.getElementById('nombreTrabajo').value;
+                const icono = document.getElementById('iconoTrabajo').value;
+                return { nombre, icono };
             }
-            })
-    }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const { nombre, icono } = result.value;
+                agregarTrabajo(nombre, icono);
+            }
+        });
+    };
 
     return (
         <main className='py-10'>
@@ -131,4 +126,3 @@ const AdminWorks = () => {
 }
 
 export default AdminWorks;
-
