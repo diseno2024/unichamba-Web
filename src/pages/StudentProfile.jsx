@@ -120,7 +120,7 @@ const StudentProfile = () => {
   
         reader.readAsDataURL(pdf);  
       }else{
-        setArchivoSeleccionado();
+        setArchivoSeleccionado(null);
         estudiante.hojadevida = ""
       }
   };
@@ -718,7 +718,7 @@ const StudentProfile = () => {
                       </button>
                     </form>
                     <div>
-                      {estudiante.hojadevida != "" ? (
+                      {estudiante.pdfUrl != "" ? (
                         <>
                           <a
                             href={estudiante.pdfUrl}
@@ -739,7 +739,7 @@ const StudentProfile = () => {
                   </div>
                 ) : (
                   <div>
-                    {estudiante.hojadevida != "" ? (
+                    {estudiante.pdfUrl != "" ? (
                       <a
                         href={estudiante.pdfUrl}
                         target="_blank"
