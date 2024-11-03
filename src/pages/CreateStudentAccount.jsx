@@ -216,7 +216,8 @@ const handleImageChange = (e) => {
     setLoading(true);
     try {
         // 1. Guardar los datos del estudiante (sin _id para que CouchDB lo genere)
-        const studentResponse = await axios.post('https://couchdbbackend.esaapp.com/unichamba-estudiantes/',
+        const studentResponse = await axios.post(
+            'https://couchdbbackend.esaapp.com/unichamba-estudiantes/',
             studentData,
             {
                 auth: {
@@ -277,11 +278,10 @@ const handleImageChange = (e) => {
         const updatedData = {
             ...studentDoc.data, // Incluye el documento actual con _rev para evitar conflictos
             imageUrl: `https://couchdbbackend.esaapp.com/unichamba-estudiantes-storage/${studentId}/imagen.jpg`, // Enlace directo a la imagen
+            pdfUrl: values.hojadevida 
+                ? `https://couchdbbackend.esaapp.com/unichamba-estudiantes-storage/${studentId}/curriculum.pdf`
+                : "", // Cadena vacía si no hay currículum
         };
-
-        if (values.hojadevida) {
-            updatedData.pdfUrl = `https://couchdbbackend.esaapp.com/unichamba-estudiantes-storage/${studentId}/curriculum.pdf`; // Enlace directo al PDF
-        }
 
         await axios.put(
             `https://couchdbbackend.esaapp.com/unichamba-estudiantes/${studentId}`,
