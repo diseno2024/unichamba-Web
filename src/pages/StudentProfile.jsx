@@ -86,19 +86,33 @@ const StudentProfile = () => {
     });
     const rawTrabajos = trabajosCollection.data.rows;
 
-    let trabajosFiltrados = rawTrabajos.filter(trabajo => 
-      Array.isArray(trabajos) && !trabajos.some(t => t.nombre === trabajo.doc.nombre)
+    // Filtrar los trabajos que no están seleccionados
+    const trabajosFiltrados = rawTrabajos.filter(trabajo => 
+      !trabajos.some(t => t.nombre === trabajo.doc.nombre) // Excluir los trabajos ya seleccionados
     );
 
+    // Mapear los trabajos filtrados a un formato adecuado para el Select
     const trabajosList = trabajosFiltrados.map((document) => ({
       value: document.id,
       label: document.doc.nombre,
       icon: document.doc.icono,
     }));
 
+    // Ordenar alfabéticamente por nombre
     trabajosList.sort((a, b) => a.label.localeCompare(b.label));
+
+    // Actualizar el estado de las opciones de trabajo
     setTrabajosOptions(trabajosList);
   };
+
+  // Ejecutar fetchTrabajos cada vez que los trabajos seleccionados cambien
+  useEffect(() => {
+    fetchTrabajos();
+  }, [trabajos]); // Dependencia: cuando cambian los trabajos seleccionados
+
+  // Placeholder: mostrar los trabajos seleccionados como texto
+  const placeholderText = trabajos.map(trabajo => trabajo.nombre).join(", ");
+
 
   const fetchCarreras = async () => {
     const getCarreras =
@@ -370,6 +384,12 @@ const StudentProfile = () => {
     });
   };
 
+  const [pruebasTrabajos, setpruebasTrabajos] = useState([
+    { value: "trabajo_id_1", label: "Trabajo 1" },
+    { value: "trabajo_id_2", label: "Trabajo 2" },
+    { value: "trabajo_id_3", label: "Trabajo 3" }
+  ]);
+
   const FormularioCompleto = () => {
     return (
       <form onSubmit={editSubmit}>
@@ -452,15 +472,15 @@ const StudentProfile = () => {
               Trabajo(s)*
             </label>
             <Select
-              id="trabajosInput"
-              placeholder={trabajos.map(trabajo => (trabajo.nombre+", " ))}
-              closeMenuOnSelect={false}
-              components={animatedComponents}
-              options={trabajosOptions}
-              isMulti
-              onChange={handleTrabajosChange}
-              className="rounded-lg border border-black  mt-4 font-light  w-[270px] md:w-[600px] px-5 py-2"
-            />
+        id="trabajosInput"
+        placeholder={placeholderText} // Mostrar los trabajos seleccionados como texto
+        closeMenuOnSelect={false}
+        components={animatedComponents}
+        options={trabajosOptions} // Solo los trabajos que no han sido seleccionados
+        isMulti
+        onChange={handleTrabajosChange} // Actualizar el estado de trabajos seleccionados
+        className="rounded-lg border border-black mt-4 font-light w-[270px] md:w-[600px] px-5 py-2"
+      />
           </div>
         </div>
         <br />
@@ -617,14 +637,7 @@ const StudentProfile = () => {
                 <span class="material-symbols-outlined">arrow_back</span>
               </button>
             </NavLink>
-            {location.pathname === "/studentProfile" ? (
-              <button
-                className="mx-4 py-2 px-6 text-Space-cadet rounded-lg font-normal bg-Navbar relative top-3 max-h-10"
-                onClick={editarPerfil}
-              >
-                Editar perfil
-              </button>
-            ) : null}
+           
           </div>
           <div className=" w-[200px]  h-[200px] ml-12 rounded-full overflow-hidden flex items-center absolute top-60 left-10 md:left-5 border-4">
             <img src={estudiante.imageUrl} alt="" className=" " />
@@ -658,6 +671,14 @@ const StudentProfile = () => {
               {" "}
               <WhatsAppButton phoneNumber={estudiante.whatsapp} />{" "}
             </div>
+            {location.pathname === "/studentProfile" ? (
+              <button
+                className="mx-4 py-2 px-6 text-Space-cadet rounded-lg font-normal bg-Navbar relative top-3 max-h-10"
+                onClick={editarPerfil}
+              >
+                Editar perfil
+              </button>
+            ) : null}
             <div className=" mt-5 px-2 flex flex-col justify-start md:items-center w-full">
               <span className="font-normal">Informacion personal</span>
               <ul className=" mt-5">
