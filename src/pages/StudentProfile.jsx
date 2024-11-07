@@ -33,6 +33,7 @@ const StudentProfile = () => {
   const MySwal = withReactContent(Swal);
   const animatedComponents = makeAnimated();
   const [carrerasList, setCarrerasOptions] = useState([]);
+  const [trabajos, setTrabajos] = useState([])
 
   const fetchData = async () => {
     setLoading(true);
@@ -60,13 +61,17 @@ const StudentProfile = () => {
     if (location.pathname === "/studentProfile") {
       students.map((perfil) => {
         if (perfil.email === user.email) {
+          setTrabajos(perfil.trabajos)
           setEstudiante(perfil);
         }
       });
     } else if (perfilSeleccionado.data.docs[0].email === user.email) {
+      console.log(perfilSeleccionado.data.docs[0].trabajos)
       setEstudiante(perfilSeleccionado.data.docs[0]);
+      setTrabajos(perfilSeleccionado.data.docs[0].trabajos)
       navigate("/studentProfile");
     } else {
+      setTrabajos(perfilSeleccionado.data.docs[0].trabajos);
       setEstudiante(perfilSeleccionado.data.docs[0]);
     }
 
@@ -80,11 +85,17 @@ const StudentProfile = () => {
       auth: { username: "unichamba", password: "S3pt13mbre#2024Work" },
     });
     const rawTrabajos = trabajosCollection.data.rows;
-    const trabajosList = rawTrabajos.map((document) => ({
+
+    let trabajosFiltrados = rawTrabajos.filter(trabajo => 
+      Array.isArray(trabajos) && !trabajos.some(t => t.nombre === trabajo.doc.nombre)
+    );
+
+    const trabajosList = trabajosFiltrados.map((document) => ({
       value: document.id,
       label: document.doc.nombre,
       icon: document.doc.icono,
     }));
+
     trabajosList.sort((a, b) => a.label.localeCompare(b.label));
     setTrabajosOptions(trabajosList);
   };
@@ -104,7 +115,7 @@ const StudentProfile = () => {
     setCarrerasOptions(carrerasList);
   };
 
-  const { trabajos } = estudiante;
+ 
 
   const handlePDFChange = (e) => {
       pdf = e.target.files[0];
@@ -291,7 +302,7 @@ const StudentProfile = () => {
     }
 
     if (trabajosInicial.length > 0) {
-      estudiante.trabajos = trabajosInicial;
+      estudiante.trabajos = [...estudiante.trabajos, ...trabajosInicial];
     }
     await axios.put(
       `https://couchdbbackend.esaapp.com/unichamba-estudiantes/${estudiante.id}`,
@@ -746,7 +757,7 @@ const StudentProfile = () => {
                         className="font-bold mt-2 block"
                       >
                         <img
-                          src="../../public/pdf.png"
+                          src="/pdf.png"
                           className=" w-20 ml-5"
                         />
                       </a>
