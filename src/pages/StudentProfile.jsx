@@ -35,6 +35,7 @@ const StudentProfile = () => {
   const [carrerasList, setCarrerasOptions] = useState([]);
   const [trabajos, setTrabajos] = useState([])
 
+  // LLAMADA A LA DATA DE LOS ESTUDIANTES Y ORDENA LA DATA SEGUN EL PERFIL DEL ESTUDIANTE A MOSTRAR
   const fetchData = async () => {
     setLoading(true);
     const getRequest =
@@ -61,12 +62,14 @@ const StudentProfile = () => {
     if (location.pathname === "/studentProfile") {
       students.map((perfil) => {
         if (perfil.email === user.email) {
-          setTrabajos(perfil.trabajos)
+          setTrabajos(perfil.trabajos.map(trabajo =>({
+            nombre: trabajo.nombre,
+            icono: trabajo.icono
+          })))
           setEstudiante(perfil);
         }
       });
     } else if (perfilSeleccionado.data.docs[0].email === user.email) {
-      console.log(perfilSeleccionado.data.docs[0].trabajos)
       setEstudiante(perfilSeleccionado.data.docs[0]);
       setTrabajos(perfilSeleccionado.data.docs[0].trabajos)
       navigate("/studentProfile");
@@ -74,10 +77,12 @@ const StudentProfile = () => {
       setTrabajos(perfilSeleccionado.data.docs[0].trabajos);
       setEstudiante(perfilSeleccionado.data.docs[0]);
     }
+    
 
     setLoading(false);
   };
 
+  // LLAMA LA DATA DE LOS TRABAJOS PARA EDICION DE PERFIL
   const fetchTrabajos = async () => {
     const getTrabajos =
       "https://couchdbbackend.esaapp.com/unichamba-trabajos/_all_docs?include_docs=True";
@@ -86,16 +91,11 @@ const StudentProfile = () => {
     });
     const rawTrabajos = trabajosCollection.data.rows;
 
-    // Filtrar los trabajos que no están seleccionados
-    const trabajosFiltrados = rawTrabajos.filter(trabajo => 
-      !trabajos.some(t => t.nombre === trabajo.doc.nombre) // Excluir los trabajos ya seleccionados
-    );
 
     // Mapear los trabajos filtrados a un formato adecuado para el Select
-    const trabajosList = trabajosFiltrados.map((document) => ({
-      value: document.id,
+    const trabajosList = rawTrabajos.map((document) => ({
+      value: document.doc.icono,
       label: document.doc.nombre,
-      icon: document.doc.icono,
     }));
 
     // Ordenar alfabéticamente por nombre
@@ -105,15 +105,7 @@ const StudentProfile = () => {
     setTrabajosOptions(trabajosList);
   };
 
-  // Ejecutar fetchTrabajos cada vez que los trabajos seleccionados cambien
-  useEffect(() => {
-    fetchTrabajos();
-  }, [trabajos]); // Dependencia: cuando cambian los trabajos seleccionados
-
-  // Placeholder: mostrar los trabajos seleccionados como texto
-  const placeholderText = trabajos.map(trabajo => trabajo.nombre).join(", ");
-
-
+  // TRAE LA DATA DE LAS CARRERAS PARA EDICION DEL PERFIL DEL ESTUDIANTE
   const fetchCarreras = async () => {
     const getCarreras =
       "https://couchdbbackend.esaapp.com/unichamba-carreras/_all_docs?include_docs=True";
@@ -129,8 +121,7 @@ const StudentProfile = () => {
     setCarrerasOptions(carrerasList);
   };
 
- 
-
+  // PROCESO PARA MANEJO DE LOS PDF'S
   const handlePDFChange = (e) => {
       pdf = e.target.files[0];
 
@@ -286,7 +277,23 @@ const StudentProfile = () => {
     acercaDeActualizado = descripcion;
   };
 
-  // SUBMIT PARA SUBIR EDICION
+  const handleTrabajosChange = (selectedOptions) => {
+    trabajosInicial = trabajos;
+    const trabajosSelected = selectedOptions.map((option) => ({
+      icono: option.value,
+      nombre: option.label,
+    }));
+    trabajosInicial = trabajosSelected;
+  };
+
+  const handleCarreraChange = (e) => {
+    const carreras = {
+      carrera: e.label,
+    };
+    carreraActualizada = carreras;
+  };
+
+  // SUBMIT PARA SUBIR EDICION DEL MODAL
   const editSubmit = async (e) => {
     e.preventDefault();
     const isEmpty = (obj) => Object.keys(obj).length === 0;
@@ -315,8 +322,8 @@ const StudentProfile = () => {
       estudiante.carrera = carreraActualizada.carrera;
     }
 
-    if (trabajosInicial.length > 0) {
-      estudiante.trabajos = [...estudiante.trabajos, ...trabajosInicial];
+    if (trabajosInicial.length >= 0) {
+        estudiante.trabajos = [...trabajosInicial];
     }
     await axios.put(
       `https://couchdbbackend.esaapp.com/unichamba-estudiantes/${estudiante.id}`,
@@ -341,22 +348,9 @@ const StudentProfile = () => {
     fetchData();
   };
 
-  const handleTrabajosChange = (selectedOptions) => {
-    const trabajos = selectedOptions.map((option) => ({
-      icono: option.icon,
-      nombre: option.label,
-    }));
-    trabajosInicial = trabajos;
-  };
-
-  const handleCarreraChange = (e) => {
-    const carreras = {
-      carrera: e.label,
-    };
-    carreraActualizada = carreras;
-  };
-
+  // MODAL Y FORMULARIO PARA EDICION DEL PERFIL 
   const editarPerfil = () => {
+    trabajosInicial = trabajos;
     MySwal.fire({
       title: "Editar Perfil",
       customClass: {
@@ -383,12 +377,6 @@ const StudentProfile = () => {
       }
     });
   };
-
-  const [pruebasTrabajos, setpruebasTrabajos] = useState([
-    { value: "trabajo_id_1", label: "Trabajo 1" },
-    { value: "trabajo_id_2", label: "Trabajo 2" },
-    { value: "trabajo_id_3", label: "Trabajo 3" }
-  ]);
 
   const FormularioCompleto = () => {
     return (
@@ -459,7 +447,7 @@ const StudentProfile = () => {
             </label>
             <Select
               id="carreraInput"
-              placeholder={estudiante.carrera}
+              defaultValue={estudiante.carrera}
               closeMenuOnSelect={false}
               components={animatedComponents}
               onChange={handleCarreraChange}
@@ -473,13 +461,13 @@ const StudentProfile = () => {
             </label>
             <Select
         id="trabajosInput"
-        placeholder={placeholderText} // Mostrar los trabajos seleccionados como texto
+        defaultValue={trabajos.map((trabajo) => ({ value: trabajo.icono, label: trabajo.nombre }))}
         closeMenuOnSelect={false}
         components={animatedComponents}
         options={trabajosOptions} // Solo los trabajos que no han sido seleccionados
         isMulti
         onChange={handleTrabajosChange} // Actualizar el estado de trabajos seleccionados
-        className="rounded-lg border border-black mt-4 font-light w-[270px] md:w-[600px] px-5 py-2"
+        className="rounded-lg border border-black mt-4 font-light w-[270px] md:w-[600px] px-5 py-2 overflow-visible whitespace-normal"
       />
           </div>
         </div>
@@ -507,6 +495,7 @@ const StudentProfile = () => {
     );
   };
 
+  // METODOS PARA MANEJO DE LA FOTO DE PERFIL
   const actualizarFoto = () => {
     MySwal.fire({
       title: "Actualizar Foto",
@@ -607,6 +596,49 @@ const StudentProfile = () => {
     fetchData();
   };
 
+  // CONTROLES PARA ELIMINAR LA CUENTA
+  const modalEliminarCuenta = () => {
+    Swal.fire({
+        title: "¿Seguro que quieres eliminar tu cuenta?",
+        icon: "warning|",
+        showCancelButton: true,
+        confirmButtonColor: "#161A30",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Si, eliminar",
+        cancelButtonText: "Cancelar"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            eliminarCuenta()
+        }
+        });
+}
+
+  const eliminarCuenta = async () => {
+    const getStudentStorage = `https://couchdbbackend.esaapp.com/unichamba-estudiantes-storage/${estudiante.id}`;
+    const storage = await axios.get(getStudentStorage, {auth: {username:"unichamba", password:"S3pt13mbre#2024Work"}});
+
+    const storageData = {
+        rev: storage.data._rev,
+    };
+
+    const deleteStorageRequest = `https://couchdbbackend.esaapp.com/unichamba-estudiantes-storage/${estudiante.id}`
+    await axios.delete(deleteStorageRequest, {params: {"rev": storageData.rev}, auth: {username:"unichamba", password:"S3pt13mbre#2024Work"}})
+
+    const deleteStudentRequest = `https://couchdbbackend.esaapp.com/unichamba-estudiantes/${estudiante.id}`
+    await axios.delete(deleteStudentRequest, {params: {"rev": estudiante.rev}, auth: {username:"unichamba", password:"S3pt13mbre#2024Work"}})
+
+    Swal.fire({
+      title: "¡Tu cuenta ha sido borrada de Unichamba!",
+      text: "Esperamos verte pronto de nuevo, puedes volver siempre que desees",
+      icon: "success",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      window.location.href = "/";
+    }
+    });
+}
+
+  // USEEFFECT PARA DISPARAR LAS LLAMADAS A LOS DATOS
   useEffect(() => {
     fetchData();
     fetchTrabajos();
@@ -637,7 +669,14 @@ const StudentProfile = () => {
                 <span class="material-symbols-outlined">arrow_back</span>
               </button>
             </NavLink>
-           
+            {location.pathname === "/studentProfile" ? (
+              <button
+                className="mx-4 px-1 text-gray-400 rounded-lg font-normal bg-gray-800 relative top-3 max-h-10"
+                onClick={modalEliminarCuenta}
+              >
+                Eliminar cuenta
+              </button>
+            ) : null}
           </div>
           <div className=" w-[200px]  h-[200px] ml-12 rounded-full overflow-hidden flex items-center absolute top-60 left-10 md:left-5 border-4">
             <img src={estudiante.imageUrl} alt="" className=" " />
@@ -672,12 +711,14 @@ const StudentProfile = () => {
               <WhatsAppButton phoneNumber={estudiante.whatsapp} />{" "}
             </div>
             {location.pathname === "/studentProfile" ? (
-              <button
+              // <NavLink to={"/editProfile"}>
+                <button
                 className="mx-4 py-2 px-6 text-Space-cadet rounded-lg font-normal bg-Navbar relative top-3 max-h-10"
                 onClick={editarPerfil}
-              >
-                Editar perfil
-              </button>
+                >
+                  Editar perfil
+                </button>
+              // </NavLink>
             ) : null}
             <div className=" mt-5 px-2 flex flex-col justify-start md:items-center w-full">
               <span className="font-normal">Informacion personal</span>
