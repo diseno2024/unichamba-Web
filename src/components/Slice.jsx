@@ -3,6 +3,9 @@ import React from 'react'
 export const Slice = ({card, fading, ultimoEstudiante, ultimaOferta}) => {
     const {id, titulo, texto, type} = card
 
+
+    console.log(ultimoEstudiante)
+    console.log(ultimaOferta)
   return (
     <div className={`w-[400px] md:w-[700px] mx-[3px] h-full flex-shrink-0 cursor-pointer relative ${type === 'estudiante' ? 'bg-banner bg-left' : 'bg-bannerOferta phone:bg-left'} bg-cover bg-center rounded-xl`}>
         {/* <img src="public/bg_banner.png" alt=""/> */}

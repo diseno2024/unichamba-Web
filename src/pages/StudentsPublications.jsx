@@ -129,8 +129,8 @@ const StudentsPublications = () => {
         />
       </header>
       <br />
-      <main className="flex flex-col md:flex-row h-auto mt-[70px] relative space-y-0 md:space-y-0 md:space-x-7">
-        <section className="px-5 h-max w-full md:min-w-[225px] md:max-w-[250px] border-r-2 flex-col space-y-4">
+      <main className="flex flex-col md:flex-row h-auto relative space-y-0 md:space-y-0 md:space-x-7">
+        <section className="mb-5 px-5 h-max w-full md:min-w-[225px] md:max-w-[250px] border-r-2 flex-col space-y-4">
           <div className={`lg:block md:block md:pl-2 ${menuAbierto ? 'block' : 'hidden'}`}>
             <div className="flex justify-end px-2 pt-2 md:hidden">
               <button onClick={toggleMenu} className="text-black focus:outline-none">
@@ -199,7 +199,7 @@ const StudentsPublications = () => {
             </section>
 
           {/* Paginador */}
-          <div className="md:absolute md:top-0 md:right-0 lg:absolute lg:top-0 lg:right-0 flex justify-center my-4">
+          <div className="md:absolute md:top-0 md:right-0 lg:absolute lg:top-0 lg:right-10 flex justify-center my-4">
           <button
               onClick={() => currentPage > 1 && paginate(currentPage - 1)}
               disabled={currentPage === 1}

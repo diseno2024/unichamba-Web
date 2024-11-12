@@ -58,7 +58,7 @@ const OfferExploreStudent = () => {
         <Navbar setCarreraSeleccionadaNav={setCarreraSeleccionadaNav} />
       </header>
 
-      <main className='flex flex-col md:flex-row h-auto mt-[125px] relative space-y-4 md:space-y-0 md:space-x-4 '>
+      <main className='flex flex-col md:flex-row h-auto mt-[25px] relative space-y-4 md:space-y-0 md:space-x-4 '>
         {/* Filtros */}
         <div className='md:min-w-[250px] lg:min-w-[300px] lg:mt-0 ml-1 mt-4 md:mt-10 pl-4 py-2 lg:border-r-2 border-black/20 '>
           {/* Botón de menú hamburguesa (visible solo en pantallas pequeñas) */}
