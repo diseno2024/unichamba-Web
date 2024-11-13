@@ -33,7 +33,7 @@ const StudentProfile = () => {
   const MySwal = withReactContent(Swal);
   const animatedComponents = makeAnimated();
   const [carrerasList, setCarrerasOptions] = useState([]);
-  const [trabajos, setTrabajos] = useState([])
+  const [trabajos, setTrabajos] = useState([]);
 
   // LLAMADA A LA DATA DE LOS ESTUDIANTES Y ORDENA LA DATA SEGUN EL PERFIL DEL ESTUDIANTE A MOSTRAR
   const fetchData = async () => {
@@ -62,22 +62,23 @@ const StudentProfile = () => {
     if (location.pathname === "/studentProfile") {
       students.map((perfil) => {
         if (perfil.email === user.email) {
-          setTrabajos(perfil.trabajos.map(trabajo =>({
-            nombre: trabajo.nombre,
-            icono: trabajo.icono
-          })))
+          setTrabajos(
+            perfil.trabajos.map((trabajo) => ({
+              nombre: trabajo.nombre,
+              icono: trabajo.icono,
+            }))
+          );
           setEstudiante(perfil);
         }
       });
     } else if (perfilSeleccionado.data.docs[0].email === user.email) {
       setEstudiante(perfilSeleccionado.data.docs[0]);
-      setTrabajos(perfilSeleccionado.data.docs[0].trabajos)
+      setTrabajos(perfilSeleccionado.data.docs[0].trabajos);
       navigate("/studentProfile");
     } else {
       setTrabajos(perfilSeleccionado.data.docs[0].trabajos);
       setEstudiante(perfilSeleccionado.data.docs[0]);
     }
-    
 
     setLoading(false);
   };
@@ -90,7 +91,6 @@ const StudentProfile = () => {
       auth: { username: "unichamba", password: "S3pt13mbre#2024Work" },
     });
     const rawTrabajos = trabajosCollection.data.rows;
-
 
     // Mapear los trabajos filtrados a un formato adecuado para el Select
     const trabajosList = rawTrabajos.map((document) => ({
@@ -123,22 +123,36 @@ const StudentProfile = () => {
 
   // PROCESO PARA MANEJO DE LOS PDF'S
   const handlePDFChange = (e) => {
-      pdf = e.target.files[0];
+    pdf = e.target.files[0];
 
-      if(pdf){
-        setArchivoSeleccionado(pdf);
-        const reader = new FileReader();
+      if (pdf) {
+        const maxSize = 1 * 1024 * 1024;
+        if (pdf.size > maxSize) {
+          Swal.fire({
+            title: "Archivo demasiado grande",
+            icon: "error",
+            text: "El pdf no debe superar 1 MB de tamaño.",
+          });
+          pdf = {};
+          setArchivoSeleccionado(null);
+          estudiante.hojadevida = "";
+          return;
+        } else {
+          setArchivoSeleccionado(pdf);
+          const reader = new FileReader();
 
-        reader.onloadend = () => {
-          const base64String = reader.result;
-          estudiante.hojadevida = base64String;
-        };
-  
-        reader.readAsDataURL(pdf);  
-      }else{
+          reader.onloadend = () => {
+            const base64String = reader.result;
+            estudiante.hojadevida = base64String;
+          };
+
+          reader.readAsDataURL(pdf);
+        }
+      } else {
         setArchivoSeleccionado(null);
-        estudiante.hojadevida = ""
+        estudiante.hojadevida = "";
       }
+    
   };
 
   const addOrEdit = async (link) => {
@@ -232,12 +246,11 @@ const StudentProfile = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if(archivoSeleccionado){
+    if (archivoSeleccionado) {
       addOrEdit(value);
       setArchivoSeleccionado(null);
       e.target.reset();
     }
-
   };
 
   // CAPTURA LOS INPUTS PARA EDITAR
@@ -323,7 +336,7 @@ const StudentProfile = () => {
     }
 
     if (trabajosInicial.length >= 0) {
-        estudiante.trabajos = [...trabajosInicial];
+      estudiante.trabajos = [...trabajosInicial];
     }
     await axios.put(
       `https://couchdbbackend.esaapp.com/unichamba-estudiantes/${estudiante.id}`,
@@ -348,7 +361,7 @@ const StudentProfile = () => {
     fetchData();
   };
 
-  // MODAL Y FORMULARIO PARA EDICION DEL PERFIL 
+  // MODAL Y FORMULARIO PARA EDICION DEL PERFIL
   const editarPerfil = () => {
     trabajosInicial = trabajos;
     MySwal.fire({
@@ -383,54 +396,44 @@ const StudentProfile = () => {
       <form onSubmit={editSubmit}>
         <div className="md:flex w-full">
           <div className="md:px-5 space-y-4 ">
-            
-            <div  className="w-full px-5 flex flex-col items-center justify-start space-y-3 mt-3 md:mt-0">
-            <label htmlFor="nombreInput">
-              Nombre(s)*
-            </label>
-            <input
-              placeholder={estudiante.nombre}
-              type="text"
-              id="nombreInput"
-              className="rounded-lg border border-black font-normal py-4 w-[270px] md:w-[600px] px-5"
-              name="nombre"
-              onChange={handleNombreChange}
-              pattern="^[A-Za-záéíóúÁÉÍÓÚ]+(\s[A-Za-záéíóúÁÉÍÓÚ]+)*$"
-            />
+            <div className="w-full px-5 flex flex-col items-center justify-start space-y-3 mt-3 md:mt-0">
+              <label htmlFor="nombreInput">Nombre(s)*</label>
+              <input
+                placeholder={estudiante.nombre}
+                type="text"
+                id="nombreInput"
+                className="rounded-lg border border-black font-normal py-4 w-[270px] md:w-[600px] px-5"
+                name="nombre"
+                onChange={handleNombreChange}
+                pattern="^[A-Za-záéíóúÁÉÍÓÚ]+(\s[A-Za-záéíóúÁÉÍÓÚ]+)*$"
+              />
 
-            <label htmlFor="apellidoInput">
-              Apellido(s)*
-            </label>
-            <input
-              placeholder={estudiante.apellido}
-              type="text"
-              id="apellidoInput"
-              className="rounded-lg border border-black font-normal py-4  w-[270px] md:w-[600px] px-5"
-              name="apellido"
-              onChange={handleApellidoChange}
-              pattern="^[A-Za-záéíóúÁÉÍÓÚ]+(\s[A-Za-záéíóúÁÉÍÓÚ]+)*$"
-            />
+              <label htmlFor="apellidoInput">Apellido(s)*</label>
+              <input
+                placeholder={estudiante.apellido}
+                type="text"
+                id="apellidoInput"
+                className="rounded-lg border border-black font-normal py-4  w-[270px] md:w-[600px] px-5"
+                name="apellido"
+                onChange={handleApellidoChange}
+                pattern="^[A-Za-záéíóúÁÉÍÓÚ]+(\s[A-Za-záéíóúÁÉÍÓÚ]+)*$"
+              />
 
-
-            <label htmlFor="telefonoInput">
-              Telefono*
-            </label>
-            <input
-              placeholder={estudiante.telefono}
-              type="text"
-              id="telefonoInput"
-              className="rounded-lg border border-black font-normal py-4  w-[270px] md:w-[600px] px-5"
-              name="telefono"
-              pattern="[0-9]{8}"
-              onChange={handleTelefonoChange}
-            />
+              <label htmlFor="telefonoInput">Telefono*</label>
+              <input
+                placeholder={estudiante.telefono}
+                type="text"
+                id="telefonoInput"
+                className="rounded-lg border border-black font-normal py-4  w-[270px] md:w-[600px] px-5"
+                name="telefono"
+                pattern="[0-9]{8}"
+                onChange={handleTelefonoChange}
+              />
             </div>
           </div>
-          
+
           <div className="w-full px-5 flex flex-col items-center justify-start space-y-3 mt-3 md:mt-0">
-            <label htmlFor="whatsappInput">
-              Whatsapp*
-            </label>
+            <label htmlFor="whatsappInput">Whatsapp*</label>
             <input
               placeholder={estudiante.whatsapp}
               type="text"
@@ -441,13 +444,10 @@ const StudentProfile = () => {
               pattern="[0-9]{8}"
             />
 
-
-            <label htmlFor="carreraInput">
-              Carrera*
-            </label>
+            <label htmlFor="carreraInput">Carrera*</label>
             <Select
               id="carreraInput"
-              defaultValue={estudiante.carrera}
+              placeholder={estudiante.carrera}
               closeMenuOnSelect={false}
               components={animatedComponents}
               onChange={handleCarreraChange}
@@ -456,19 +456,20 @@ const StudentProfile = () => {
               className="rounded-lg border border-black  mt-4 font-light  w-[270px] md:w-[600px] px-5 py-2"
             />
 
-            <label htmlFor="trabajosInput">
-              Trabajo(s)*
-            </label>
+            <label htmlFor="trabajosInput">Trabajo(s)*</label>
             <Select
-        id="trabajosInput"
-        defaultValue={trabajos.map((trabajo) => ({ value: trabajo.icono, label: trabajo.nombre }))}
-        closeMenuOnSelect={false}
-        components={animatedComponents}
-        options={trabajosOptions} // Solo los trabajos que no han sido seleccionados
-        isMulti
-        onChange={handleTrabajosChange} // Actualizar el estado de trabajos seleccionados
-        className="rounded-lg border border-black mt-4 font-light w-[270px] md:w-[600px] px-5 py-2 overflow-visible whitespace-normal"
-      />
+              id="trabajosInput"
+              defaultValue={trabajos.map((trabajo) => ({
+                value: trabajo.icono,
+                label: trabajo.nombre,
+              }))}
+              closeMenuOnSelect={false}
+              components={animatedComponents}
+              options={trabajosOptions} // Solo los trabajos que no han sido seleccionados
+              isMulti
+              onChange={handleTrabajosChange} // Actualizar el estado de trabajos seleccionados
+              className="rounded-lg border border-black mt-4 font-light w-[270px] md:w-[600px] px-5 py-2 overflow-visible whitespace-normal"
+            />
           </div>
         </div>
         <br />
@@ -505,8 +506,8 @@ const StudentProfile = () => {
           <input
             type="file"
             id="fileInput"
-            accept=".jpeg, .png, .jpg"
             className="hidden"
+            accept=".jpeg, .png, .jpg"
             onChange={handleImageChange}
           />
           <label
@@ -516,6 +517,9 @@ const StudentProfile = () => {
           >
             Actualizar imagen de perfil
           </label>
+          <h6 className="text-sm text-gray-500 mt-2 ml-1 font-normal">
+            El tamaño máximo permitido para la foto es 1 MB.
+          </h6>
           {/* Botón para subir imagen */}
         </div>
       ),
@@ -526,117 +530,136 @@ const StudentProfile = () => {
   const handleImageChange = async (e) => {
     fotoPerfil = e.target.files[0];
 
-    const reader = new FileReader();
+    const maxSize = 1 * 1024 * 1024;
+    if (fotoPerfil.size > maxSize) {
+      Swal.fire({
+        title: "Archivo demasiado grande",
+        icon: "error",
+        text: "La foto no debe superar 1 MB de tamaño.",
+      });
+      fotoPerfil = {};
+      return;
+    } else {
+      const reader = new FileReader();
 
-    reader.onloadend = () => {
-      const base64String = reader.result;
-      estudiante.imageUrl = base64String;
-    };
+      reader.onloadend = () => {
+        const base64String = reader.result;
+        estudiante.imageUrl = base64String;
+      };
 
-    reader.readAsDataURL(fotoPerfil);
+      reader.readAsDataURL(fotoPerfil);
 
-    const getStorage = `https://couchdbbackend.esaapp.com/unichamba-estudiantes-storage/${estudiante.id}`;
-    const storageStudent = await axios.get(getStorage, {
-      auth: { username: "unichamba", password: "S3pt13mbre#2024Work" },
-    });
+      const getStorage = `https://couchdbbackend.esaapp.com/unichamba-estudiantes-storage/${estudiante.id}`;
+      const storageStudent = await axios.get(getStorage, {
+        auth: { username: "unichamba", password: "S3pt13mbre#2024Work" },
+      });
 
-    const storageImage = {
-      data: storageStudent.data,
-      rev: storageStudent.data._rev,
-    };
+      const storageImage = {
+        data: storageStudent.data,
+        rev: storageStudent.data._rev,
+      };
 
-    const attachments = {
-      _attachments: {
-        "imagen.jpg": {
-          content_type: "image/jpeg",
-          data: estudiante.imageUrl.split(",")[1],
+      const attachments = {
+        _attachments: {
+          "imagen.jpg": {
+            content_type: "image/jpeg",
+            data: estudiante.imageUrl.split(",")[1],
+          },
         },
-      },
-    };
+      };
 
-    storageImage.data._attachments["imagen.jpg"] =
-      attachments._attachments["imagen.jpg"];
+      storageImage.data._attachments["imagen.jpg"] =
+        attachments._attachments["imagen.jpg"];
 
-    await axios.put(
-      `https://couchdbbackend.esaapp.com/unichamba-estudiantes-storage/${estudiante.id}`,
-      storageImage.data,
-      {
-        auth: {
-          username: "unichamba",
-          password: "S3pt13mbre#2024Work",
-        },
-        params: { rev: storageImage.rev },
-      }
-    );
+      await axios.put(
+        `https://couchdbbackend.esaapp.com/unichamba-estudiantes-storage/${estudiante.id}`,
+        storageImage.data,
+        {
+          auth: {
+            username: "unichamba",
+            password: "S3pt13mbre#2024Work",
+          },
+          params: { rev: storageImage.rev },
+        }
+      );
 
-    estudiante.imageUrl = `https://couchdbbackend.esaapp.com/unichamba-estudiantes-storage/${estudiante.id}/imagen.jpg`;
+      estudiante.imageUrl = `https://couchdbbackend.esaapp.com/unichamba-estudiantes-storage/${estudiante.id}/imagen.jpg`;
 
-    await axios.put(
-      `https://couchdbbackend.esaapp.com/unichamba-estudiantes/${estudiante.id}`,
-      estudiante,
-      {
-        auth: {
-          username: "unichamba",
-          password: "S3pt13mbre#2024Work",
-        },
-        params: { rev: estudiante.rev },
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+      await axios.put(
+        `https://couchdbbackend.esaapp.com/unichamba-estudiantes/${estudiante.id}`,
+        estudiante,
+        {
+          auth: {
+            username: "unichamba",
+            password: "S3pt13mbre#2024Work",
+          },
+          params: { rev: estudiante.rev },
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-    Swal.fire({
-      title: "Imagen actualizada",
-      icon: "success",
-      text: "La imagen se actualizó correctamente",
-    });
+      Swal.fire({
+        title: "Imagen actualizada",
+        icon: "success",
+        text: "La imagen se actualizó correctamente",
+      });
 
-    fotoPerfil = {};
-    fetchData();
+      fotoPerfil = {};
+      fetchData();
+    }
   };
 
   // CONTROLES PARA ELIMINAR LA CUENTA
   const modalEliminarCuenta = () => {
     Swal.fire({
-        title: "¿Seguro que quieres eliminar tu cuenta?",
-        icon: "warning|",
-        showCancelButton: true,
-        confirmButtonColor: "#161A30",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Si, eliminar",
-        cancelButtonText: "Cancelar"
+      title: "¿Seguro que quieres eliminar tu cuenta?",
+      icon: "warning|",
+      showCancelButton: true,
+      confirmButtonColor: "#161A30",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Si, eliminar",
+      cancelButtonText: "Cancelar",
     }).then((result) => {
-        if (result.isConfirmed) {
-            eliminarCuenta()
-        }
-        });
-}
+      if (result.isConfirmed) {
+        eliminarCuenta();
+      }
+    });
+  };
 
   const eliminarCuenta = async () => {
     const getStudentStorage = `https://couchdbbackend.esaapp.com/unichamba-estudiantes-storage/${estudiante.id}`;
-    const storage = await axios.get(getStudentStorage, {auth: {username:"unichamba", password:"S3pt13mbre#2024Work"}});
+    const storage = await axios.get(getStudentStorage, {
+      auth: { username: "unichamba", password: "S3pt13mbre#2024Work" },
+    });
 
     const storageData = {
-        rev: storage.data._rev,
+      rev: storage.data._rev,
     };
 
-    const deleteStorageRequest = `https://couchdbbackend.esaapp.com/unichamba-estudiantes-storage/${estudiante.id}`
-    await axios.delete(deleteStorageRequest, {params: {"rev": storageData.rev}, auth: {username:"unichamba", password:"S3pt13mbre#2024Work"}})
+    const deleteStorageRequest = `https://couchdbbackend.esaapp.com/unichamba-estudiantes-storage/${estudiante.id}`;
+    await axios.delete(deleteStorageRequest, {
+      params: { rev: storageData.rev },
+      auth: { username: "unichamba", password: "S3pt13mbre#2024Work" },
+    });
 
-    const deleteStudentRequest = `https://couchdbbackend.esaapp.com/unichamba-estudiantes/${estudiante.id}`
-    await axios.delete(deleteStudentRequest, {params: {"rev": estudiante.rev}, auth: {username:"unichamba", password:"S3pt13mbre#2024Work"}})
+    const deleteStudentRequest = `https://couchdbbackend.esaapp.com/unichamba-estudiantes/${estudiante.id}`;
+    await axios.delete(deleteStudentRequest, {
+      params: { rev: estudiante.rev },
+      auth: { username: "unichamba", password: "S3pt13mbre#2024Work" },
+    });
 
     Swal.fire({
       title: "¡Tu cuenta ha sido borrada de Unichamba!",
       text: "Esperamos verte pronto de nuevo, puedes volver siempre que desees",
       icon: "success",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      window.location.href = "/";
-    }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        window.location.href = "/";
+      }
     });
-}
+  };
 
   // USEEFFECT PARA DISPARAR LAS LLAMADAS A LOS DATOS
   useEffect(() => {
@@ -712,14 +735,14 @@ const StudentProfile = () => {
             </div>
             {location.pathname === "/studentProfile" ? (
               // <NavLink to={"/editProfile"}>
-                <button
+              <button
                 className="mx-4 py-2 px-6 text-Space-cadet rounded-lg font-normal bg-Navbar relative top-3 max-h-10"
                 onClick={editarPerfil}
-                >
-                  Editar perfil
-                </button>
-              // </NavLink>
-            ) : null}
+              >
+                Editar perfil
+              </button>
+            ) : // </NavLink>
+            null}
             <div className=" mt-5 px-2 flex flex-col justify-start md:items-center w-full">
               <span className="font-normal">Informacion personal</span>
               <ul className=" mt-5">
@@ -778,6 +801,9 @@ const StudentProfile = () => {
                         className="px-1"
                         onChange={handlePDFChange}
                       />
+                      <h6 className="text-sm text-gray-500 mt-2 ml-1 font-normal">
+                          El tamaño máximo permitido para el archivo es 1 MB.
+                      </h6>
                       <button
                         type="submit"
                         disabled={!archivoSeleccionado}
@@ -818,10 +844,7 @@ const StudentProfile = () => {
                         target="_blank"
                         className="font-bold mt-2 block"
                       >
-                        <img
-                          src="/pdf.png"
-                          className=" w-20 ml-5"
-                        />
+                        <img src="/pdf.png" className=" w-20 ml-5" />
                       </a>
                     ) : null}
                   </div>
