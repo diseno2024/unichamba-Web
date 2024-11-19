@@ -45,30 +45,33 @@ const CreateStudentAccount = () => {
   useEffect(() => {
     const fetchTrabajosFromCouchDB = async () => {
       try {
-        const response = await axios.get('https://couchdbbackend.esaapp.com/unichamba-trabajos/_all_docs', {
-          auth: {
-            username: 'unichamba',
-            password: 'S3pt13mbre#2024Work'
-          },
-          params: {
-            include_docs: true  // Incluir los documentos completos
+        const response = await axios.get(
+          "https://couchdbbackend.esaapp.com/unichamba-trabajos/_all_docs",
+          {
+            auth: {
+              username: "unichamba",
+              password: "S3pt13mbre#2024Work",
+            },
+            params: {
+              include_docs: true, // Incluir los documentos completos
+            },
           }
-        });
-  
+        );
+
         const trabajosList = response.data.rows.map((row) => ({
           value: row.id,
-          label: row.doc?.nombre || 'Sin nombre',  // Verificar si 'doc' y 'nombre' existen
-          icon: row.doc?.icono || 'default-icon',
+          label: row.doc?.nombre || "Sin nombre", // Verificar si 'doc' y 'nombre' existen
+          icon: row.doc?.icono || "default-icon",
         }));
-  
+
         trabajosList.sort((a, b) => a.label.localeCompare(b.label));
-  
+
         setTrabajosOptions(trabajosList);
       } catch (error) {
         console.error("Error obteniendo trabajos de CouchDB: ", error);
       }
     };
-  
+
     fetchTrabajosFromCouchDB();
   }, []);
 
@@ -76,7 +79,7 @@ const CreateStudentAccount = () => {
     const { name, value } = e.target;
     setValues({ ...values, [name]: value });
   };
- 
+
   const [values, setValues] = useState(initialStateValues);
   const [imageFiles, setImageFiles] = useState([]); // Estado para manejar el archivo de imagen
   const [trabajosOptions, setTrabajosOptions] = useState([]);
@@ -87,7 +90,6 @@ const CreateStudentAccount = () => {
     console.log(values); // values
     addOrEditLink(values);
   };
-
 
   const handleCarreraChange = (carrera) => {
     setValues({ ...values, carrera: carrera });
@@ -106,7 +108,7 @@ const CreateStudentAccount = () => {
   const handleTrabajosChange = (selectedOptions) => {
     const trabajos = selectedOptions.map((option) => ({
       nombre: option.label,
-      icono: option.icon,  // Incluir el ícono en el trabajo seleccionado
+      icono: option.icon, // Incluir el ícono en el trabajo seleccionado
     }));
     setValues({ ...values, trabajos: trabajos });
   };
@@ -118,7 +120,7 @@ const CreateStudentAccount = () => {
       const allowedExtensions = /(\.pdf)$/i;
       // Validar que el nombre del archivo no contenga espacios
       const noSpacesInName = /^[^\s]+\.pdf$/i;
-  
+
       if (!allowedExtensions.test(file.name)) {
         Swal.fire({
           icon: "error",
@@ -126,81 +128,93 @@ const CreateStudentAccount = () => {
           text: "Por favor, sube un archivo en formato PDF.",
         });
         e.target.value = null; // Limpiar el campo de archivo
+      } else if (file.size > 1048576) {
+        Swal.fire({
+          icon: "error",
+          title: "Archivo demasiado grande",
+          text: "El tamaño del archivo no debe superar 1 MB.",
+        });
+        e.target.value = null;
       } else {
         const reader = new FileReader();
-  
+
         // Convertir PDF a base64 después de que el archivo se haya leído
         reader.onloadend = () => {
           const base64String = reader.result; // El archivo convertido a Base64
-  
+
           // Actualizar el estado con el PDF en base64
           setValues((prevValues) => ({
             ...prevValues,
-            hojadevida: base64String,  // Aquí almacenamos el base64 del PDF
-            pdfNombre: file.name,  // Guardamos el nombre del archivo
+            hojadevida: base64String, // Aquí almacenamos el base64 del PDF
+            pdfNombre: file.name, // Guardamos el nombre del archivo
           }));
         };
-  
+
         reader.readAsDataURL(file); // Lee el archivo y lo convierte a base64
       }
     }
   };
-  
+
   const convertToJPG = async (base64Image) => {
     const [type, data] = base64Image.split(",");
     const mimeType = type.match(/:(.*?);/)[1];
 
     // Si ya es JPG, no necesita conversión
     if (mimeType === "image/jpeg") {
-        return base64Image;
+      return base64Image;
     }
 
     // Convertir PNG o JPEG a JPG
     const img = new Image();
     img.src = base64Image;
-    
+
     return new Promise((resolve) => {
-        img.onload = () => {
-            const canvas = document.createElement("canvas");
-            canvas.width = img.width;
-            canvas.height = img.height;
-            const ctx = canvas.getContext("2d");
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext("2d");
 
-            ctx.drawImage(img, 0, 0);
-            const jpgBase64 = canvas.toDataURL("image/jpeg", 0.9); // Convierte a JPEG con 90% de calidad
-            resolve(jpgBase64); // Devuelve la imagen convertida a base64
-        };
+        ctx.drawImage(img, 0, 0);
+        const jpgBase64 = canvas.toDataURL("image/jpeg", 0.9); // Convierte a JPEG con 90% de calidad
+        resolve(jpgBase64); // Devuelve la imagen convertida a base64
+      };
     });
-};
+  };
 
-// Manejo de cambios en la imagen
-const handleImageChange = (e) => {
+  // Manejo de cambios en la imagen
+  const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-        // Validar la extensión del archivo utilizando una expresión regular
-        const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
-        const noSpacesInName = /^[^\s]+\.(jpg|jpeg|png)$/i;
+      // Validar la extensión del archivo utilizando una expresión regular
+      const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
+      const noSpacesInName = /^[^\s]+\.(jpg|jpeg|png)$/i;
 
-        if (!allowedExtensions.test(file.name)) {
-            Swal.fire({
-                icon: "error",
-                title: "Formato no válido",
-                text: "Por favor, sube una imagen en formato png, jpg o jpeg.",
-            });
-            e.target.value = null; // Limpiar el campo de archivo
-        } else {
-            const reader = new FileReader();
-            reader.onloadend = async () => {
-                let base64String = reader.result; // La imagen convertida a Base64
-                base64String = await convertToJPG(base64String); // Convertir a JPG si es necesario
-                setValues({ ...values, imageUrl: base64String });
-            };
-            reader.readAsDataURL(file); // Convierte la imagen a Base64
-        }
+      if (!allowedExtensions.test(file.name)) {
+        Swal.fire({
+          icon: "error",
+          title: "Formato no válido",
+          text: "Por favor, sube una imagen en formato png, jpg o jpeg.",
+        });
+        e.target.value = null; // Limpiar el campo de archivo
+      } else if (file.size > 1048576) {
+        Swal.fire({
+          icon: "error",
+          title: "Foto demasiado grande",
+          text: "El tamaño de la foto no debe superar 1 MB.",
+        });
+        e.target.value = null;
+      } else {
+        const reader = new FileReader();
+        reader.onloadend = async () => {
+          let base64String = reader.result; // La imagen convertida a Base64
+          base64String = await convertToJPG(base64String); // Convertir a JPG si es necesario
+          setValues({ ...values, imageUrl: base64String });
+        };
+        reader.readAsDataURL(file); // Convierte la imagen a Base64
+      }
     }
-};
-
-  
+  };
 
   const MostrarAyuda = () => {
     Swal.fire({
@@ -210,114 +224,112 @@ const handleImageChange = (e) => {
     });
   };
 
-  
-
   const addOrEditLink = async (studentData) => {
     setLoading(true);
     try {
-        // 1. Guardar los datos del estudiante (sin _id para que CouchDB lo genere)
-        const studentResponse = await axios.post(
-            'https://couchdbbackend.esaapp.com/unichamba-estudiantes/',
-            studentData,
-            {
-                auth: {
-                    username: 'unichamba',
-                    password: 'S3pt13mbre#2024Work',
-                },
-            }
-        );
-
-        // Obtén el ID generado por CouchDB
-        const studentId = studentResponse.data.id;
-        console.log('ID del estudiante generado:', studentId); // Verificar el ID
-
-        // 2. Preparar los datos para el almacenamiento, incluyendo solo el PDF si se ha subido
-        const attachments = {
-            _attachments: {
-                "imagen.jpg": {
-                    content_type: "image/jpeg", // Ajusta el tipo de contenido según sea necesario
-                    data: values.imageUrl.split(",")[1], // Base64 sin el prefijo de tipo de archivo
-                }
-            }
-        };
-
-        // Solo agregar el PDF si está presente
-        if (values.hojadevida) {
-            attachments._attachments["curriculum.pdf"] = {
-                content_type: "application/pdf",
-                data: values.hojadevida.split(",")[1], // Base64 sin el prefijo de tipo de archivo
-            };
+      // 1. Guardar los datos del estudiante (sin _id para que CouchDB lo genere)
+      const studentResponse = await axios.post(
+        "https://couchdbbackend.esaapp.com/unichamba-estudiantes/",
+        studentData,
+        {
+          auth: {
+            username: "unichamba",
+            password: "S3pt13mbre#2024Work",
+          },
         }
+      );
 
-        // 3. Guardar la imagen (y el PDF si existe) en la base de datos de almacenamiento
-        await axios.put(
-            `https://couchdbbackend.esaapp.com/unichamba-estudiantes-storage/${studentId}`,
-            attachments,
-            {
-                auth: {
-                    username: 'unichamba',
-                    password: 'S3pt13mbre#2024Work',
-                },
-            }
-        );
+      // Obtén el ID generado por CouchDB
+      const studentId = studentResponse.data.id;
+      console.log("ID del estudiante generado:", studentId); // Verificar el ID
 
-        console.log('Imagen y, si existe, PDF guardados.');
+      // 2. Preparar los datos para el almacenamiento, incluyendo solo el PDF si se ha subido
+      const attachments = {
+        _attachments: {
+          "imagen.jpg": {
+            content_type: "image/jpeg", // Ajusta el tipo de contenido según sea necesario
+            data: values.imageUrl.split(",")[1], // Base64 sin el prefijo de tipo de archivo
+          },
+        },
+      };
 
-        // 4. Obtener el documento del estudiante para actualizarlo
-        const studentDoc = await axios.get(
-            `https://couchdbbackend.esaapp.com/unichamba-estudiantes/${studentId}`,
-            {
-                auth: {
-                    username: 'unichamba',
-                    password: 'S3pt13mbre#2024Work',
-                },
-            }
-        );
-
-        // 5. Actualizar el documento del estudiante con las URLs de la imagen y el PDF si existe
-        const updatedData = {
-            ...studentDoc.data, // Incluye el documento actual con _rev para evitar conflictos
-            imageUrl: `https://couchdbbackend.esaapp.com/unichamba-estudiantes-storage/${studentId}/imagen.jpg`, // Enlace directo a la imagen
-            pdfUrl: values.hojadevida 
-                ? `https://couchdbbackend.esaapp.com/unichamba-estudiantes-storage/${studentId}/curriculum.pdf`
-                : "", // Cadena vacía si no hay currículum
+      // Solo agregar el PDF si está presente
+      if (values.hojadevida) {
+        attachments._attachments["curriculum.pdf"] = {
+          content_type: "application/pdf",
+          data: values.hojadevida.split(",")[1], // Base64 sin el prefijo de tipo de archivo
         };
+      }
 
-        await axios.put(
-            `https://couchdbbackend.esaapp.com/unichamba-estudiantes/${studentId}`,
-            updatedData,
-            {
-                auth: {
-                    username: 'unichamba',
-                    password: 'S3pt13mbre#2024Work',
-                },
-            }
-        );
+      // 3. Guardar la imagen (y el PDF si existe) en la base de datos de almacenamiento
+      await axios.put(
+        `https://couchdbbackend.esaapp.com/unichamba-estudiantes-storage/${studentId}`,
+        attachments,
+        {
+          auth: {
+            username: "unichamba",
+            password: "S3pt13mbre#2024Work",
+          },
+        }
+      );
 
-        Swal.fire({
-            icon: "success",
-            title: "Registro con éxito",
-            text: "¡Estudiante registrado con éxito!",
-        }).then((result) => {
-            if (result.isConfirmed) {
-                window.location.href = "/";
-            }
-        });
+      console.log("Imagen y, si existe, PDF guardados.");
 
-        setValues(initialStateValues);
-        setImageFiles([]); // Resetear los archivos de imagen
-        setPdf(null); // Restablecer el estado del PDF
+      // 4. Obtener el documento del estudiante para actualizarlo
+      const studentDoc = await axios.get(
+        `https://couchdbbackend.esaapp.com/unichamba-estudiantes/${studentId}`,
+        {
+          auth: {
+            username: "unichamba",
+            password: "S3pt13mbre#2024Work",
+          },
+        }
+      );
+
+      // 5. Actualizar el documento del estudiante con las URLs de la imagen y el PDF si existe
+      const updatedData = {
+        ...studentDoc.data, // Incluye el documento actual con _rev para evitar conflictos
+        imageUrl: `https://couchdbbackend.esaapp.com/unichamba-estudiantes-storage/${studentId}/imagen.jpg`, // Enlace directo a la imagen
+        pdfUrl: values.hojadevida
+          ? `https://couchdbbackend.esaapp.com/unichamba-estudiantes-storage/${studentId}/curriculum.pdf`
+          : "", // Cadena vacía si no hay currículum
+      };
+
+      await axios.put(
+        `https://couchdbbackend.esaapp.com/unichamba-estudiantes/${studentId}`,
+        updatedData,
+        {
+          auth: {
+            username: "unichamba",
+            password: "S3pt13mbre#2024Work",
+          },
+        }
+      );
+
+      Swal.fire({
+        icon: "success",
+        title: "Registro con éxito",
+        text: "¡Estudiante registrado con éxito!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.href = "/";
+        }
+      });
+
+      setValues(initialStateValues);
+      setImageFiles([]); // Resetear los archivos de imagen
+      setPdf(null); // Restablecer el estado del PDF
     } catch (error) {
-        console.error('Error al guardar en CouchDB:', error);
-        Swal.fire('¡Error!', `Hubo un problema al guardar los datos: ${error.message}`, 'error');
+      console.error("Error al guardar en CouchDB:", error);
+      Swal.fire(
+        "¡Error!",
+        `Hubo un problema al guardar los datos: ${error.message}`,
+        "error"
+      );
     } finally {
-        setLoading(false);
+      setLoading(false);
     }
-};
-
-  
-  
- 
+  };
 
   return (
     <>
@@ -351,8 +363,8 @@ const handleImageChange = (e) => {
                   name="nombre"
                   pattern="^[A-Za-záéíóúÁÉÍÓÚ]+(\s[A-Za-záéíóúÁÉÍÓÚ]+)*$"
                   title="Por favor introduce tus nombres adecuadamente"
-                  value={values.nombre}  // conectar al estado
-                  onChange={handleInputChange}  // actualizar el estado
+                  value={values.nombre} // conectar al estado
+                  onChange={handleInputChange} // actualizar el estado
                   required
                 />
                 <br></br>
@@ -369,8 +381,8 @@ const handleImageChange = (e) => {
                   name="telefono"
                   pattern="[0-9]{8}"
                   title="Por favor, introduce exactamente 8 números."
-                  value={values.telefono}  // conectar al estado
-                  onChange={handleInputChange}  // actualizar el estado
+                  value={values.telefono} // conectar al estado
+                  onChange={handleInputChange} // actualizar el estado
                   required
                 />
                 <br />
@@ -395,12 +407,15 @@ const handleImageChange = (e) => {
                   className="rounded-lg border border-black p-3 w-80 mt-4 font-normal"
                   name="imagen"
                   accept="image/jpeg, image/png, image/jpg"
-                  onChange={handleImageChange}  // actualizar el estado
+                  onChange={handleImageChange} // actualizar el estado
                   title="Las fotos deben subirse en formato png, jpg, jpeg"
                   required
                 />
                 <h6 className="text-sm text-gray-500 mt-2 ml-1 font-normal">
-                  La imagen debe estar en formato .png .jpg .jpeg 
+                  La imagen debe estar en formato .png .jpg .jpeg
+                </h6>
+                <h6 className="text-sm text-gray-500 mt-2 ml-1 font-normal">
+                  La imagen no debe ser mayor a 1 Mb
                 </h6>
               </div>
 
@@ -419,8 +434,8 @@ const handleImageChange = (e) => {
                   name="apellido"
                   pattern="^[A-Za-záéíóúÁÉÍÓÚ]+(\s[A-Za-záéíóúÁÉÍÓÚ]+)*$"
                   title="Por favor introduce entre 5 y 30 dígitos."
-                  value={values.apellido}  // conectar al estado
-                  onChange={handleInputChange}  // actualizar el estado
+                  value={values.apellido} // conectar al estado
+                  onChange={handleInputChange} // actualizar el estado
                   required
                 />
                 <br></br>
@@ -435,8 +450,8 @@ const handleImageChange = (e) => {
                   id="whatsappInput"
                   className="rounded-lg border border-black p-3 w-80 mt-4 font-normal"
                   name="whatsapp"
-                  value={values.whatsapp}  // conectar al estado
-                  onChange={handleInputChange}  // actualizar el estado
+                  value={values.whatsapp} // conectar al estado
+                  onChange={handleInputChange} // actualizar el estado
                   required
                   pattern="[0-9]{8}"
                   title="Por favor, introduce exactamente 8 números."
@@ -470,16 +485,17 @@ const handleImageChange = (e) => {
                   id="imagenCV"
                   className="rounded-lg border border-black p-3 w-80 mt-4 font-normal"
                   name="curriculum"
-                    // conectar al estado
-                  onChange={handleFileChange}  // actualizar el estado
+                  // conectar al estado
+                  onChange={handleFileChange} // actualizar el estado
                   title="El archivo debe estar en formato PDF"
                   accept=".pdf"
-                  
                 />
                 <h6 className="text-sm text-gray-500 mt-2 ml-1 font-normal">
                   El archivo debe estar en formato .pdf
                 </h6>
-              
+                <h6 className="text-sm text-gray-500 mt-2 ml-1 font-normal">
+                  No subir archivos mayores a un 1 Mb
+                </h6>
               </div>
 
               {/* imagen svg */}
@@ -494,7 +510,7 @@ const handleImageChange = (e) => {
             </div>
             <div>
               <br />
-             <div className="ml-10">
+              <div className="ml-10">
                 <label htmlFor="trabajoInput" className=" font-normal">
                   Trabajos
                 </label>
@@ -510,7 +526,7 @@ const handleImageChange = (e) => {
                   className="rounded-lg border border-black p-3 w-670 mt-4 font-light "
                 />
               </div>
-              
+
               <br />
             </div>
             <div className="flex ml-10 bg-Blanco-cremoso justify-between pr-10">
@@ -525,8 +541,8 @@ const handleImageChange = (e) => {
                   placeholder="Puedes hablar acerca de tus conocimientos o sobre tus aptitudes"
                   name="acercaDe"
                   id=""
-                  value={values.acercaDe}  // conectar al estado
-                  onChange={handleInputChange}  // actualizar el estado
+                  value={values.acercaDe} // conectar al estado
+                  onChange={handleInputChange} // actualizar el estado
                   cols="79"
                   required
                   rows="4"
@@ -566,7 +582,7 @@ const handleImageChange = (e) => {
                 <div className="ml-4 relative">
                   <div>
                     <br />
-                 
+
                     <br></br>
 
                     <label htmlFor="nombreInput" className="mt-7 font-normal">
@@ -579,10 +595,10 @@ const handleImageChange = (e) => {
                       id="nombreInput"
                       className="rounded-lg border border-black p-3 w-[87%] mt-4 font-normal"
                       name="nombre"
-                     pattern="^[A-Za-záéíóúÁÉÍÓÚ]+(\s[A-Za-záéíóúÁÉÍÓÚ]+)*$"
+                      pattern="^[A-Za-záéíóúÁÉÍÓÚ]+(\s[A-Za-záéíóúÁÉÍÓÚ]+)*$"
                       title="Por favor introduce tus nombres adecuadamente"
-                      value={values.nombre}  // conectar al estado
-                      onChange={handleInputChange}  // actualizar el estado
+                      value={values.nombre} // conectar al estado
+                      onChange={handleInputChange} // actualizar el estado
                       required
                     />
                     <br></br>
@@ -597,11 +613,10 @@ const handleImageChange = (e) => {
                       id="apellidoInput"
                       className="rounded-lg border border-black p-3 w-[87%] mt-4 font-normal"
                       name="apellido"
-                      value={values.apellido}  // conectar al estado
-                      onChange={handleInputChange}  // actualizar el estado
-                     pattern="^[A-Za-záéíóúÁÉÍÓÚ]+(\s[A-Za-záéíóúÁÉÍÓÚ]+)*$"
+                      value={values.apellido} // conectar al estado
+                      onChange={handleInputChange} // actualizar el estado
+                      pattern="^[A-Za-záéíóúÁÉÍÓÚ]+(\s[A-Za-záéíóúÁÉÍÓÚ]+)*$"
                       title="Por favor introduce entre 5 y 30 dígitos."
-                     
                       required
                     />
                     <br></br>
@@ -618,8 +633,8 @@ const handleImageChange = (e) => {
                       name="telefono"
                       pattern="[0-9]{8}"
                       title="Por favor, introduce exactamente 8 números."
-                      value={values.telefono}  // conectar al estado
-                      onChange={handleInputChange}  // actualizar el estado
+                      value={values.telefono} // conectar al estado
+                      onChange={handleInputChange} // actualizar el estado
                       required
                     />
                     <br />
@@ -643,7 +658,7 @@ const handleImageChange = (e) => {
                       id="imagenInput"
                       className="rounded-lg border border-black p-3 w-[87%] mt-4 font-normal"
                       name="imagen"
-                      onChange={handleImageChange}  // actualizar el estado
+                      onChange={handleImageChange} // actualizar el estado
                       title="Las fotos deben subirse en formato png, jpg, jpeg"
                       accept="image/jpeg, image/png, image/jpg"
                       required
@@ -651,8 +666,9 @@ const handleImageChange = (e) => {
                     <h6 className="text-sm text-gray-500 mt-2 ml-1 font-normal w-[87%]">
                       La imagen debe estar en formato .png .jpg .jpeg
                     </h6>
-                   
-                    
+                    <h6 className="text-sm text-gray-500 mt-2 ml-1 font-normal">
+                  La imagen no debe ser mayor a 1 Mb
+                </h6>
                   </div>
 
                   <div>
@@ -668,8 +684,8 @@ const handleImageChange = (e) => {
                       id="whatsappInput"
                       className="rounded-lg border border-black p-3 w-[87%] mt-4 font-normal"
                       name="whatsapp"
-                      value={values.whatsapp}  // conectar al estado
-                      onChange={handleInputChange}  // actualizar el estado
+                      value={values.whatsapp} // conectar al estado
+                      onChange={handleInputChange} // actualizar el estado
                       required
                       pattern="[0-9]{8}"
                       title="Por favor, introduce exactamente 8 números."
@@ -704,15 +720,17 @@ const handleImageChange = (e) => {
                       id="imagenCV"
                       className="rounded-lg border border-black p-3 w-[87%] mt-4 font-normal"
                       name="curriculum"
-                      onChange={handleFileChange}  // actualizar el estado
+                      onChange={handleFileChange} // actualizar el estado
                       title="El archivom debe estar en formato PDF"
                       accept=".pdf"
-                      
                     />
                     <h6 className="text-sm text-gray-500 mt-2 ml-1 font-normal">
                       El archivo debe estar en formato .pdf
                     </h6>
-                   
+                    <h6 className="text-sm text-gray-500 mt-2 ml-1 font-normal">
+                      No subir archivos mayores a un 1 Mb
+                    </h6>
+
                     <br />
                     <label htmlFor="trabajoInput" className=" font-normal">
                       Trabajos
@@ -738,14 +756,15 @@ const handleImageChange = (e) => {
                       placeholder="Puedes hablar acerca de tus conocimientos o sobre tus aptitudes"
                       name="acercaDe"
                       id=""
-                      value={values.acercaDe}  // conectar al estado
-                      onChange={handleInputChange} 
+                      value={values.acercaDe} // conectar al estado
+                      onChange={handleInputChange}
                       required
                       rows="4"
                       maxLength={500}
                       className="border border-black rounded-lg resize-none p-3  w-[87%] font-light"
                     ></textarea>
-                    <br /><br />
+                    <br />
+                    <br />
                     <div className="flex">
                       <div>
                         <input
@@ -774,17 +793,13 @@ const handleImageChange = (e) => {
               </div>
             </div>
             <div>
-             
               <div className="ml-10"></div>
               <br />
             </div>
             <div className="flex flex-col lg:flex-row rounded-xl">
               <div className="w-full lg:w-1/2">
                 <div className="flex ml-10 bg-Blanco-cremoso justify-between pr-10">
-                  <div>
-                    {" "}
-                    
-                  </div>
+                  <div> </div>
                   <br />
 
                   {/* btn crear cuenta */}
