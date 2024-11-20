@@ -43,17 +43,18 @@ const DetailsOffer = () => {
 
     return (
         <>
-            <header>
+            <header className='bg-Dark-Blue py-3 px-2'>
                 {/* <Navbar /> */}
-                <nav className="h-[90px] flex items-center justify-between px-4 md:px-10 bg-Dark-Blue shadow-md shadow-Gris-claro fixed top-0 w-full z-50">
-                    <NavLink to="/inicio">
-                        <img src="/LOGO.svg" alt="LOGO UNICHAMBA AZUL" className="h-10" />
-                    </NavLink>
-                </nav>
+            <figure className="phone:w-40 md:w-64">
+                <NavLink to='/inicio'>
+                <img src="/LOGO.svg" alt="logo" className="w-full h-full"/>
+
+                </NavLink>
+            </figure>
             </header>
 
             <main className='relative'>
-                <section className='mt-[110px] px-4 md:px-20'>
+                <section className='mt-5 px-4 md:px-20'>
 
                     <NavLink to="/OfferExploreStudent">
                         <span className="material-symbols-outlined">arrow_back</span>

@@ -110,7 +110,9 @@ const Navbar = () => {
     if (Object.keys(user).length !== 0) {
       setLogin(true);
       if (!cuentaExterna) {
-        if(!result){
+        if( user.email === "ernesto.calderon@ues.edu.sv" ){
+          checkUserExists(user.email);
+        }else if(!result){
           checkUserExists(user.email); // Verifica si el usuario existe
         } // Si no es una cuenta externa o empleado ues
       }
@@ -295,32 +297,6 @@ const Navbar = () => {
 
         </div>
 
-        : login && result && admin ?
-
-          <div className="flex items-center gap-4">
-            <button
-              className="relative text-white font-semibold flex items-center gap-4 bg-Malachite h-[55px] justify-between px-4 rounded-[8px]"
-              onClick={handleGoogleSingOut}>
-              Cerrar Sesión
-            </button>
-
-            <NavLink to="/userAdmin" className="space-y-5 flex items-center">
-              <h1 className="text-xl font-normal text-white">
-                ADMINISTRADOR
-              </h1>
-              <span class="material-symbols-outlined text-white pb-5 px-1" style={{fontSize:'35px'}}>admin_panel_settings</span>
-            </NavLink>
-
-          </div>
-
-          : login && cuentaExterna ?
-            // cuenta gmail
-          <button
-            className="relative text-white font-semibold flex items-center gap-4 bg-Malachite h-[55px] justify-between px-4 rounded-[8px]"
-            onClick={handleGoogleSingOut}>
-              Cerrar Sesión
-          </button>
-
 
           : login && result && !admin ?
           // cuenta empleado pero no es la cuenta del ing
@@ -338,7 +314,15 @@ const Navbar = () => {
                 Cerrar Sesión
               </button>
             </div>
-          </div>
+          </div> 
+          
+          : login && cuentaExterna ?
+          // cuenta gmail
+        <button
+          className="relative text-white font-semibold flex items-center gap-4 bg-Malachite h-[55px] justify-between px-4 rounded-[8px]"
+          onClick={handleGoogleSingOut}>
+            Cerrar Sesión
+        </button>
           :
 
           ''
