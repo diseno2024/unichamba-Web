@@ -63,11 +63,12 @@ const Inicio = () => {
     <footer className="w-full h-max bg-Dark-Blue space-y-5 py-7 ">
         <div className="w-[95%] mx-auto h-max flex flex-col items-center text-white font-normal text-xl space-y-5">
           <h2>Descarga nuestra app en tu celular!</h2>
+          <a href="https://play.google.com/store/apps/details?id=com.unichamba">
           <img
             src="/google-play.cf5ae74d.svg"
             alt="logo-google-play"
             className="w-[150px] cursor-pointer"
-          />
+          /></a>
           <h2 className="text-white font-normal text-xl">
             copyright© 2024 Unichamba
           </h2>
