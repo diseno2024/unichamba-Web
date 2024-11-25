@@ -615,12 +615,20 @@ const StudentProfile = () => {
   const modalEliminarCuenta = () => {
     Swal.fire({
       title: "¿Seguro que quieres eliminar tu cuenta?",
-      icon: "warning|",
+      text: "Por favor, ingresa la palabra 'UniChamba' para confirmar.",
+      icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#161A30",
       cancelButtonColor: "#d33",
       confirmButtonText: "Si, eliminar",
       cancelButtonText: "Cancelar",
+      input: 'text', // Tipo de input para capturar la palabra
+      inputPlaceholder: 'Ingresa la palabra de confirmación', // Placeholder del input
+      inputValidator: (value) => {
+        if (value !== 'UniChamba') {
+          return 'La palabra ingresada es incorrecta'; // Mensaje si la palabra es incorrecta
+        }
+      }
     }).then((result) => {
       if (result.isConfirmed) {
         eliminarCuenta();
